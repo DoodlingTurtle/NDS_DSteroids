@@ -9,8 +9,7 @@
 #include <nds.h>
 #include <gl2d.h>
 
-#include "./res/bounceBall32x64.h"
-#include "./RGNDS/engine.h"
+#include "../modules/RGNDS_engine/engine.h"
 
 #define SCREEN_HEIGHT2 384
 
