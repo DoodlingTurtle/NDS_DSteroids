@@ -9,7 +9,7 @@ class WrapAroundRenderer
         WrapAroundRenderer();
         virtual ~WrapAroundRenderer();
 
-        void updateDrawingInstances(RGNDS::Point<float>& pos, float detectSphere);
+        void updateDrawingInstances(RGNDS::Point<float>* pos, float detectSphere);
 
         void defineWrappingArea(int top, int right, int bottom, int left);
 

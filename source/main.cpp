@@ -44,8 +44,8 @@ protected:
             if(screen == 0) {   // Draw the following only on the top-screen
                 char buffer[300];
                 sprintf(buffer, "truePos: %f x %f\naccel: %f"
-                    , ship->truePosition.x
-                    , ship->truePosition.y
+                    , ship->pos.x
+                    , ship->pos.y
                     , ship->ph.acceleration
                 );
                 this->drawText(10, 10, buffer, ARGB16(1, 0, 15, 31));

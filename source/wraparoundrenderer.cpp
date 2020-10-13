@@ -6,31 +6,47 @@ WrapAroundRenderer::WrapAroundRenderer() {
 
 WrapAroundRenderer::~WrapAroundRenderer() {}
 
-void WrapAroundRenderer::updateDrawingInstances(RGNDS::Point<float>& pos, float shipRadius) {
-    drawingInstances[0] = pos;
+void WrapAroundRenderer::updateDrawingInstances(RGNDS::Point<float>* pos, float shipRadius) {
+
+
+    // Move ship back to screen, once its true Position has left the Screen completely
+    if(pos->x >= right + shipRadius)
+        pos->x -= width;
+
+    if(pos->x <= left-shipRadius)
+        pos->x += width;
+
+    if(pos->y >= bottom + shipRadius)
+        pos->y -= height;
+
+    if(pos->y <= top-shipRadius)
+        pos->y += height;
+
+
+    drawingInstances[0] = { pos->x, pos->y };
     drawingInstanceCnt = 1;
 
     // Left Screen border wrap arround
-    if(pos.x > right-shipRadius) {
-        drawingInstances[drawingInstanceCnt] = { pos.x - width, pos.y };
+    if(pos->x > right-shipRadius) {
+        drawingInstances[drawingInstanceCnt] = { pos->x - width, pos->y };
         drawingInstanceCnt++;
     }
 
     // Right Screen border
-    else if(pos.x < left + shipRadius) {
-        drawingInstances[drawingInstanceCnt] = { pos.x + width, pos.y };
+    else if(pos->x < left + shipRadius) {
+        drawingInstances[drawingInstanceCnt] = { pos->x + width, pos->y };
         drawingInstanceCnt++;
     }
 
     // Bottom Screen border
-    if(pos.y > bottom-shipRadius) {
-        drawingInstances[drawingInstanceCnt] = { pos.x, pos.y - height };
+    if(pos->y > bottom-shipRadius) {
+        drawingInstances[drawingInstanceCnt] = { pos->x, pos->y - height };
         drawingInstanceCnt++;
     }
 
     // Top Screen border
-    else if(pos.y < top + shipRadius) {
-        drawingInstances[drawingInstanceCnt] = { pos.x, pos.y + height };
+    else if(pos->y < top + shipRadius) {
+        drawingInstances[drawingInstanceCnt] = { pos->x, pos->y + height };
         drawingInstanceCnt++;
     }
 

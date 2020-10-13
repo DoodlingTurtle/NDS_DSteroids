@@ -63,24 +63,11 @@ void Ship::update(float deltaTime, int keys_held, int keys_up, int keys_justpres
     //TODO: (RGO) Make sure ship radius does not eclipse SCREEN_HEIGHT (192px)
     float shipRadius = 8 * scale;
 
-    // Move ship back to screen, once its true Position has left the Screen completely
-    if(pos.x >= SCREEN_WIDTH + shipRadius)
-        pos.x -= SCREEN_WIDTH;
-
-    if(pos.x <= -shipRadius)
-        pos.x += SCREEN_WIDTH;
-
-    if(pos.y >= SCREEN_HEIGHT2 + shipRadius)
-        pos.y -= SCREEN_HEIGHT2;
-
-    if(pos.y <= -shipRadius)
-        pos.y += SCREEN_HEIGHT2;
-
 // Check for WrapAround
 
-    // Update the Renderer
+    // Update Position based on Screen-Borders
+    renderer.updateDrawingInstances(&(this->pos), shipRadius);
     this->truePosition = this->pos;
-    renderer.updateDrawingInstances(pos, shipRadius);
 
 }
 
