@@ -12,12 +12,14 @@
 #include "../modules/RGNDS_engine/engine.h"
 
 #include "./ship.h"
+#include "./meteor.h"
 
 
 class PixelEngine : public RGNDS::Engine {
 
 private:
     Ship* ship;
+    Meteor meteors[10];
 
 protected:
 
@@ -41,6 +43,13 @@ protected:
     void onDraw(float deltaTime, int screen) {
 
         glBegin2D();
+
+
+            meteors[0].draw(0xffff, screen);
+
+
+            ship->draw(screen);
+
             if(screen == 0) {   // Draw the following only on the top-screen
                 char buffer[300];
                 sprintf(buffer, "truePos: %f x %f\naccel: %f"
@@ -51,7 +60,7 @@ protected:
                 this->drawText(10, 10, buffer, ARGB16(1, 0, 15, 31));
             }
 
-            ship->draw(screen);
+
         glEnd2D();
     }
 
