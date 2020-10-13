@@ -1,0 +1,5 @@
+build
+raw
+*.cbp
+*.nds
+*.elf
