@@ -1,0 +1,101 @@
+#include "ship.h"
+
+#define SCREEN_HEIGHT2 384
+
+Ship::Ship() : PolyObj(2, (const PointF[6]){
+    {  8.0f,  0.0f }
+  , { -4.0f,  0.0f }
+  , { -8.0f, -8.0f }
+
+  , {  8.0f,  0.0f }
+  , { -4.0f,  0.0f }
+  , { -8.0f,  8.0f }
+}){
+
+// Initialize the Trhuster (yellow triangle at the bottom of the ship);
+    thruster = new RGNDS::Engine::PolyObj(1, (const PointF[3]){
+        { -8.0f,  0.0f }
+      , { -4.0f, -4.0f }
+      , { -4.0f,  4.0f }
+    });
+
+// Setup Coordinats of the ship and varables needed for Wrap-Arround functionality
+    pos = { SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2};
+    truePosition = pos;
+
+    renderer.defineWrappingArea(0, SCREEN_WIDTH, SCREEN_HEIGHT2, 0);
+
+}
+
+Ship::~Ship() {
+    delete thruster;
+}
+
+void Ship::update(float deltaTime, int keys_held, int keys_up, int keys_justpressed, touchPosition& touch) {
+
+// Process user Input
+    if(keys_held&KEY_RIGHT)
+        setAngleRel(angRes);
+
+    if(keys_held&KEY_LEFT)
+        setAngleRel(-angRes);
+
+    if(keys_held&KEY_X)
+        scale += 0.05;
+
+    if(keys_held&KEY_B)
+        scale -= 0.05;
+
+    if(keys_held&KEY_UP) {
+        thrusting = true;
+        ph.accelerate(deltaTime * 1.5f);
+    }
+    else {
+        thrusting = false;
+        ph.decerlerate(1);
+    }
+
+// Update Position based on physics
+    velocity += dir * ph.acceleration;
+
+    pos += velocity;
+
+    //TODO: (RGO) Make sure ship radius does not eclipse SCREEN_HEIGHT (192px)
+    float shipRadius = 8 * scale;
+
+    // Move ship back to screen, once its true Position has left the Screen completely
+    if(pos.x >= SCREEN_WIDTH + shipRadius)
+        pos.x -= SCREEN_WIDTH;
+
+    if(pos.x <= -shipRadius)
+        pos.x += SCREEN_WIDTH;
+
+    if(pos.y >= SCREEN_HEIGHT2 + shipRadius)
+        pos.y -= SCREEN_HEIGHT2;
+
+    if(pos.y <= -shipRadius)
+        pos.y += SCREEN_HEIGHT2;
+
+// Check for WrapAround
+
+    // Update the Renderer
+    this->truePosition = this->pos;
+    renderer.updateDrawingInstances(pos, shipRadius);
+
+}
+
+void Ship::draw(int screen) {
+
+
+    for(int a = 0; a < renderer.getInstanceCnt(); a++) {
+        pos = renderer.getInstance(a);
+
+        if(thrusting)
+            thruster->draw(0x83ff, screen, this);
+
+        RGNDS::Engine::PolyObj::draw(0x801F, screen);
+    }
+
+    pos = truePosition;
+
+}
