@@ -37,6 +37,7 @@ protected:
         touchRead(&touch);
         scanKeys();
 
+        meteors[0].update(deltaTime);
         ship->update(deltaTime, keysHeld(), keysUp(), keysDown(), touch);
     }
 

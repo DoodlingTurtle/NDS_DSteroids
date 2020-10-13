@@ -9,6 +9,8 @@ class Meteor : public RGNDS::Engine::PolyObj
         Meteor();
         virtual ~Meteor();
 
+        void update(float deltaTime);
+
     private:
 };
 
