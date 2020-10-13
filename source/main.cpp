@@ -46,7 +46,7 @@ protected:
         glBegin2D();
 
 
-            meteors[0].draw(0xffff, screen);
+            meteors[0].draw(screen);
 
 
             ship->draw(screen);
