@@ -13,7 +13,19 @@
 
 #define SCREEN_HEIGHT2 384
 
-typedef RGNDS::Point<float> PointF;
+#define PointF RGNDS::Point<float>
+
+class Engine {
+public:
+    float acceleration;
+
+    void accelerate(float deltaTime) {
+        acceleration = fmin(1, acceleration + (deltaTime * deltaTime));
+    }
+    void decerlerate(float deltaTime) {
+        acceleration = fmax(0, acceleration - (deltaTime * deltaTime));
+    }
+};
 
 
 class Ship : public RGNDS::Engine::PolyObj
@@ -28,6 +40,9 @@ private:
     byte drawingInstanceCnt = 1;
 
 public:
+
+    PointF velocity;
+    Engine ph;
     PointF truePosition;
 
 
@@ -77,12 +92,18 @@ public:
             scale -= 0.05;
 
         if(keys_held&KEY_UP) {
-            moveInDirection(64 * scale * deltaTime);
             thrusting = true;
+            ph.accelerate(deltaTime * 1.5f);
         }
         else {
             thrusting = false;
+            ph.decerlerate(1);
         }
+
+    // Update Position based on physics
+        velocity += dir * ph.acceleration;
+
+        pos += velocity;
 
 
     // Check for WrapAround
@@ -177,7 +198,6 @@ protected:
         return 0;
     }
 
-
     void onEnd() {
         delete ship;
     }
@@ -195,9 +215,10 @@ protected:
         glBegin2D();
             if(screen == 0) {   // Draw the following only on the top-screen
                 char buffer[300];
-                sprintf(buffer, "truePos: %f x. %f"
+                sprintf(buffer, "truePos: %f x %f\naccel: %f"
                     , ship->truePosition.x
                     , ship->truePosition.y
+                    , ship->ph.acceleration
                 );
                 this->drawText(10, 10, buffer, ARGB16(1, 0, 15, 31));
             }
