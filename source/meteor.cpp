@@ -5,28 +5,43 @@
 #define SCREEN_HEIGHT2 384
 #define RandF() ((float)rand() / (float)RAND_MAX)
 
-Meteor::Meteor() : RGNDS::Engine::PolyObj(10, nullptr) {
+Meteor::Meteor() : RGNDS::Engine::PolyObj(8, nullptr) {
+
+    Engine_Log("number of Vertices: " << numPoints);
 
     renderer.defineWrappingArea(0, SCREEN_WIDTH, SCREEN_HEIGHT2, 0);
 
-    float angSteps = PI2 / 10;
+    float angSteps = PI2 / (numPoints/3);
     float radius = 16;
     float ang = 0;
+    int a;
+    float d1, d2;
 
     pos.x = SCREEN_WIDTH/2;
     pos.y = SCREEN_HEIGHT / 2;
 
-    for(int a = 0; a < 30; a+=3) {
-        points[a  ] = { 0, 0 };
-        points[a+1] = { cos(ang) * radius, sin(ang) * radius };
+    float pointdist[numPoints / 3 + 1];
 
-        radius += (RandF() * 16.0f) - 8;
-        points[a+2] = { cos(ang+angSteps) * radius, sin(ang+angSteps) * radius };
-
-        ang+=angSteps;
+    for(a = 0; a < numPoints/3 + 1; a++){
+        pointdist[a] = radius
+            + ((RandF() * 8 - 4) * (a%2 > 0));
     }
 
 
+
+    for(int a = 0; a < numPoints; a+=3) {
+
+        d1 = pointdist[a / 3];
+        d2 = pointdist[a / 3 + 1];
+
+        points[a  ] = { 0, 0 };
+        points[a+1] = { cos(ang) * d1, sin(ang) * d1 };
+
+        radius += (RandF() * 16.0f) - 8;
+        points[a+2] = { cos(ang+angSteps) * d2, sin(ang+angSteps) * d2 };
+
+        ang+=angSteps;
+    }
 
     setAngle(RandF() * PI2);
     velocity.x = (RandF() * 2) - 1;

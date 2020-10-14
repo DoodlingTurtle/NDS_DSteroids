@@ -14,6 +14,9 @@ endif
 include $(DEVKITARM)/ds_rules
 
 #---------------------------------------------------------------------------------
+# BUILDASDEBUG - if this is not empty, a custom property is set, that can be checked for via #ifdef TARGET_DEBUG in code
+#                certain librarys may or may not take advantage of that
+#
 # TARGET is the name of the output
 # BUILD is the directory where object files & intermediate files will be placed
 # SOURCES is a list of directories containing source code
@@ -23,7 +26,12 @@ include $(DEVKITARM)/ds_rules
 # AUDIO is a list of directories containing audio to be converted by maxmod
 # ICON is the image used to create the game icon, leave blank to use default rule
 # NITRO is a directory that will be accessible via NitroFS
+#
+# USERLIBS add your own -lLIBRARY definition here
+# LIBPATH  defines the Path to your own library
 #---------------------------------------------------------------------------------
+BUILDASDEBUG := true
+
 TARGET   := $(shell basename $(CURDIR))
 BUILD    := build
 SOURCES  := source modules/RGNDS_Engine
@@ -37,16 +45,21 @@ NITRO    :=
 USERLIBS :=
 LIBPATH  :=
 
-
 #---------------------------------------------------------------------------------
 # options for code generation
 #---------------------------------------------------------------------------------
 ARCH := -marm -mthumb-interwork -march=armv5te -mtune=arm946e-s
 
-CFLAGS   := -g -Wall -O3\
+
+CFLAGS   := -Wall -O3\
             $(ARCH) $(INCLUDE) -DARM9
+
+ifneq ($(strip $(BUILDASDEBUG)),)
+CFLAGS	 := -DTARGET_DEBUG $(CFLAGS)
+endif
+
 CXXFLAGS := $(CFLAGS) -fno-rtti -fno-exceptions
-ASFLAGS  := -g $(ARCH)
+ASFLAGS  := $(ARCH)
 LDFLAGS   = -specs=ds_arm9.specs -g $(ARCH) -Wl,-Map,$(notdir $*.map)
 
 #---------------------------------------------------------------------------------
