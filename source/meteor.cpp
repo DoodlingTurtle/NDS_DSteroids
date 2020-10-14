@@ -6,28 +6,48 @@
 #define RandF() ((float)rand() / (float)RAND_MAX)
 
 Meteor::Meteor() : RGNDS::Engine::PolyObj(8, nullptr) {
-
-    Engine_Log("number of Vertices: " << numPoints);
-
     renderer.defineWrappingArea(0, SCREEN_WIDTH, SCREEN_HEIGHT2, 0);
+    generateShape();
+    this->alive = false;
+}
 
+void Meteor::update(float deltatime) {
+    if(!alive) return;
+
+    setAngleRel(PI2 * (deltatime * spinSpeed));
+    pos += velocity;
+    renderer.updateDrawingInstances(&pos, 24);
+}
+
+void Meteor::draw(int screen) {
+    if(!alive) return;
+
+    Engine_Log("Drawing Asteroid: " << this);
+
+    RGNDS::Point<float> p = pos;
+
+    for(int a = 0; a < renderer.getInstanceCnt(); a++){
+        pos = renderer.getInstance(a);
+        RGNDS::Engine::PolyObj::draw(0xffff, screen);
+    }
+
+    pos = p;
+}
+
+void Meteor::generateShape() {
     float angSteps = PI2 / (numPoints/3);
     float radius = 16;
     float ang = 0;
     int a;
     float d1, d2;
 
-    pos.x = SCREEN_WIDTH/2;
-    pos.y = SCREEN_HEIGHT / 2;
-
+    // Setup Shape
     float pointdist[numPoints / 3 + 1];
 
     for(a = 0; a < numPoints/3 + 1; a++){
         pointdist[a] = radius
             + ((RandF() * 8 - 4) * (a%2 > 0));
     }
-
-
 
     for(int a = 0; a < numPoints; a+=3) {
 
@@ -42,31 +62,23 @@ Meteor::Meteor() : RGNDS::Engine::PolyObj(8, nullptr) {
 
         ang+=angSteps;
     }
+}
 
+void Meteor::bringBackToLife(RGNDS::Point<float> pos, bool generateNewShape, float scale) {
     setAngle(RandF() * PI2);
     velocity.x = (RandF() * 2) - 1;
     velocity.y = (RandF() * 2) - 1;
+    spinSpeed = (RandF() * 0.5 + 0.5) * 0.0625; // Spin by 360° every 16 Seconds (at max spinspeed)
 
+    this->pos = pos;
+    this->scale = scale;
+
+    if(generateNewShape)
+        generateShape();
+
+    alive = true;
 }
 
-void Meteor::update(float deltatime) {
-    setAngleRel(PI2 * (deltatime * 0.0625));    // Spin by 360° every 16 Seconds
-    pos += velocity;
-    renderer.updateDrawingInstances(&pos, 24);
-
-
-}
-
-void Meteor::draw(int screen) {
-    RGNDS::Point<float> p = pos;
-
-    for(int a = 0; a < renderer.getInstanceCnt(); a++){
-        pos = renderer.getInstance(a);
-        RGNDS::Engine::PolyObj::draw(0xffff, screen);
-    }
-
-    pos = p;
-}
 
 Meteor::~Meteor()
 {

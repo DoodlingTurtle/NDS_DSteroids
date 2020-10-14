@@ -15,17 +15,26 @@
 #include "./ship.h"
 #include "./meteor.h"
 
+#define MAX_ASTEROIDS 32
+
 
 class PixelEngine : public RGNDS::Engine {
 
 private:
     Ship* ship;
-    Meteor meteors[10];
+    Meteor asteroids[MAX_ASTEROIDS];
 
 protected:
 
     int onStart() {
+        int a;
         ship = new Ship();
+
+        for(a = 0; a < 6; a++) {
+            asteroids[a].bringBackToLife(ship->pos, false, 1);
+            asteroids[a].moveInDirection((16 * ship->scale) + 32 + Engine_RandF() * 64);
+        }
+
         return 0;
     }
 
@@ -38,17 +47,20 @@ protected:
         touchRead(&touch);
         scanKeys();
 
-        meteors[0].update(deltaTime);
+        int a;
+
         ship->update(deltaTime, keysHeld(), keysUp(), keysDown(), touch);
+
+        for(a = 0; a < MAX_ASTEROIDS; a++)
+            asteroids[a].update(deltaTime);
     }
 
     void onDraw(float deltaTime, int screen) {
-
+        int a;
         glBegin2D();
 
-
-            meteors[0].draw(screen);
-
+            for(a = 0; a < MAX_ASTEROIDS; a++)
+                asteroids[a].draw(screen);
 
             ship->draw(screen);
 
