@@ -55,7 +55,7 @@ CFLAGS   := -Wall -O3\
             $(ARCH) $(INCLUDE) -DARM9
 
 ifneq ($(strip $(BUILDASDEBUG)),)
-CFLAGS	 := -DTARGET_DEBUG $(CFLAGS)
+CFLAGS	 := -g -DTARGET_DEBUG $(CFLAGS)
 endif
 
 CXXFLAGS := $(CFLAGS) -fno-rtti -fno-exceptions
