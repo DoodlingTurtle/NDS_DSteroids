@@ -1,14 +1,14 @@
-#ifndef METEOR_H
-#define METEOR_H
+#ifndef __ASTEROID_H__
+#define __ASTEROID_H__
 
 #include "../modules/RGNDS_Engine/engine.h"
 #include "wraparoundrenderer.h"
 
-class Meteor : public RGNDS::Engine::PolyObj
+class Asteroid : public RGNDS::Engine::PolyObj
 {
     public:
-        Meteor();
-        virtual ~Meteor();
+        Asteroid();
+        virtual ~Asteroid();
 
         void update(float deltaTime);
 
@@ -26,4 +26,4 @@ class Meteor : public RGNDS::Engine::PolyObj
         bool alive;
 };
 
-#endif // METEOR_H
+#endif

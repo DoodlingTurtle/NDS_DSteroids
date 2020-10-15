@@ -13,7 +13,7 @@
 #include "../modules/RGNDS_engine/engine.h"
 
 #include "./ship.h"
-#include "./meteor.h"
+#include "./asteroid.h"
 
 #define MAX_ASTEROIDS 32
 
@@ -21,25 +21,23 @@
 class PixelEngine : public RGNDS::Engine {
 
 private:
-    Ship* ship;
-    Meteor asteroids[MAX_ASTEROIDS];
+    Ship ship;
+    Asteroid asteroids[MAX_ASTEROIDS];
 
 protected:
 
     int onStart() {
         int a;
-        ship = new Ship();
 
         for(a = 0; a < 6; a++) {
-            asteroids[a].bringBackToLife(ship->pos, false, 1);
-            asteroids[a].moveInDirection((16 * ship->scale) + 32 + Engine_RandF() * 64);
+            asteroids[a].bringBackToLife(ship.pos, false, 1);
+            asteroids[a].moveInDirection((16 * ship.scale) + 32 + Engine_RandF() * 64);
         }
 
         return 0;
     }
 
     void onEnd() {
-        delete ship;
     }
 
     void onUpdate(float deltaTime) {
@@ -49,7 +47,7 @@ protected:
 
         int a;
 
-        ship->update(deltaTime, keysHeld(), keysUp(), keysDown(), touch);
+        ship.update(deltaTime, keysHeld(), keysUp(), keysDown(), touch);
 
         for(a = 0; a < MAX_ASTEROIDS; a++)
             asteroids[a].update(deltaTime);
@@ -62,16 +60,16 @@ protected:
             for(a = 0; a < MAX_ASTEROIDS; a++)
                 asteroids[a].draw(screen);
 
-            ship->draw(screen);
+            ship.draw(screen);
 
             if(screen == 0) {   // Draw the following only on the top-screen
                 char buffer[300];
                 sprintf(buffer, "truePos: %f x %f\naccel: %f"
-                    , ship->pos.x
-                    , ship->pos.y
-                    , ship->ph.acceleration
+                    , ship.pos.x
+                    , ship.pos.y
+                    , ship.ph.acceleration
                 );
-                this->drawText(10, 10, buffer, ARGB16(1, 0, 15, 31));
+                drawText(10, 10, buffer, ARGB16(1, 0, 15, 31));
             }
 
 

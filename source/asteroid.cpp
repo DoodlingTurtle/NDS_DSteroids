@@ -1,17 +1,17 @@
-#include "meteor.h"
+#include "asteroid.h"
 
 #include <math.h>
 
 #define SCREEN_HEIGHT2 384
 #define RandF() ((float)rand() / (float)RAND_MAX)
 
-Meteor::Meteor() : RGNDS::Engine::PolyObj(8, nullptr) {
+Asteroid::Asteroid() : RGNDS::Engine::PolyObj(8, nullptr) {
     renderer.defineWrappingArea(0, SCREEN_WIDTH, SCREEN_HEIGHT2, 0);
     generateShape();
     this->alive = false;
 }
 
-void Meteor::update(float deltatime) {
+void Asteroid::update(float deltatime) {
     if(!alive) return;
 
     setAngleRel(PI2 * (deltatime * spinSpeed));
@@ -19,7 +19,7 @@ void Meteor::update(float deltatime) {
     renderer.updateDrawingInstances(&pos, 24);
 }
 
-void Meteor::draw(int screen) {
+void Asteroid::draw(int screen) {
     if(!alive) return;
 
     Engine_Log("Drawing Asteroid: " << this);
@@ -34,7 +34,7 @@ void Meteor::draw(int screen) {
     pos = p;
 }
 
-void Meteor::generateShape() {
+void Asteroid::generateShape() {
     float angSteps = PI2 / (numPoints/3);
     float radius = 16;
     float ang = 0;
@@ -64,7 +64,7 @@ void Meteor::generateShape() {
     }
 }
 
-void Meteor::bringBackToLife(RGNDS::Point<float> pos, bool generateNewShape, float scale) {
+void Asteroid::bringBackToLife(RGNDS::Point<float> pos, bool generateNewShape, float scale) {
     setAngle(RandF() * PI2);
     velocity.x = (RandF() * 2) - 1;
     velocity.y = (RandF() * 2) - 1;
@@ -80,7 +80,7 @@ void Meteor::bringBackToLife(RGNDS::Point<float> pos, bool generateNewShape, flo
 }
 
 
-Meteor::~Meteor()
+Asteroid::~Asteroid()
 {
     //dtor
 }
