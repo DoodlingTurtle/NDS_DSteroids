@@ -1,9 +1,13 @@
 #include "asteroid.h"
 
+#include "ship.h"
+
 #include <math.h>
 
 #define SCREEN_HEIGHT2 384
 #define RandF() ((float)rand() / (float)RAND_MAX)
+
+Broadcast Asteroid::broadcast(bchAsteroid);
 
 Asteroid::Asteroid() : RGNDS::Engine::PolyObj(8, nullptr) {
     renderer.defineWrappingArea(0, SCREEN_WIDTH, SCREEN_HEIGHT2, 0);
@@ -77,6 +81,25 @@ void Asteroid::bringBackToLife(RGNDS::Point<float> pos, bool generateNewShape, f
         generateShape();
 
     alive = true;
+}
+
+void Asteroid::kill() {
+    alive = false;
+}
+
+void Asteroid::onBroadcast(int channel, int event, void* broadcastdata) {
+    if(channel == bchShip) {
+        if(event == bceMove) {
+            RGNDS::Point<float> dist = ((Ship*)broadcastdata)->pos - this->pos;
+            dist *= dist;
+            float fdist = sqrt(dist.x + dist.y);
+
+            if((16 * scale) + (16 * ((Ship*)broadcastdata)->scale) > fdist)
+                broadcast.transmit(bceDead, this);
+
+            Engine_Log("dist to ship: " << fdist);
+        }
+    }
 }
 
 

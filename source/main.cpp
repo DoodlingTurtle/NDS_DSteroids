@@ -18,20 +18,34 @@
 #define MAX_ASTEROIDS 32
 
 
-class PixelEngine : public RGNDS::Engine {
+class PixelEngine : public RGNDS::Engine, public Broadcast::Listener {
 
 private:
     Ship ship;
     Asteroid asteroids[MAX_ASTEROIDS];
+
+    void onBroadcast(int channel, int event, void* sender) {
+        if(channel == bchAsteroid) {
+            switch(event) {
+                case bceDead:
+                    ((Asteroid*)sender)->kill();
+                    ship.broadcast->unsubscribe((Asteroid*)sender);
+                    //TODO; Award Points
+            }
+        }
+    }
 
 protected:
 
     int onStart() {
         int a;
 
+        Asteroid::broadcast.subscribe(this);
+
         for(a = 0; a < 6; a++) {
             asteroids[a].bringBackToLife(ship.pos, false, 1);
             asteroids[a].moveInDirection((16 * ship.scale) + 32 + Engine_RandF() * 64);
+            ship.broadcast->subscribe(&asteroids[a]);
         }
 
         return 0;
@@ -47,10 +61,10 @@ protected:
 
         int a;
 
-        ship.update(deltaTime, keysHeld(), keysUp(), keysDown(), touch);
-
         for(a = 0; a < MAX_ASTEROIDS; a++)
             asteroids[a].update(deltaTime);
+
+        ship.update(deltaTime, keysHeld(), keysUp(), keysDown(), touch);
     }
 
     void onDraw(float deltaTime, int screen) {

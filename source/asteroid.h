@@ -4,9 +4,15 @@
 #include "../modules/RGNDS_Engine/engine.h"
 #include "wraparoundrenderer.h"
 
-class Asteroid : public RGNDS::Engine::PolyObj
+#include "broadcast.h"
+#include "broadcastchannels.h"
+
+class Asteroid : public RGNDS::Engine::PolyObj, public Broadcast::Listener
 {
     public:
+
+        static Broadcast broadcast;
+
         Asteroid();
         virtual ~Asteroid();
 
@@ -15,6 +21,9 @@ class Asteroid : public RGNDS::Engine::PolyObj
         void draw(int screen);
 
         void bringBackToLife(RGNDS::Point<float> pos, bool generateNewShape, float scale);
+        void kill();
+
+        void onBroadcast(int c, int e, void* b);
 
     private:
         void generateShape();

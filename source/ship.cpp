@@ -12,6 +12,9 @@ Ship::Ship() : PolyObj(2, (const PointF[6]){
   , { -8.0f,  8.0f }
 }){
 
+// start broadcasting
+    broadcast = new Broadcast(bchShip);
+
 // Initialize the Trhuster (yellow triangle at the bottom of the ship);
     thruster = new RGNDS::Engine::PolyObj(1, (const PointF[3]){
         { -8.0f,  0.0f }
@@ -29,6 +32,7 @@ Ship::Ship() : PolyObj(2, (const PointF[6]){
 
 Ship::~Ship() {
     delete thruster;
+    delete broadcast;
 }
 
 void Ship::update(float deltaTime, int keys_held, int keys_up, int keys_justpressed, touchPosition& touch) {
@@ -68,6 +72,8 @@ void Ship::update(float deltaTime, int keys_held, int keys_up, int keys_justpres
     // Update Position based on Screen-Borders
     renderer.updateDrawingInstances(&(this->pos), shipRadius);
     this->truePosition = this->pos;
+
+    broadcast->transmit(bceMove, this);
 
 }
 
