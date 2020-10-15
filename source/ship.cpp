@@ -90,5 +90,9 @@ void Ship::draw(int screen) {
     }
 
     pos = truePosition;
+    pos.y -= screen;
 
+    RGNDS::Engine::drawCircle(pos.to<int>(), 16 * scale, 10, Engine_Color16(1, 0, 31, 0));
+
+    pos.y = truePosition.y;
 }
