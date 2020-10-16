@@ -2,6 +2,9 @@
 
 #define SCREEN_HEIGHT2 384
 
+#include "../modules/RGNDS_GL2D/gl2d.h"
+
+
 Ship::Ship() : PolyObj(2, (const PointF[6]){
     {  8.0f,  0.0f }
   , { -4.0f,  0.0f }

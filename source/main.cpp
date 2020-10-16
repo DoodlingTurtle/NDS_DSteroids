@@ -7,7 +7,6 @@
 #include <stdio.h>
 
 #include <nds.h>
-#include <gl2d.h>
 #include <time.h>
 
 #include "../modules/RGNDS_engine/engine.h"
