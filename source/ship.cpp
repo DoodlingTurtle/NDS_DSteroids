@@ -79,6 +79,17 @@ void Ship::update(float deltaTime, int keys_held, int keys_up, int keys_justpres
 
 void Ship::draw(int screen) {
 
+    RGNDS::EngineGL2D::glStartShape( GL_QUAD );
+        glColor( Engine_Color16(1, 16, 31, 4) );
+        RGNDS::Point<int> p[4] = {
+            { (int)pos.x -8, (int)pos.y -8 } ,
+            { (int)pos.x +8, (int)pos.y -8 } ,
+            { (int)pos.x +8, (int)pos.y +8 } ,
+            { (int)pos.x -8, (int)pos.y +8 }
+        };
+
+        RGNDS::EngineGL2D::glSetPoints(4, p);
+    RGNDS::EngineGL2D::glEndShape();
 
     for(int a = 0; a < renderer.getInstanceCnt(); a++) {
         pos = renderer.getInstance(a);
@@ -92,7 +103,8 @@ void Ship::draw(int screen) {
     pos = truePosition;
     pos.y -= screen;
 
-    RGNDS::Engine::drawCircle(pos.to<int>(), 16 * scale, 10, Engine_Color16(1, 0, 31, 0));
+
+    //RGNDS::Engine::drawCircle(pos.to<int>(), 16 * scale, 10, Engine_Color16(1, 0, 31, 0));
 
     pos.y = truePosition.y;
 }
