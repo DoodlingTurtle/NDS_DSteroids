@@ -68,25 +68,21 @@ protected:
 
     void onDraw(float deltaTime, int screen) {
         int a;
-        glBegin2D();
 
-            for(a = 0; a < MAX_ASTEROIDS; a++)
-                asteroids[a].draw(screen);
+        for(a = 0; a < MAX_ASTEROIDS; a++)
+            asteroids[a].draw(screen);
 
-            ship.draw(screen);
+        ship.draw(screen);
 
-            if(screen == 0) {   // Draw the following only on the top-screen
-                char buffer[300];
-                sprintf(buffer, "truePos: %f x %f\naccel: %f"
-                    , ship.pos.x
-                    , ship.pos.y
-                    , ship.ph.acceleration
-                );
-                drawText(10, 10, buffer, ARGB16(1, 0, 15, 31));
-            }
-
-
-        glEnd2D();
+        if(screen == 0) {   // Draw the following only on the top-screen
+            char buffer[300];
+            sprintf(buffer, "truePos: %f x %f\naccel: %f"
+                , ship.pos.x
+                , ship.pos.y
+                , ship.ph.acceleration
+            );
+            drawText(10, 10, buffer, ARGB16(1, 0, 15, 31));
+        }
     }
 
 };
