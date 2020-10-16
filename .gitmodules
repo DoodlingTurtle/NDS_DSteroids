@@ -1,3 +1,6 @@
 [submodule "modules/RGNDS_Engine"]
 	path = modules/RGNDS_Engine
 	url = ssh://git.local/~/repo/NDS_RGNDS_Engine.git
+[submodule "modules/RGNDS_GL2D"]
+	path = modules/RGNDS_GL2D
+	url = ssh://git.local/~/repo/NDS_RGNDS_GL2D.git
