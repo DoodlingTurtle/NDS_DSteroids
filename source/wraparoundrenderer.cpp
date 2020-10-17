@@ -78,5 +78,7 @@ RGNDS::Point<float> WrapAroundRenderer::getInstance(byte index) {
     if(index < 0 || index > 3)
         index = 0;
 
+
+
     return drawingInstances[index];
 }

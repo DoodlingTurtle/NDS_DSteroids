@@ -2,25 +2,15 @@
 
 #define SCREEN_HEIGHT2 384
 
-Ship::Ship() : PolyObj(2, (const PointF[6]){
-    {  8.0f,  0.0f }
+Ship::Ship() : PolyObj(4, (const PointF[4]){
+    { -8.0f, -8.0f }
   , { -4.0f,  0.0f }
-  , { -8.0f, -8.0f }
-
   , {  8.0f,  0.0f }
-  , { -4.0f,  0.0f }
   , { -8.0f,  8.0f }
-}){
+}, Engine_Color16(1, 31, 0, 0), GL_TRIANGLE_STRIP){
 
 // start broadcasting
     broadcast = new Broadcast(bchShip);
-
-// Initialize the Trhuster (yellow triangle at the bottom of the ship);
-    thruster = new RGNDS::Engine::PolyObj(1, (const PointF[3]){
-        { -8.0f,  0.0f }
-      , { -4.0f, -4.0f }
-      , { -4.0f,  4.0f }
-    });
 
 // Setup Coordinats of the ship and varables needed for Wrap-Arround functionality
     pos = { SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2};
@@ -31,7 +21,6 @@ Ship::Ship() : PolyObj(2, (const PointF[6]){
 }
 
 Ship::~Ship() {
-    delete thruster;
     delete broadcast;
 }
 
@@ -79,32 +68,46 @@ void Ship::update(float deltaTime, int keys_held, int keys_up, int keys_justpres
 
 void Ship::draw(int screen) {
 
-    RGNDS::EngineGL2D::glStartShape( GL_QUAD );
-        glColor( Engine_Color16(1, 16, 31, 4) );
-        RGNDS::Point<int> p[4] = {
-            { (int)pos.x -8, (int)pos.y -8 } ,
-            { (int)pos.x +8, (int)pos.y -8 } ,
-            { (int)pos.x +8, (int)pos.y +8 } ,
-            { (int)pos.x -8, (int)pos.y +8 }
-        };
-
-        RGNDS::EngineGL2D::glSetPoints(4, p);
-    RGNDS::EngineGL2D::glEndShape();
-
-    for(int a = 0; a < renderer.getInstanceCnt(); a++) {
-        pos = renderer.getInstance(a);
-
-        if(thrusting)
-            thruster->draw(0x83ff, screen, this);
-
-        RGNDS::Engine::PolyObj::draw(0x801F, screen);
-    }
-
-    pos = truePosition;
     pos.y -= screen;
 
+    RGNDS::Point<int> p[4];
 
-    //RGNDS::Engine::drawCircle(pos.to<int>(), 16 * scale, 10, Engine_Color16(1, 0, 31, 0));
+    p[0].x = -8;    p[0].y = -8;
+    translate<int, int>(&p[0], &p[0]);
 
-    pos.y = truePosition.y;
+    p[1].x =  8;    p[1].y = -8;
+    translate<int, int>(&p[1], &p[1]);
+
+    p[2].x =  8;    p[2].y =  8;
+    translate<int, int>(&p[2], &p[2]);
+
+    p[3].x = -8;    p[3].y =  8;
+    translate<int, int>(&p[3], &p[3]);
+
+    RGNDS::EngineGL2D::glShape(GL_QUAD, Engine_Color16(1, 16, 31, 4), 4, p);
+
+    pos.y += screen;
+
+    RGNDS::Point<float> posOrig = pos;
+    for(int a = 0; a < renderer.getInstanceCnt(); a++) {
+        pos = renderer.getInstance(a);
+        pos.y -= screen;
+
+        if(thrusting) {
+            p[0].x = -8;    p[0].y =  0;
+            translate<int, int>(&p[0], &p[0]);
+
+            p[1].x = -4;    p[1].y = -4;
+            translate<int, int>(&p[1], &p[1]);
+
+            p[2].x = -4;    p[2].y =  4;
+            translate<int, int>(&p[2], &p[2]);
+
+            RGNDS::EngineGL2D::glShape(GL_TRIANGLE, Engine_Color16(1, 31, 31, 0), 3, p);
+        }
+
+        RGNDS::Engine::PolyObj::draw(0);
+
+    }
+    pos = posOrig;
 }

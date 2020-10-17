@@ -9,7 +9,7 @@
 
 Broadcast Asteroid::broadcast(bchAsteroid);
 
-Asteroid::Asteroid() : RGNDS::Engine::PolyObj(8, nullptr) {
+Asteroid::Asteroid() : RGNDS::Engine::PolyObj(18, nullptr, Engine_Color16(1, 14, 11, 10), GL_QUAD_STRIP) {
     renderer.defineWrappingArea(0, SCREEN_WIDTH, SCREEN_HEIGHT2, 0);
     generateShape();
     this->alive = false;
@@ -32,26 +32,45 @@ void Asteroid::draw(int screen) {
 
     for(int a = 0; a < renderer.getInstanceCnt(); a++){
         pos = renderer.getInstance(a);
-        RGNDS::Engine::PolyObj::draw(0xffff, screen);
+        RGNDS::Engine::PolyObj::draw(screen);
     }
 
     pos = p;
 }
 
 void Asteroid::generateShape() {
-    float angSteps = PI2 / (numPoints/3);
+    float angSteps = PI2 / ((numPoints-2) / 2);
     float radius = 16;
     float ang = 0;
     int a;
     float d1, d2;
 
     // Setup Shape
-    float pointdist[numPoints / 3 + 1];
+    float pointdist[numPoints + 1];
 
-    for(a = 0; a < numPoints/3 + 1; a++){
+    for(a = 0; a < (numPoints-2)/2 + 1; a++){
         pointdist[a] = radius
             + ((RandF() * 8 - 4) * (a%2 > 0));
     }
+
+    points[0].x = 2;
+    points[0].y = 0;
+    points[1].x = radius;
+    points[1].y = 0;
+
+    for(a = 0; a < numPoints; a+=2) {
+        ang += angSteps;
+
+        points[a+1].x = cos(ang) * pointdist[a/2];
+        points[a+1].y = sin(ang) * pointdist[a/2];
+
+        points[a].x = 0;
+        points[a].y = 0;
+
+    }
+
+    return;
+
 
     for(int a = 0; a < numPoints; a+=3) {
 
