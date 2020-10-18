@@ -3,22 +3,24 @@
 
 #include <nds.h>
 #include "../modules/RGNDS_Engine/engine.h"
+#include "../modules/RGNDS_Engine/gl2d_polyshape.h"
+#include "../modules/RGNDS_Engine/transform.h"
 
-#include "./shipengine.h"
 #include "./wraparoundrenderer.h"
 #include "./broadcastchannels.h"
 #include "./broadcast.h"
 
+#include "shipengine.h"
+
 #define PointF RGNDS::Point<float>
 
-class Ship : public RGNDS::Engine::PolyObj {
+class Ship : public RGNDS::Transform {
     public:
-
         PointF velocity;
-        ShipEngine ph;
-        PointF truePosition;
         Broadcast* broadcast;
         WrapAroundRenderer renderer;
+
+        ShipEngine ph;
 
         Ship();
         virtual ~Ship();
@@ -30,8 +32,8 @@ class Ship : public RGNDS::Engine::PolyObj {
         float angRes = PI/20;
         bool thrusting = false;
 
-        RGNDS::Engine::PolyObj* thruster;
-
+        RGNDS::GL2D::PolyShape* shaBody;
+        RGNDS::GL2D::PolyShape* shaThruster;
 };
 
 #endif // SHIP_H

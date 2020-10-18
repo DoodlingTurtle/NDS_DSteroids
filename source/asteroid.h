@@ -4,14 +4,19 @@
 #include "../modules/RGNDS_Engine/engine.h"
 #include "wraparoundrenderer.h"
 
+#include "../modules/RGNDS_Engine/transform.h"
+#include "../modules/RGNDS_Engine/gl2d_polyshape.h"
+
 #include "broadcast.h"
 #include "broadcastchannels.h"
 
-class Asteroid : public RGNDS::Engine::PolyObj, public Broadcast::Listener
+class Asteroid : public RGNDS::GL2D::PolyShape, public Broadcast::Listener
 {
     public:
 
         static Broadcast broadcast;
+
+        RGNDS::Transform* tra = nullptr;
 
         Asteroid();
         virtual ~Asteroid();
@@ -29,9 +34,9 @@ class Asteroid : public RGNDS::Engine::PolyObj, public Broadcast::Listener
         void generateShape();
 
         WrapAroundRenderer renderer;
+
         RGNDS::Point<float> velocity;
         float spinSpeed;
-
         bool alive;
 };
 

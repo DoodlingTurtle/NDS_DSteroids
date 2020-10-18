@@ -43,7 +43,7 @@ protected:
 
         for(a = 0; a < 6; a++) {
             asteroids[a].bringBackToLife(ship.pos, false, 1);
-            asteroids[a].moveInDirection((16 * ship.scale) + 32 + Engine_RandF() * 64);
+            asteroids[a].tra->moveInDirection((16 * ship.scale) + 32 + Engine_RandF() * 64);
             ship.broadcast->subscribe(&asteroids[a]);
         }
 
@@ -74,15 +74,6 @@ protected:
 
         ship.draw(screen);
 
-        if(screen == 0) {   // Draw the following only on the top-screen
-            char buffer[300];
-            sprintf(buffer, "truePos: %f x %f\naccel: %f"
-                , ship.pos.x
-                , ship.pos.y
-                , ship.ph.acceleration
-            );
-            drawText(10, 10, buffer, ARGB16(1, 0, 15, 31));
-        }
     }
 
 };
