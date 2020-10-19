@@ -10,16 +10,16 @@ void WrapAroundRenderer::updateDrawingInstances(RGNDS::Point<float>* pos, float 
 
 
     // Move ship back to screen, once its true Position has left the Screen completely
-    if(pos->x >= right + shipRadius)
+    if(pos->x >= right)
         pos->x -= width;
 
-    if(pos->x <= left-shipRadius)
+    if(pos->x <= left)
         pos->x += width;
 
-    if(pos->y >= bottom + shipRadius)
+    if(pos->y >= bottom)
         pos->y -= height;
 
-    if(pos->y <= top-shipRadius)
+    if(pos->y <= top)
         pos->y += height;
 
 
