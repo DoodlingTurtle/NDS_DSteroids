@@ -5,6 +5,7 @@
 -----------------------------------------------------------------------------*/
 #include <math.h>
 #include <stdio.h>
+#include <climits>
 
 #include <nds.h>
 #include <time.h>
@@ -14,7 +15,7 @@
 #include "./ship.h"
 #include "./asteroid.h"
 
-#define MAX_ASTEROIDS 32
+#define MAX_ASTEROIDS 48
 
 
 class PixelEngine : public RGNDS::Engine, public Broadcast::Listener {
@@ -27,7 +28,7 @@ private:
         if(channel == bchAsteroid) {
             switch(event) {
             case bceHitPlayer:
-                exit();
+                //exit();
                 break;
             case bceDead:
                 ((Asteroid*)sender)->kill();
@@ -44,7 +45,7 @@ protected:
 
         Asteroid::broadcast.subscribe(this);
 
-        for(a = 0; a < 6; a++) {
+        for(a = 0; a < MAX_ASTEROIDS; a++) {
             asteroids[a].bringBackToLife(ship.pos, false, 1);
             asteroids[a].tra->moveInDirection((16 * ship.scale) + 32 + Engine_RandF() * 64);
             ship.broadcast->subscribe(&asteroids[a]);
@@ -76,6 +77,12 @@ protected:
             asteroids[a].draw(screen);
 
         ship.draw(screen);
+
+        if(screen == 0) {
+            char buffer[128];
+            sprintf(buffer, "ABC 123 !!!\n%d", 0xffff);
+            RGNDS::GL2D::glText(buffer, Engine_Color16(1, 0, 10, 31), &RGNDS::Transform::_default);
+        }
 
     }
 

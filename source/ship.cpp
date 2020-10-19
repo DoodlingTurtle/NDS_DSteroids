@@ -7,10 +7,10 @@ Ship::Ship() {
     shaBody = new RGNDS::GL2D::PolyShape(
           4,
           (const PointF[4]){
-                { -8.0f, -8.0f }
-              , { -4.0f,  0.0f }
-              , {  8.0f,  0.0f }
-              , { -8.0f,  8.0f }
+                { -16.0f, -16.0f }
+              , { - 8.0f,   0.0f }
+              , {  16.0f,   0.0f }
+              , { -16.0f,  16.0f }
           },
           GL_TRIANGLE_STRIP
     );
@@ -19,12 +19,14 @@ Ship::Ship() {
     shaThruster = new RGNDS::GL2D::PolyShape(
          3,
          (const PointF[3]){
-              { -8,  0 },
-              { -4, -4 },
-              { -4,  4 },
+              { -16,   0 },
+              { - 8,  -8 },
+              { - 8,   8 },
          },
          GL_TRIANGLE
     );
+
+    scale = .75;
 
 // start broadcasting
     broadcast = new Broadcast(bchShip);
@@ -80,7 +82,7 @@ void Ship::update(float deltaTime, int keys_held, int keys_up, int keys_justpres
 }
 
 void Ship::draw(int screen) {
-    RGNDS::GL2D::PolyShape *c = RGNDS::GL2D::PolyShape::createCircle(8, 8, 1);
+    RGNDS::GL2D::PolyShape *c = RGNDS::GL2D::PolyShape::createCircle(16, 8, 1);
     c->draw(Engine_Color16(1, 12, 21, 31), screen, this);
     delete c;
 

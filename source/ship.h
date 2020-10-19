@@ -12,7 +12,7 @@
 
 #include "shipengine.h"
 
-#define PointF RGNDS::Point<float>
+#define PointF RGNDS::Point<double>
 
 class Ship : public RGNDS::Transform {
     public:
