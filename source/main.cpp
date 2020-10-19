@@ -24,11 +24,12 @@ private:
     Ship ship;
     Asteroid asteroids[MAX_ASTEROIDS];
 
+
     void onBroadcast(int channel, int event, void* sender) {
         if(channel == bchAsteroid) {
             switch(event) {
             case bceHitPlayer:
-                //exit();
+                exit();     // Meteor hits player = game over;
                 break;
             case bceDead:
                 ((Asteroid*)sender)->kill();
@@ -40,12 +41,16 @@ private:
 
 protected:
 
+    static float game_difficulty;        // difficulty goes from 1 to 16;
+                                         // 16 = max num of Asteroids with biggest size
+
+
     int onStart() {
         int a;
 
         Asteroid::broadcast.subscribe(this);
 
-        for(a = 0; a < MAX_ASTEROIDS; a++) {
+        for(a = 0; a < (int)game_difficulty; a++) {
             asteroids[a].bringBackToLife(ship.pos, false, 1);
             asteroids[a].tra->moveInDirection((16 * ship.scale) + 32 + Engine_RandF() * 64);
             ship.broadcast->subscribe(&asteroids[a]);
@@ -55,6 +60,12 @@ protected:
     }
 
     void onEnd() {
+        for(int a = 0; a < MAX_ASTEROIDS; a++) {
+            ship.broadcast->unsubscribe(&asteroids[a]);
+            asteroids[a].kill();
+        }
+
+        Asteroid::broadcast.unsubscribe(this);
     }
 
     void onUpdate(float deltaTime) {
@@ -87,6 +98,8 @@ protected:
     }
 
 };
+
+float PixelEngine::game_difficulty = 1.0f;
 
 
 //-----------------------------------------------------------------------------
