@@ -8,7 +8,8 @@ enum BroadcastChannel{
 
 enum BroadcastEvent {
     bceMove = 0,
-    bceDead
+    bceDead,
+    bceHitPlayer
 };
 
 #endif // __BROADCASTCHANNELS_H__

@@ -73,16 +73,16 @@ void Ship::update(float deltaTime, int keys_held, int keys_up, int keys_justpres
     //TODO: (RGO) Make sure ship radius does not eclipse SCREEN_HEIGHT (192px)
     float shipRadius = 8 * scale;
 
-// Check for WrapAround
-
     // Update Position based on Screen-Borders
     renderer.updateDrawingInstances(&(this->pos), shipRadius);
 
     broadcast->transmit(bceMove, this);
-
 }
 
 void Ship::draw(int screen) {
+    RGNDS::GL2D::PolyShape *c = RGNDS::GL2D::PolyShape::createCircle(8, 8, 1);
+    c->draw(Engine_Color16(1, 12, 21, 31), screen, this);
+    delete c;
 
     RGNDS::Point<float> posOrig = this->pos;
 

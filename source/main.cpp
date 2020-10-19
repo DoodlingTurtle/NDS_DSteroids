@@ -26,10 +26,13 @@ private:
     void onBroadcast(int channel, int event, void* sender) {
         if(channel == bchAsteroid) {
             switch(event) {
-                case bceDead:
-                    ((Asteroid*)sender)->kill();
-                    ship.broadcast->unsubscribe((Asteroid*)sender);
-                    //TODO; Award Points
+            case bceHitPlayer:
+                exit();
+                break;
+            case bceDead:
+                ((Asteroid*)sender)->kill();
+                ship.broadcast->unsubscribe((Asteroid*)sender);
+                //TODO; Award Points
             }
         }
     }
@@ -86,8 +89,12 @@ int main(void) {
 
     srand(time(nullptr));
 
-    PixelEngine game;
-    game.run();
+    PixelEngine* game = nullptr;
+    while(1) {
+        game = new PixelEngine();
+        game->run();
+        delete game;
+    }
 
     return 0;
 }

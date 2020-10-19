@@ -4,6 +4,8 @@
 
 #include <math.h>
 
+#include "collision.h"
+
 #define SCREEN_HEIGHT2 384
 #define RandF() ((float)rand() / (float)RAND_MAX)
 
@@ -24,6 +26,8 @@ void Asteroid::update(float deltatime) {
     tra->setAngleRel(PI2 * (deltatime * spinSpeed));
     tra->pos += velocity;
     renderer.updateDrawingInstances(&tra->pos, 24);
+
+    broadcast.transmit(bceMove, this);
 }
 
 void Asteroid::draw(int screen) {
@@ -89,18 +93,14 @@ void Asteroid::kill() {
     alive = false;
 }
 
-void Asteroid::onBroadcast(int channel, int event, void* broadcastdata) {
-    if(channel == bchShip) {
-        if(event == bceMove) {
-            RGNDS::Point<float> dist = ((Ship*)broadcastdata)->pos - tra->pos;
-            dist *= dist;
-            float fdist = sqrt(dist.x + dist.y);
-
-            if((16 * tra->scale) + (16 * ((Ship*)broadcastdata)->scale) > fdist)
-                broadcast.transmit(bceDead, this);
-
-            Engine_Log("dist to ship: " << fdist);
-        }
+void Asteroid::onBroadcast(int channel, int event, void* bcdata) {
+    if(channel == bchShip && event == bceMove) {
+        if(Collision::checkCircleOnCircle(
+            &tra->pos,
+            tra->scale * 16,
+            &((Ship*)bcdata)->pos,
+            ((Ship*)bcdata)->scale * 8
+        )) broadcast.transmit(bceHitPlayer, this);
     }
 }
 
