@@ -24,6 +24,8 @@ private:
     Ship ship;
     Asteroid asteroids[MAX_ASTEROIDS];
 
+    RGNDS::Transform scorelocation;
+    float scoreTimer;
 
     void onBroadcast(int channel, int event, void* sender) {
         if(channel == bchAsteroid) {
@@ -49,6 +51,12 @@ protected:
         int a;
 
         Asteroid::broadcast.subscribe(this);
+        scorelocation.pos.x = 5;
+        scorelocation.pos.y = 5;
+        scorelocation.scale = 2;
+
+        score = 0;
+        scoreTimer = 0.0f;
 
         for(a = 0; a < (int)game_difficulty; a++) {
             asteroids[a].bringBackToLife(ship.pos, false, 1);
@@ -73,6 +81,16 @@ protected:
         touchRead(&touch);
         scanKeys();
 
+        scoreTimer += deltaTime * 1000.0f;
+        // award 1 Point for each Second survived
+        if(scoreTimer > 1000.0f) {
+            score++;
+            scoreTimer -= 1000.0f;
+        }
+
+        //TODO: punish plazer if he stayed still for to long
+        //TODO: alternatively award points for ship movement instead of time
+
         int a;
 
         for(a = 0; a < MAX_ASTEROIDS; a++)
@@ -90,12 +108,14 @@ protected:
         ship.draw(screen);
 
         if(screen == 0) {
-            char buffer[128];
-            sprintf(buffer, "ABC 123 !!!\n%d", 0xffff);
-            RGNDS::GL2D::glText(buffer, Engine_Color16(1, 0, 10, 31), &RGNDS::Transform::_default);
+            char buffer[16];
+            sprintf(buffer, "Score: % 8d", score);
+            RGNDS::GL2D::glText(buffer, Engine_Color16(1, 0, 10, 31), &scorelocation);
         }
-
     }
+
+public:
+    int score = 0;
 
 };
 
