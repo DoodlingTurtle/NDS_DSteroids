@@ -1,4 +1,5 @@
 #include "ship.h"
+#include <math.h>
 
 #define SCREEN_HEIGHT2 384
 
@@ -46,19 +47,19 @@ Ship::~Ship() {
 void Ship::update(float deltaTime, int keys_held, int keys_up, int keys_justpressed, touchPosition& touch) {
 
 // Process user Input
-    if(keys_held&KEY_RIGHT)
+    if(keys_held&(KEY_RIGHT|KEY_A))
         this->setAngleRel(angRes);
 
-    if(keys_held&KEY_LEFT)
+    if(keys_held&(KEY_LEFT|KEY_Y))
         this->setAngleRel(-angRes);
 
-    if(keys_held&KEY_X)
+    if(keys_held&KEY_START)
         this->scale += 0.05;
 
-    if(keys_held&KEY_B)
+    if(keys_held&KEY_SELECT)
         this->scale -= 0.05;
 
-    if(keys_held&KEY_UP) {
+    if(keys_held&(KEY_UP|KEY_X)) {
         thrusting = true;
         ph.accelerate(deltaTime * 1.5f);
     }
@@ -82,10 +83,6 @@ void Ship::update(float deltaTime, int keys_held, int keys_up, int keys_justpres
 }
 
 void Ship::draw(int screen) {
-    RGNDS::GL2D::PolyShape *c = RGNDS::GL2D::PolyShape::createCircle(16, 8, 1);
-    c->draw(Engine_Color16(1, 12, 21, 31), screen, this);
-    delete c;
-
     RGNDS::Point<float> posOrig = this->pos;
 
     for(int a = 0; a < renderer.getInstanceCnt(); a++) {
@@ -97,4 +94,16 @@ void Ship::draw(int screen) {
     }
 
     this->pos = posOrig;
+
+#ifdef TARGET_DEBUG
+    RGNDS::GL2D::PolyShape *c = RGNDS::GL2D::PolyShape::createCircle(12, 16, std::max(0.0001f, 1/scale));
+    c->draw(Engine_Color16(1, 12, 21, 31), screen, this);
+    delete c;
+#endif
+
+}
+
+void Ship::getCollisionSphere(RGNDS::Point<float> *pos, float *radius) {
+    *pos = this->pos;
+    *radius = this->scale * 16.0f;
 }

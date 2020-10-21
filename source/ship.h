@@ -28,6 +28,8 @@ class Ship : public RGNDS::Transform {
         void update(float deltaTime, int keys_held, int keys_up, int keys_justpressed, touchPosition& touch);
         void draw(int screen);
 
+        void getCollisionSphere(RGNDS::Point<float> *pos, float *radius);
+
     private:
         float angRes = PI/20;
         bool thrusting = false;

@@ -41,6 +41,13 @@ void Asteroid::draw(int screen) {
     }
 
     tra->pos = p;
+
+#ifdef TARGET_DEBUG
+    RGNDS::GL2D::PolyShape *c = RGNDS::GL2D::PolyShape::createCircle(14, 16, std::max(0.001f, 1/tra->scale));
+    c->draw(Engine_Color16(1, 12, 21, 31), screen, tra);
+    delete c;
+#endif
+
 }
 
 void Asteroid::generateShape() {
@@ -94,18 +101,20 @@ void Asteroid::kill() {
 }
 
 void Asteroid::onBroadcast(int channel, int event, void* bcdata) {
+// React to Ship Movement
     if(channel == bchShip && event == bceMove) {
-        if(Collision::checkCircleOnCircle(
-            &tra->pos,
-            tra->scale * 16,
-            &((Ship*)bcdata)->pos,
-            ((Ship*)bcdata)->scale * 8
+        RGNDS::Point <float> p;
+        float r;
+        ((Ship*)bcdata)->getCollisionSphere(&p, &r);
+
+        if(RGNDS::Collision::checkCircleOnCircle(
+            &tra->pos, tra->scale * 14,
+            &p, r
         )) broadcast.transmit(bceHitPlayer, this);
     }
 }
 
 
-Asteroid::~Asteroid()
-{
+Asteroid::~Asteroid() {
     delete tra;
 }

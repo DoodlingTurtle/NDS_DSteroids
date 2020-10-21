@@ -2,40 +2,31 @@
 
 #include <math.h>
 
-bool Collision::checkCircleOnCircle(RGNDS::Point<float>* const pos1, float radius1, RGNDS::Point<float>* const pos2, float radius2, Collision* overlapdata )
-{
-    RGNDS::Point<float> d =  *pos1 - *pos2;
+namespace RGNDS {
 
-    float dstP = (d.x * d.x) + (d.y * d.y);
+    bool Collision::checkCircleOnCircle(Point<float>* const pos1, float radius1, Point<float>* const pos2, float radius2, Collision* overlapdata)
+    {
+        RGNDS::Point<float> d =  *pos1 - *pos2;
 
-    float dstR = radius1 + radius2;
-          dstR *= dstR;
+        float dstP = (d.x * d.x) + (d.y * d.y);
 
-    if(dstP < dstR){
-        if(overlapdata != nullptr) {
-            overlapdata->C2COverlapDist = std::sqrt(dstP);
-            overlapdata->C2COverlapImpact = std::sqrt(dstR-dstP);
-            overlapdata->overlapDir.x = d.x / overlapdata->C2COverlapDist;
-            overlapdata->overlapDir.y = d.y / overlapdata->C2COverlapDist;
+        float dstR = radius1 + radius2;
+              dstR *= dstR;
+
+        if(dstP < dstR){
+            if(overlapdata != nullptr) {
+                overlapdata->C2COverlapDist = std::sqrt(dstR);
+                overlapdata->C2COverlapImpact = std::sqrt(dstR-dstP);
+                overlapdata->overlapDir.x = d.x / overlapdata->C2COverlapDist;
+                overlapdata->overlapDir.y = d.y / overlapdata->C2COverlapDist;
+            }
+            return true;
         }
-        return true;
+
+        return false;
     }
 
-    return false;
-}
 
-
-
-
-
-
-
-Collision::Collision()
-{
-    //ctor
-}
-
-Collision::~Collision()
-{
-    //dtor
+    Collision::Collision() {}
+    Collision::~Collision() {}
 }
