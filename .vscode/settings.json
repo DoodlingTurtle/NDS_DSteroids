@@ -1,0 +1,24 @@
+{    
+    "C_Cpp.default.includePath": [
+        ".",
+        "C:\\devkitPro\\libnds\\include",
+        "C:\\devkitPro\\devkitARM\\arm-none-eabi\\include",
+        "C:\\devkitPro\\devkitARM\\lib\\gcc\\arm-none-eabi\\10.2.0\\include",
+        "C:\\devkitPro\\devkitARM\\arm-none-eabi\\include\\c++\\10.2.0",
+        "C:\\devkitPro\\devkitARM\\arm-none-eabi\\include\\c++\\10.2.0\\arm-none-eabi\\armv6k\\fpu"
+    ],
+    
+    "C_Cpp.default.cStandard": "c11",
+    "C_Cpp.default.cppStandard": "c++11" ,
+
+    "C_Cpp.default.browse.limitSymbolsToIncludedHeaders": false,
+
+    "C_Cpp.default.browse.path": [
+        "${workspaceRoot}",
+        "C:\\devkitPro\\libnds\\include",
+        "C:\\devkitPro\\devkitARM\\arm-none-eabi\\include",
+        "C:\\devkitPro\\devkitARM\\lib\\gcc\\arm-none-eabi\\10.2.0\\include",
+        "C:\\devkitPro\\devkitARM\\arm-none-eabi\\include\\c++\\10.2.0",
+        "C:\\devkitPro\\devkitARM\\arm-none-eabi\\include\\c++\\10.2.0\\arm-none-eabi\\armv6k\\fpu"
+    ]
+}
