@@ -27,13 +27,12 @@ Ship::Ship() {
          GL_TRIANGLE
     );
 
-    scale = .75;
-
+    
 // start broadcasting
     broadcast = new Broadcast(bchShip);
 
 // Setup Coordinats of the ship and varables needed for Wrap-Arround functionality
-    pos = { SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2};
+    reset();
 
     renderer.defineWrappingArea(0, SCREEN_WIDTH, SCREEN_HEIGHT2, 0);
 }
@@ -74,7 +73,8 @@ void Ship::update(float deltaTime, int keys_held, int keys_up, int keys_justpres
     pos += velocity;
 
     //TODO: (RGO) Make sure ship radius does not eclipse SCREEN_HEIGHT (192px)
-    float shipRadius = 8 * scale;
+    float shipRadius;
+    getCollisionSphere(nullptr, &shipRadius);
 
     // Update Position based on Screen-Borders
     renderer.updateDrawingInstances(&(this->pos), shipRadius);
@@ -82,28 +82,38 @@ void Ship::update(float deltaTime, int keys_held, int keys_up, int keys_justpres
     broadcast->transmit(bceMove, this);
 }
 
-void Ship::draw(int screen) {
+void Ship::draw() {
     RGNDS::Point<float> posOrig = this->pos;
 
     for(int a = 0; a < renderer.getInstanceCnt(); a++) {
         this->pos = renderer.getInstance(a);
         if(thrusting)
-            shaThruster->draw(Engine_Color16(a, 31, 31,  0), screen, this);
+            shaThruster->draw(Engine_Color16(a, 31, 31,  0), this);
 
-        shaBody->draw(Engine_Color16(a, 31,  0,  0), screen, this);
+        shaBody->draw(Engine_Color16(a, 31,  0,  0), this);
     }
 
     this->pos = posOrig;
 
 #ifdef TARGET_DEBUG
     RGNDS::GL2D::PolyShape *c = RGNDS::GL2D::PolyShape::createCircle(12, 16, std::max(0.0001f, 1/scale));
-    c->draw(Engine_Color16(1, 12, 21, 31), screen, this);
+    c->draw(Engine_Color16(1, 12, 21, 31), this);
     delete c;
 #endif
 
 }
 
 void Ship::getCollisionSphere(RGNDS::Point<float> *pos, float *radius) {
-    *pos = this->pos;
-    *radius = this->scale * 16.0f;
+    if(pos != nullptr)
+        *pos = this->pos;
+    if(radius != nullptr)
+        *radius = this->scale * 16.0f;
+}
+
+void Ship::reset() {
+    pos = { SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2};
+    scale = .75;
+    ang  = -PI/2;
+    velocity.x = 0;
+    velocity.y = 0;
 }

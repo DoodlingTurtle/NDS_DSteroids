@@ -23,7 +23,7 @@ class Asteroid : public RGNDS::GL2D::PolyShape, public Broadcast::Listener
 
         void update(float deltaTime);
 
-        void draw(int screen);
+        void draw();
 
         void bringBackToLife(RGNDS::Point<float> pos, bool generateNewShape, float scale);
         void kill();

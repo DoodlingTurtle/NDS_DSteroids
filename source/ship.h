@@ -26,9 +26,11 @@ class Ship : public RGNDS::Transform {
         virtual ~Ship();
 
         void update(float deltaTime, int keys_held, int keys_up, int keys_justpressed, touchPosition& touch);
-        void draw(int screen);
+        void draw();
 
         void getCollisionSphere(RGNDS::Point<float> *pos, float *radius);
+
+        void reset();
 
     private:
         float angRes = PI/20;

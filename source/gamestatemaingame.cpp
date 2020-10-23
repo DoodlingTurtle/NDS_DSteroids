@@ -22,6 +22,8 @@ void GameStateMainGame::onBroadcast(int channel, int event, void* sender) {
 int GameStateMainGame::onStart() {
     int a;
 
+    ship.reset();
+
     Asteroid::broadcast.subscribe(this);
     scorelocation.pos.x = 5;
     scorelocation.pos.y = 5;
@@ -81,7 +83,7 @@ void GameStateMainGame::onUpdate(float deltaTime) {
     ship.update(deltaTime, keysHeld(), keysUp(), keysDown(), touch);
 }
 
-void GameStateMainGame::onDraw(float deltaTime, int screen) {
+void GameStateMainGame::onDraw(float deltaTime, RGNDS::Engine::Screen screen) {
     int a;
 
     for(auto star : stars) {
@@ -89,11 +91,11 @@ void GameStateMainGame::onDraw(float deltaTime, int screen) {
     }
 
     for(a = 0; a < MAX_ASTEROIDS; a++)
-        asteroids[a].draw(screen);
+        asteroids[a].draw();
 
-    ship.draw(screen);
+    ship.draw();
 
-    if(screen == 0) {
+    if(screen == ENGINE_SCREEN_TOP) {
         char buffer[16];
         sprintf(buffer, "Score: % 8d", score);
         RGNDS::GL2D::glText(buffer, Engine_Color16(1, 0, 10, 31), &scorelocation);

@@ -1,10 +1,11 @@
 #ifndef GAMESTATEMAINGAME_H
 #define GAMESTATEMAINGAME_H
 
+#include <cstdio>
+
 #include "../modules/RGNDS_Engine/engine.h"
 #include "broadcast.h"
 #include "broadcastchannels.h"
-
 
 #include "./ship.h"
 #include "./asteroid.h"
@@ -27,7 +28,6 @@ class GameStateMainGame : public RGNDS::Engine, public Broadcast::Listener
             int alpha;
         };
 
-
         Ship ship;
         Asteroid asteroids[MAX_ASTEROIDS];
         std::vector<Star> stars;
@@ -39,7 +39,7 @@ class GameStateMainGame : public RGNDS::Engine, public Broadcast::Listener
         int onStart();
         void onEnd();
         void onUpdate(float deltaTime);
-        void onDraw(float deltaTime, int screen);
+        void onDraw(float deltaTime, RGNDS::Engine::Screen screen);
 
 };
 

@@ -30,21 +30,21 @@ void Asteroid::update(float deltatime) {
     broadcast.transmit(bceMove, this);
 }
 
-void Asteroid::draw(int screen) {
+void Asteroid::draw() {
     if(!alive) return;
 
     RGNDS::Point<float> p = tra->pos;
 
     for(int a = 0; a < renderer.getInstanceCnt(); a++) {
         tra->pos = renderer.getInstance(a);
-        RGNDS::GL2D::PolyShape::draw(Engine_Color16(1, 14, 11, 10), screen, tra);
+        RGNDS::GL2D::PolyShape::draw(Engine_Color16(1, 14, 11, 10), tra);
     }
 
     tra->pos = p;
 
 #ifdef TARGET_DEBUG
     RGNDS::GL2D::PolyShape *c = RGNDS::GL2D::PolyShape::createCircle(14, 16, std::max(0.001f, 1/tra->scale));
-    c->draw(Engine_Color16(1, 12, 21, 31), screen, tra);
+    c->draw(Engine_Color16(1, 12, 21, 31), tra);
     delete c;
 #endif
 
@@ -85,7 +85,7 @@ void Asteroid::bringBackToLife(RGNDS::Point<float> pos, bool generateNewShape, f
     tra->setAngle(RandF() * PI2);
     velocity.x = (RandF() * 2) - 1;
     velocity.y = (RandF() * 2) - 1;
-    spinSpeed = (RandF() * 0.5 + 0.5) * 0.0625; // Spin by 360° every 16 Seconds (at max spinspeed)
+    spinSpeed = (RandF() * 0.5 + 0.5) * 0.0625; // Spin by 360ï¿½ every 16 Seconds (at max spinspeed)
 
     tra->pos = pos;
     tra->scale = scale;
