@@ -13,6 +13,8 @@
 #include "shipengine.h"
 #include "spaceobj.h"
 
+#include "shot.h"
+
 class Ship : public SpaceObj {
     public:
         Broadcast* broadcast;
@@ -32,6 +34,8 @@ class Ship : public SpaceObj {
 
         RGNDS::GL2D::PolyShape* shaBody;
         RGNDS::GL2D::PolyShape* shaThruster;
+
+        std::vector<Shot*> *shots;
 };
 
 #endif // SHIP_H

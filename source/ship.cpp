@@ -29,6 +29,8 @@ Ship::Ship() : SpaceObj(16.0f) {
 // start broadcasting
     broadcast = new Broadcast(bchShip);
 
+    shots = new std::vector<Shot*>();
+
 // Setup Coordinats of the ship and varables needed for Wrap-Arround functionality
     reset();
 }
@@ -37,6 +39,12 @@ Ship::~Ship() {
     delete broadcast;
     delete shaBody;
     delete shaThruster;
+
+    for(auto shot : *shots)
+        delete shot;
+
+    shots->clear();
+    delete shots;
 }
 
 void Ship::update(float deltaTime, int keys_held, int keys_up, int keys_justpressed, touchPosition& touch) {
@@ -54,6 +62,9 @@ void Ship::update(float deltaTime, int keys_held, int keys_up, int keys_justpres
     if(keys_held&KEY_SELECT)
         this->scale -= 0.05;
 
+    if(keys_justpressed&(KEY_R|KEY_L))
+        shots->push_back(new Shot(ang, &pos));
+    
     if(keys_held&(KEY_UP|KEY_X)) {
         thrusting = true;
         ph.accelerate(deltaTime * 1.5f);
@@ -69,6 +80,19 @@ void Ship::update(float deltaTime, int keys_held, int keys_up, int keys_justpres
     // Update Position based on Screen-Borders
     updatePosition();
     broadcast->transmit(bceMove, this);
+
+    // Process Shots
+    std::vector<Shot*> *nextRound = new std::vector<Shot*>();
+    
+    for(auto shot : *shots) {
+        if(shot->update(deltaTime))
+            nextRound->push_back(shot);
+    }
+
+    shots->clear();
+    delete shots;
+    shots = nextRound;
+
 }
 
 void Ship::draw() {
@@ -78,12 +102,16 @@ void Ship::draw() {
 
         this->shaBody->draw(Engine_Color16(1, 31,  0,  0), tr);
     });
+
+    for(auto shot : *shots) {
+        shot->draw();
+    }
 }
 
 void Ship::reset() {
     pos = { SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2};
     scale = .75;
-    ang  = -PI/2;
+    setAngle(PI/2);
     velocity.x = 0;
     velocity.y = 0;
 }
