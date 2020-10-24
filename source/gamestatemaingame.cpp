@@ -43,7 +43,7 @@ int GameStateMainGame::onStart() {
 
     for(a = 0; a < (int)game_difficulty; a++) {
         asteroids[a].bringBackToLife(ship.pos, false, 1);
-        asteroids[a].tra->moveInDirection((16 * ship.scale) + 32 + Engine_RandF() * 64);
+        asteroids[a].moveInDirection((16 * ship.scale) + 32 + Engine_RandF() * 64);
         ship.broadcast->subscribe(&asteroids[a]);
     }
 

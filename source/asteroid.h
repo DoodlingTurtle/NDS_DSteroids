@@ -1,22 +1,21 @@
 #ifndef __ASTEROID_H__
 #define __ASTEROID_H__
 
-#include "../modules/RGNDS_Engine/engine.h"
-#include "wraparoundrenderer.h"
-
-#include "../modules/RGNDS_Engine/transform.h"
 #include "../modules/RGNDS_Engine/gl2d_polyshape.h"
+#include "../modules/RGNDS_Engine/transform.h"
 
+#include "spaceobj.h"
 #include "broadcast.h"
 #include "broadcastchannels.h"
 
-class Asteroid : public RGNDS::GL2D::PolyShape, public Broadcast::Listener
+class Asteroid 
+    : public RGNDS::GL2D::PolyShape
+    , public Broadcast::Listener
+    , public SpaceObj
 {
     public:
 
         static Broadcast broadcast;
-
-        RGNDS::Transform* tra = nullptr;
 
         Asteroid();
         virtual ~Asteroid();
@@ -32,10 +31,6 @@ class Asteroid : public RGNDS::GL2D::PolyShape, public Broadcast::Listener
 
     private:
         void generateShape();
-
-        WrapAroundRenderer renderer;
-
-        RGNDS::Point<float> velocity;
         float spinSpeed;
         bool alive;
 };

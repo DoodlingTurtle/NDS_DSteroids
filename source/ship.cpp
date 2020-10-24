@@ -3,11 +3,11 @@
 
 #define SCREEN_HEIGHT2 384
 
-Ship::Ship() {
+Ship::Ship() : SpaceObj(16.0f) {
 
     shaBody = new RGNDS::GL2D::PolyShape(
           4,
-          (const PointF[4]){
+          (const RGNDS::Point<double>[4]){
                 { -16.0f, -16.0f }
               , { - 8.0f,   0.0f }
               , {  16.0f,   0.0f }
@@ -16,25 +16,21 @@ Ship::Ship() {
           GL_TRIANGLE_STRIP
     );
 
-
     shaThruster = new RGNDS::GL2D::PolyShape(
          3,
-         (const PointF[3]){
+         (const RGNDS::Point<double>[3]){
               { -16,   0 },
               { - 8,  -8 },
               { - 8,   8 },
          },
          GL_TRIANGLE
     );
-
     
 // start broadcasting
     broadcast = new Broadcast(bchShip);
 
 // Setup Coordinats of the ship and varables needed for Wrap-Arround functionality
     reset();
-
-    renderer.defineWrappingArea(0, SCREEN_WIDTH, SCREEN_HEIGHT2, 0);
 }
 
 Ship::~Ship() {
@@ -69,45 +65,19 @@ void Ship::update(float deltaTime, int keys_held, int keys_up, int keys_justpres
 
 // Update Position based on physics
     velocity += dir * ph.acceleration;
-
-    pos += velocity;
-
-    //TODO: (RGO) Make sure ship radius does not eclipse SCREEN_HEIGHT (192px)
-    float shipRadius;
-    getCollisionSphere(nullptr, &shipRadius);
-
+    
     // Update Position based on Screen-Borders
-    renderer.updateDrawingInstances(&(this->pos), shipRadius);
-
+    updatePosition();
     broadcast->transmit(bceMove, this);
 }
 
 void Ship::draw() {
-    RGNDS::Point<float> posOrig = this->pos;
+    SpaceObj::draw([this](Transform* tr) {
+        if(this->thrusting)
+            this->shaThruster->draw(Engine_Color16(1, 31, 31,  0), tr);
 
-    for(int a = 0; a < renderer.getInstanceCnt(); a++) {
-        this->pos = renderer.getInstance(a);
-        if(thrusting)
-            shaThruster->draw(Engine_Color16(a, 31, 31,  0), this);
-
-        shaBody->draw(Engine_Color16(a, 31,  0,  0), this);
-    }
-
-    this->pos = posOrig;
-
-#ifdef TARGET_DEBUG
-    RGNDS::GL2D::PolyShape *c = RGNDS::GL2D::PolyShape::createCircle(12, 16, std::max(0.0001f, 1/scale));
-    c->draw(Engine_Color16(1, 12, 21, 31), this);
-    delete c;
-#endif
-
-}
-
-void Ship::getCollisionSphere(RGNDS::Point<float> *pos, float *radius) {
-    if(pos != nullptr)
-        *pos = this->pos;
-    if(radius != nullptr)
-        *radius = this->scale * 16.0f;
+        this->shaBody->draw(Engine_Color16(1, 31,  0,  0), tr);
+    });
 }
 
 void Ship::reset() {

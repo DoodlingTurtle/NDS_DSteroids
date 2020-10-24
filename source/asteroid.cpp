@@ -11,11 +11,10 @@
 
 Broadcast Asteroid::broadcast(bchAsteroid);
 
-Asteroid::Asteroid() : RGNDS::GL2D::PolyShape(18, nullptr, GL_QUAD_STRIP) {
-    renderer.defineWrappingArea(0, SCREEN_WIDTH, SCREEN_HEIGHT2, 0);
-
-    tra = new RGNDS::Transform();
-
+Asteroid::Asteroid() : 
+    RGNDS::GL2D::PolyShape(18, nullptr, GL_QUAD_STRIP) 
+    , SpaceObj(16.0f)    
+{
     generateShape();
     this->alive = false;
 }
@@ -23,9 +22,8 @@ Asteroid::Asteroid() : RGNDS::GL2D::PolyShape(18, nullptr, GL_QUAD_STRIP) {
 void Asteroid::update(float deltatime) {
     if(!alive) return;
 
-    tra->setAngleRel(PI2 * (deltatime * spinSpeed));
-    tra->pos += velocity;
-    renderer.updateDrawingInstances(&tra->pos, 24);
+    setAngleRel(PI2 * (deltatime * spinSpeed));
+    updatePosition();
 
     broadcast.transmit(bceMove, this);
 }
@@ -33,21 +31,9 @@ void Asteroid::update(float deltatime) {
 void Asteroid::draw() {
     if(!alive) return;
 
-    RGNDS::Point<float> p = tra->pos;
-
-    for(int a = 0; a < renderer.getInstanceCnt(); a++) {
-        tra->pos = renderer.getInstance(a);
-        RGNDS::GL2D::PolyShape::draw(Engine_Color16(1, 14, 11, 10), tra);
-    }
-
-    tra->pos = p;
-
-#ifdef TARGET_DEBUG
-    RGNDS::GL2D::PolyShape *c = RGNDS::GL2D::PolyShape::createCircle(14, 16, std::max(0.001f, 1/tra->scale));
-    c->draw(Engine_Color16(1, 12, 21, 31), tra);
-    delete c;
-#endif
-
+    SpaceObj::draw([this](RGNDS::Transform* tr){
+        RGNDS::GL2D::PolyShape::draw(Engine_Color16(1, 14, 11, 10), tr);
+    });
 }
 
 void Asteroid::generateShape() {
@@ -82,13 +68,13 @@ void Asteroid::generateShape() {
 }
 
 void Asteroid::bringBackToLife(RGNDS::Point<float> pos, bool generateNewShape, float scale) {
-    tra->setAngle(RandF() * PI2);
+    setAngle(RandF() * PI2);
     velocity.x = (RandF() * 2) - 1;
     velocity.y = (RandF() * 2) - 1;
     spinSpeed = (RandF() * 0.5 + 0.5) * 0.0625; // Spin by 360� every 16 Seconds (at max spinspeed)
 
-    tra->pos = pos;
-    tra->scale = scale;
+    pos = pos;
+    scale = scale;
 
     if(generateNewShape)
         generateShape();
@@ -108,7 +94,7 @@ void Asteroid::onBroadcast(int channel, int event, void* bcdata) {
         ((Ship*)bcdata)->getCollisionSphere(&p, &r);
 
         if(RGNDS::Collision::checkCircleOnCircle(
-            &tra->pos, tra->scale * 14,
+            &this->pos, this->scale * 14,
             &p, r
         )) broadcast.transmit(bceHitPlayer, this);
     }
@@ -116,5 +102,4 @@ void Asteroid::onBroadcast(int channel, int event, void* bcdata) {
 
 
 Asteroid::~Asteroid() {
-    delete tra;
 }

@@ -11,15 +11,12 @@
 #include "./broadcast.h"
 
 #include "shipengine.h"
+#include "spaceobj.h"
 
-#define PointF RGNDS::Point<double>
-
-class Ship : public RGNDS::Transform {
+class Ship : public SpaceObj {
     public:
-        PointF velocity;
         Broadcast* broadcast;
-        WrapAroundRenderer renderer;
-
+    
         ShipEngine ph;
 
         Ship();
@@ -27,9 +24,6 @@ class Ship : public RGNDS::Transform {
 
         void update(float deltaTime, int keys_held, int keys_up, int keys_justpressed, touchPosition& touch);
         void draw();
-
-        void getCollisionSphere(RGNDS::Point<float> *pos, float *radius);
-
         void reset();
 
     private:
