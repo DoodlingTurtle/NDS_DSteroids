@@ -65,6 +65,7 @@ Asteroid::Asteroid() :
 }
 
 void Asteroid::update(float deltatime) {
+
     setAngleRel(PI2 * (deltatime * spinSpeed));
     updatePosition();
 
@@ -78,6 +79,16 @@ void Asteroid::update(float deltatime) {
             &this->pos, this->scale * 14,
             &p, r
         )) broadcast.transmit(bceHitPlayer, this);
+    }
+
+    for(Shot* s : shots) {
+        if(RGNDS::Collision::checkCircleOnCircle(
+            &this->pos, this->scale * 14, &s->pos, 2
+        )) {
+            broadcast.transmit(bceDead, this);
+            s->kill();
+        } 
+
     }
 }
 

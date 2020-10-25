@@ -70,3 +70,7 @@ bool Shot::update(float deltaTime) {
 
     return true;
 }
+
+void Shot::kill() {
+    lifetime = 0;
+}

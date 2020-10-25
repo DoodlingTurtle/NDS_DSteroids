@@ -18,7 +18,8 @@ public:
     virtual ~Shot();
     static RGNDS::Broadcast broadcast;
 
-    
+    void kill();
+
 private:
     static std::vector<Shot*> _instances;
 
