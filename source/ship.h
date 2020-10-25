@@ -8,7 +8,7 @@
 
 #include "./wraparoundrenderer.h"
 #include "./broadcastchannels.h"
-#include "./broadcast.h"
+#include "../modules/RGNDS_Engine/broadcast.h"
 
 #include "shipengine.h"
 #include "spaceobj.h"
@@ -17,16 +17,18 @@
 
 class Ship : public SpaceObj {
     public:
-        Broadcast* broadcast;
-    
+        static RGNDS::Broadcast broadcast;
+
         ShipEngine ph;
 
         Ship();
         virtual ~Ship();
 
         void update(float deltaTime, int keys_held, int keys_up, int keys_justpressed, touchPosition& touch);
-        void draw();
         void reset();
+
+        std::function<void(int, void*)> heartbeat;
+
 
     private:
         float angRes = PI/20;
@@ -34,8 +36,6 @@ class Ship : public SpaceObj {
 
         RGNDS::GL2D::PolyShape* shaBody;
         RGNDS::GL2D::PolyShape* shaThruster;
-
-        std::vector<Shot*> *shots;
 };
 
 #endif // SHIP_H

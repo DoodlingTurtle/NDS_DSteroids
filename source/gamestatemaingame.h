@@ -4,7 +4,7 @@
 #include <cstdio>
 
 #include "../modules/RGNDS_Engine/engine.h"
-#include "broadcast.h"
+#include "../modules/RGNDS_Engine/broadcast.h"
 #include "broadcastchannels.h"
 
 #include "./ship.h"
@@ -12,12 +12,25 @@
 
 #define MAX_ASTEROIDS 48
 
-class GameStateMainGame : public RGNDS::Engine, public Broadcast::Listener
+struct MainGameUpdateData {
+    float deltaTime; 
+    int keys_held; 
+    int keys_up; 
+    int keys_justpressed; 
+    touchPosition touch;
+};
+
+struct MainGameDrawData {
+    float deltaTime;
+    RGNDS::Engine::Screen screen;
+};
+
+class GameStateMainGame : public RGNDS::Engine
 {
     public:
         int score = 0;
 
-        void onBroadcast(int channel, int event, void* sender);
+        std::function<void(int, void*)> onAsteroidBroadcast;
 
     private:
         static float game_difficulty;        // difficulty goes from 1 to 16;
@@ -34,6 +47,8 @@ class GameStateMainGame : public RGNDS::Engine, public Broadcast::Listener
 
         RGNDS::Transform scorelocation;
         float scoreTimer;
+
+        RGNDS::Broadcast mainGameBroadcast;
 
     protected:
         int onStart();

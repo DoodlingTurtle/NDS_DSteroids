@@ -5,34 +5,44 @@
 float GameStateMainGame::game_difficulty = 1.0f;
 
 
-void GameStateMainGame::onBroadcast(int channel, int event, void* sender) {
-    if(channel == bchAsteroid) {
-        switch(event) {
-        case bceHitPlayer:
-            exit();     // Meteor hits player = game over;
-            break;
-        case bceDead:
-            ((Asteroid*)sender)->kill();
-            ship.broadcast->unsubscribe((Asteroid*)sender);
-            //TODO; Award Points
-        }
-    }
-}
-
 int GameStateMainGame::onStart() {
     int a;
 
-    ship.reset();
+    Engine_Log("Start application");
 
-    Asteroid::broadcast.subscribe(this);
+    // Listen to what all asteroids are doing
+    onAsteroidBroadcast = [this](int event, void* data) {
+        Engine_Log("Asteroids broadcast "<<event);
+        switch(event) {
+        case bceHitPlayer:
+            Engine_Log("Asteroid hit Ship");
+            exit();     // Meteor hits player = game over;
+            break;
+        case bceDead:   // In case of bceDead - Event stop heartbeat to the sending asteroid
+            Engine_Log("Kill Asteroid");
+            ((Asteroid*)data)->kill(&mainGameBroadcast);
+            //TODO; Award Points
+        }
+    };
+    
+    Engine_Log("Engine subscribe to broadcast");
+    Asteroid::broadcast.subscribe(&onAsteroidBroadcast);
+    
+    Engine_Log("Shot subscribe to Heartbeat");
+    mainGameBroadcast.subscribe(&Shot::heartbeat);
+
+    Engine_Log("Asteroid Subscribe to Shot Action");
+    Shot::broadcast.subscribe(&Asteroid::onShotAction);
+
+    // setup the scoreboard
     scorelocation.pos.x = 5;
     scorelocation.pos.y = 5;
     scorelocation.scale = 2;
-
     score = 0;
     scoreTimer = 0.0f;
     game_difficulty = 4;
 
+    // Create a star field for the background
     for(a = 0; a < 64; a++) {
         stars.push_back((const Star){
                 rand() / (INT_MAX/256),
@@ -41,30 +51,72 @@ int GameStateMainGame::onStart() {
         });
     }
 
+    // Initialize the asteroids
+    Engine_Log("setting ub asteroids");
     for(a = 0; a < (int)game_difficulty; a++) {
-        asteroids[a].bringBackToLife(ship.pos, false, 1);
-        asteroids[a].moveInDirection((16 * ship.scale) + 32 + Engine_RandF() * 64);
-        ship.broadcast->subscribe(&asteroids[a]);
+        // resurect the, until now, dead astroid
+        asteroids[a].bringBackToLife(&mainGameBroadcast, ship.pos, false, 1);
+
+        Engine_Log("Subscribe Asteroid to Ship");
+        // Tell Asteroid to listen to what ship is doing 
+        ship.broadcast.subscribe(&asteroids[a].onShipAction);
     }
+
+    //Make ship send out a signal, so that the asteroids know where it is 
+    //(And can move out of the way, if needed)
+    ship.reset();
+    Engine_Log("Ship transmit Spawn-Event");
+    ship.broadcast.transmit(bceSpawn, &ship);
+
+    Engine_Log("Subscript Ship to Engine");
+    mainGameBroadcast.subscribe(&ship.heartbeat);
+
+
 
     return 0;
 }
 
 void GameStateMainGame::onEnd() {
+
+    Engine_Log("unsubscribe ship from engine");
+    mainGameBroadcast.unsubscribe(&ship.heartbeat);
+
     for(int a = 0; a < MAX_ASTEROIDS; a++) {
-        ship.broadcast->unsubscribe(&asteroids[a]);
-        asteroids[a].kill();
+        Engine_Log("unsubscribe asteroid from ship");
+        ship.broadcast.unsubscribe(&asteroids[a].onShipAction);
+        Engine_Log("kill asteroid");
+        asteroids[a].kill(&mainGameBroadcast);
     }
 
-    Asteroid::broadcast.unsubscribe(this);
+    Engine_Log("Unsubscribe Asteroid from Shot");
+    Shot::broadcast.unsubscribe(&Asteroid::onShotAction);
+
+    Engine_Log("Unsubscribe Shot from Engine");
+    mainGameBroadcast.unsubscribe(&Shot::heartbeat);
+
+    Engine_Log("Unsubscribe AsteroidBroadcast from Engine");
+    Asteroid::broadcast.unsubscribe(&onAsteroidBroadcast);
     stars.clear();
+
 }
 
 void GameStateMainGame::onUpdate(float deltaTime) {
-    touchPosition touch;
-    touchRead(&touch);
+
+// Read Player input
+    MainGameUpdateData data;
+
+    touchRead(&(data.touch));
     scanKeys();
 
+    data.keys_held = keysHeld();
+    data.keys_up   = keysUp();
+    data.keys_justpressed = keysDown();
+    data.deltaTime = deltaTime;
+
+// Send out an update heartbeat to all attached objects
+    mainGameBroadcast.transmit(bceTick, &data);
+
+// Update Scores
     scoreTimer += deltaTime * 1000.0f;
     // award 1 Point for each Second survived
     if(scoreTimer > 1000.0f) {
@@ -74,27 +126,19 @@ void GameStateMainGame::onUpdate(float deltaTime) {
 
     //TODO: punish player if he stayed still for to long
     //TODO: alternatively award points for ship movement instead of time
-
-    int a;
-
-    for(a = 0; a < MAX_ASTEROIDS; a++)
-        asteroids[a].update(deltaTime);
-
-    ship.update(deltaTime, keysHeld(), keysUp(), keysDown(), touch);
 }
 
 void GameStateMainGame::onDraw(float deltaTime, RGNDS::Engine::Screen screen) {
-    int a;
 
-    for(auto star : stars) {
+// Draw Stars
+    for(auto star : stars)
         RGNDS::GL2D::glPixel(star.x, star.y, Engine_Color16(1, 15, 15, 15), star.alpha);
-    }
 
-    for(a = 0; a < MAX_ASTEROIDS; a++)
-        asteroids[a].draw();
+// Sendout a draw heartbeat
+    MainGameDrawData data = { deltaTime, screen };
+    mainGameBroadcast.transmit(bceDraw, &data);    
 
-    ship.draw();
-
+// Render Score, but only if the Top-Screen is rendered
     if(screen == ENGINE_SCREEN_TOP) {
         char buffer[16];
         sprintf(buffer, "Score: % 8d", score);

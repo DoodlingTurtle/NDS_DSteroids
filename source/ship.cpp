@@ -1,7 +1,12 @@
 #include "ship.h"
 #include <math.h>
 
+#include "gamestatemaingame.h"
+#include "broadcastchannels.h"
+
 #define SCREEN_HEIGHT2 384
+
+RGNDS::Broadcast Ship::broadcast;
 
 Ship::Ship() : SpaceObj(16.0f) {
 
@@ -25,26 +30,43 @@ Ship::Ship() : SpaceObj(16.0f) {
          },
          GL_TRIANGLE
     );
-    
-// start broadcasting
-    broadcast = new Broadcast(bchShip);
-
-    shots = new std::vector<Shot*>();
 
 // Setup Coordinats of the ship and varables needed for Wrap-Arround functionality
     reset();
+    
+// define Heartbeat;
+    heartbeat = [this](int event, void* data) {
+        switch(event) {
+            case bceTick: {
+                MainGameUpdateData *dat = (MainGameUpdateData*)data;
+                this->update(
+                    dat->deltaTime
+                  , dat->keys_held
+                  , dat->keys_up
+                  , dat->keys_justpressed
+                  , dat->touch
+                );
+            } break;
+
+            case bceDraw:
+                SpaceObj::draw([this](Transform* tr) {
+                    if(this->thrusting)
+                        this->shaThruster->draw(Engine_Color16(1, 31, 31,  0), tr);
+
+                    this->shaBody->draw(Engine_Color16(1, 31,  0,  0), tr);
+                });
+                break;
+
+        }
+    };
+
+// start broadcasting
+    broadcast.transmit(bceSpawn, this);
 }
 
 Ship::~Ship() {
-    delete broadcast;
     delete shaBody;
     delete shaThruster;
-
-    for(auto shot : *shots)
-        delete shot;
-
-    shots->clear();
-    delete shots;
 }
 
 void Ship::update(float deltaTime, int keys_held, int keys_up, int keys_justpressed, touchPosition& touch) {
@@ -63,7 +85,7 @@ void Ship::update(float deltaTime, int keys_held, int keys_up, int keys_justpres
         this->scale -= 0.05;
 
     if(keys_justpressed&(KEY_R|KEY_L))
-        shots->push_back(new Shot(ang, &pos));
+        Shot::Spawn(ang, &pos);
     
     if(keys_held&(KEY_UP|KEY_X)) {
         thrusting = true;
@@ -79,33 +101,7 @@ void Ship::update(float deltaTime, int keys_held, int keys_up, int keys_justpres
     
     // Update Position based on Screen-Borders
     updatePosition();
-    broadcast->transmit(bceMove, this);
 
-    // Process Shots
-    std::vector<Shot*> *nextRound = new std::vector<Shot*>();
-    
-    for(auto shot : *shots) {
-        if(shot->update(deltaTime))
-            nextRound->push_back(shot);
-    }
-
-    shots->clear();
-    delete shots;
-    shots = nextRound;
-
-}
-
-void Ship::draw() {
-    SpaceObj::draw([this](Transform* tr) {
-        if(this->thrusting)
-            this->shaThruster->draw(Engine_Color16(1, 31, 31,  0), tr);
-
-        this->shaBody->draw(Engine_Color16(1, 31,  0,  0), tr);
-    });
-
-    for(auto shot : *shots) {
-        shot->draw();
-    }
 }
 
 void Ship::reset() {

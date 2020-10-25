@@ -4,20 +4,30 @@
 #include "../modules/RGNDS_Engine/engine.h"
 #include "../modules/RGNDS_Engine/gl2d_polyshape.h"
 
+#include "../modules/RGNDS_Engine/broadcast.h"
+
 #include "spaceobj.h"
 
 class Shot : public RGNDS::GL2D::PolyShape, public SpaceObj {
 
 public:
+    static void Spawn(float angle, RGNDS::Point<float>* pos);
     
-    Shot( float angle, RGNDS::Point<float>* pos );
+    static std::function<void(int, void*)> heartbeat;
+    
     virtual ~Shot();
+    static RGNDS::Broadcast broadcast;
+
+    
+private:
+    static std::vector<Shot*> _instances;
+
+    Shot( float angle, RGNDS::Point<float>* pos );
+    
+    int lifetime = 1000;
 
     void draw();
     bool update( float deltaTime );
-
-private:
-    int lifetime = 1000;
 
 };
 

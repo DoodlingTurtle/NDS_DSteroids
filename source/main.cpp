@@ -9,9 +9,10 @@
 #include <nds.h>
 #include <time.h>
 
-#include "../modules/RGNDS_engine/engine.h"
+#include "../modules/RGNDS_Engine/engine.h"
 
 #include "gamestatemaingame.h"
+
 
 
 //-----------------------------------------------------------------------------

@@ -5,34 +5,41 @@
 #include "../modules/RGNDS_Engine/transform.h"
 
 #include "spaceobj.h"
-#include "broadcast.h"
+#include "ship.h"
+#include "shot.h"
+
+#include "../modules/RGNDS_Engine/broadcast.h"
 #include "broadcastchannels.h"
 
 class Asteroid 
     : public RGNDS::GL2D::PolyShape
-    , public Broadcast::Listener
     , public SpaceObj
 {
     public:
-
-        static Broadcast broadcast;
-
+    
+        static RGNDS::Broadcast broadcast;
+        
         Asteroid();
         virtual ~Asteroid();
 
         void update(float deltaTime);
+       
+        std::function<void(int, void*)> onGameHeartbeat;
+        std::function<void(int, void*)> onShipAction;
 
-        void draw();
+        static std::function<void(int, void*)> onShotAction;
 
-        void bringBackToLife(RGNDS::Point<float> pos, bool generateNewShape, float scale);
-        void kill();
+        void bringBackToLife(RGNDS::Broadcast* gameHeartbeat, RGNDS::Point<float> pos, bool generateNewShape, float scale);
+        void kill(RGNDS::Broadcast* gameHeartbeat);
 
-        void onBroadcast(int c, int e, void* b);
+    protected:
+        // Objects for Asteroid to keep track of
+        Ship* ship;
+        static std::vector<Shot*> shots;
 
     private:
         void generateShape();
         float spinSpeed;
-        bool alive;
 };
 
 #endif

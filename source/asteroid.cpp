@@ -1,5 +1,6 @@
 #include "asteroid.h"
 
+#include "gamestatemaingame.h"
 #include "ship.h"
 
 #include <math.h>
@@ -9,31 +10,75 @@
 #define SCREEN_HEIGHT2 384
 #define RandF() ((float)rand() / (float)RAND_MAX)
 
-Broadcast Asteroid::broadcast(bchAsteroid);
+RGNDS::Broadcast Asteroid::broadcast;
+std::vector<Shot*> Asteroid::shots;
+
+std::function<void(int, void*)> Asteroid::onShotAction = [](int event, void* obj){
+    switch(event) {
+        case bceSpawn: {
+
+            Engine_Log("Register Shot to asteroids");
+            Asteroid::shots.push_back((Shot*)obj);
+
+        } break;
+
+        case bceDead: {
+
+            Engine_Log("Remove Shot from asteroids");
+            for(int a = Asteroid::shots.size()-1; a >= 0; a--)
+                if(Asteroid::shots.at(a) == (Shot*)obj)
+                    Asteroid::shots.erase(Asteroid::shots.begin()+a);
+
+        } break;
+    }
+};
+
+
 
 Asteroid::Asteroid() : 
     RGNDS::GL2D::PolyShape(18, nullptr, GL_QUAD_STRIP) 
     , SpaceObj(16.0f)    
 {
     generateShape();
-    this->alive = false;
+    
+    onGameHeartbeat = [this](int event, void* data) {
+        switch(event) {
+            case bceTick:
+                this->update(((MainGameUpdateData*)data)->deltaTime);
+                break;
+
+            case bceDraw:
+                SpaceObj::draw([this](RGNDS::Transform* tr){
+                    RGNDS::GL2D::PolyShape::draw(Engine_Color16(1, 14, 11, 10), tr);
+                });
+                break;
+        }
+    };
+
+    onShipAction = [this](int event, void* data) {
+        switch(event) {
+            case bceSpawn:
+                Engine_Log("Asteroid register ship spawn event");
+                this->ship = (Ship*)data;
+        }
+    };
 }
 
 void Asteroid::update(float deltatime) {
-    if(!alive) return;
-
     setAngleRel(PI2 * (deltatime * spinSpeed));
     updatePosition();
 
-    broadcast.transmit(bceMove, this);
-}
+    // Check for collision with Ship
+    if(this->ship != nullptr) {
+        RGNDS::Point <float> p;
+        float r;
+        ship->getCollisionSphere(&p, &r);
 
-void Asteroid::draw() {
-    if(!alive) return;
-
-    SpaceObj::draw([this](RGNDS::Transform* tr){
-        RGNDS::GL2D::PolyShape::draw(Engine_Color16(1, 14, 11, 10), tr);
-    });
+        if(RGNDS::Collision::checkCircleOnCircle(
+            &this->pos, this->scale * 14,
+            &p, r
+        )) broadcast.transmit(bceHitPlayer, this);
+    }
 }
 
 void Asteroid::generateShape() {
@@ -67,7 +112,9 @@ void Asteroid::generateShape() {
     return;
 }
 
-void Asteroid::bringBackToLife(RGNDS::Point<float> pos, bool generateNewShape, float scale) {
+void Asteroid::bringBackToLife(RGNDS::Broadcast* gameHeartbeat, RGNDS::Point<float> pos, bool generateNewShape, float scale) {
+    Engine_Log("Bring asteroid back to life");
+
     setAngle(RandF() * PI2);
     velocity.x = (RandF() * 2) - 1;
     velocity.y = (RandF() * 2) - 1;
@@ -79,27 +126,13 @@ void Asteroid::bringBackToLife(RGNDS::Point<float> pos, bool generateNewShape, f
     if(generateNewShape)
         generateShape();
 
-    alive = true;
+
+    gameHeartbeat->subscribe(&onGameHeartbeat);
 }
 
-void Asteroid::kill() {
-    alive = false;
+void Asteroid::kill(RGNDS::Broadcast* gameHeartbeat) {
+    gameHeartbeat->unsubscribe(&onGameHeartbeat);
 }
-
-void Asteroid::onBroadcast(int channel, int event, void* bcdata) {
-// React to Ship Movement
-    if(channel == bchShip && event == bceMove) {
-        RGNDS::Point <float> p;
-        float r;
-        ((Ship*)bcdata)->getCollisionSphere(&p, &r);
-
-        if(RGNDS::Collision::checkCircleOnCircle(
-            &this->pos, this->scale * 14,
-            &p, r
-        )) broadcast.transmit(bceHitPlayer, this);
-    }
-}
-
 
 Asteroid::~Asteroid() {
 }
