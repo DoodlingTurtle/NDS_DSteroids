@@ -4,13 +4,8 @@
 
 float GameStateMainGame::game_difficulty = 1.0f;
 
+GameStateMainGame::GameStateMainGame() {
 
-int GameStateMainGame::onStart() {
-    int a;
-
-    Engine_Log("Start application");
-
-    // Listen to what all asteroids are doing
     onAsteroidBroadcast = [this](int event, void* data) {
         Engine_Log("Asteroids broadcast "<<event);
         switch(event) {
@@ -21,9 +16,25 @@ int GameStateMainGame::onStart() {
         case bceDead:   // In case of bceDead - Event stop heartbeat to the sending asteroid
             Engine_Log("Kill Asteroid");
             ((Asteroid*)data)->kill(&mainGameBroadcast);
+
+			for(int a = asteroids.size()-1; a >= 0; a--) {
+				if(asteroids.at(a) == ((Asteroid*)data)) {
+					delete asteroids.at(a);
+					asteroids.erase(asteroids.begin()+1);
+				}
+			}
+
             //TODO; Award Points
         }
     };
+}
+
+int GameStateMainGame::onStart() {
+    int a;
+
+    Engine_Log("Start application");
+
+    // Listen to what all asteroids are doing
     
     Engine_Log("Engine subscribe to broadcast");
     Asteroid::broadcast.subscribe(&onAsteroidBroadcast);
@@ -54,12 +65,14 @@ int GameStateMainGame::onStart() {
     // Initialize the asteroids
     Engine_Log("setting ub asteroids");
     for(a = 0; a < (int)game_difficulty; a++) {
-        // resurect the, until now, dead astroid
-        asteroids[a].bringBackToLife(&mainGameBroadcast, ship.pos, false, 1);
+        Asteroid* ast = new Asteroid();
+		ast->bringBackToLife(&mainGameBroadcast, ship.pos, false, 1);
 
         Engine_Log("Subscribe Asteroid to Ship");
         // Tell Asteroid to listen to what ship is doing 
-        ship.broadcast.subscribe(&asteroids[a].onShipAction);
+		ship.broadcast.subscribe(&ast->onShipAction);
+
+		asteroids.push_back(ast);
     }
 
     //Make ship send out a signal, so that the asteroids know where it is 
@@ -81,12 +94,13 @@ void GameStateMainGame::onEnd() {
     Engine_Log("unsubscribe ship from engine");
     mainGameBroadcast.unsubscribe(&ship.heartbeat);
 
-    for(int a = 0; a < MAX_ASTEROIDS; a++) {
-        Engine_Log("unsubscribe asteroid from ship");
-        ship.broadcast.unsubscribe(&asteroids[a].onShipAction);
-        Engine_Log("kill asteroid");
-        asteroids[a].kill(&mainGameBroadcast);
-    }
+	for(auto a : asteroids) {
+		ship.broadcast.unsubscribe(&(a->onShipAction));
+		a->kill(&mainGameBroadcast);
+		delete a;
+	}
+
+	asteroids.clear();
 
     Engine_Log("Unsubscribe Asteroid from Shot");
     Shot::broadcast.unsubscribe(&Asteroid::onShotAction);
@@ -101,7 +115,6 @@ void GameStateMainGame::onEnd() {
 }
 
 void GameStateMainGame::onUpdate(float deltaTime) {
-
 // Read Player input
     MainGameUpdateData data;
 

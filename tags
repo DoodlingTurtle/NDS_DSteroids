@@ -1,0 +1,349 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.9~svn20110310	//
+ARCH	Makefile	/^ARCH := -marm -mthumb-interwork -march=armv5te -mtune=arm946e-s$/;"	m
+ASFLAGS	Makefile	/^ASFLAGS  := $(ARCH)$/;"	m
+AUDIO	Makefile	/^AUDIO    :=$/;"	m
+Asteroid	source/asteroid.cpp	/^Asteroid::Asteroid() : $/;"	f	class:Asteroid
+Asteroid	source/asteroid.h	/^class Asteroid $/;"	c
+BINFILES	Makefile	/^BINFILES := $(foreach dir,$(DATA),$(notdir $(wildcard $(dir)\/*.*)))$/;"	m
+BUILD	Makefile	/^BUILD    := build$/;"	m
+BUILDASDEBUG	Makefile	/^BUILDASDEBUG := true$/;"	m
+Broadcast	modules/RGNDS_Engine/broadcast.h	/^    class Broadcast {$/;"	c	namespace:RGNDS
+BroadcastEvent	source/broadcastchannels.h	/^enum BroadcastEvent {$/;"	g
+C2COverlapDist	source/collision.h	/^            float C2COverlapDist;$/;"	m	class:RGNDS::Collision
+C2COverlapImpact	source/collision.h	/^            float C2COverlapImpact;$/;"	m	class:RGNDS::Collision
+CFILES	Makefile	/^CFILES   := $(foreach dir,$(SOURCES),$(notdir $(wildcard $(dir)\/*.c)))$/;"	m
+CFLAGS	Makefile	/^CFLAGS	 := -g -DTARGET_DEBUG $(CFLAGS)$/;"	m
+CFLAGS	Makefile	/^CFLAGS   := -Wall -O3\\$/;"	m
+CPPFILES	Makefile	/^CPPFILES := $(foreach dir,$(SOURCES),$(notdir $(wildcard $(dir)\/*.cpp)))$/;"	m
+CXXFLAGS	Makefile	/^CXXFLAGS := $(CFLAGS) -fno-rtti -fno-exceptions$/;"	m
+Collision	source/collision.cpp	/^    Collision::Collision() {}$/;"	f	class:RGNDS::Collision
+Collision	source/collision.h	/^    class Collision$/;"	c	namespace:RGNDS
+DATA	Makefile	/^DATA     :=$/;"	m
+DEPSDIR	Makefile	/^export DEPSDIR := $(CURDIR)\/$(BUILD)$/;"	m
+ENGINE_SCREEN_BOTTOM	modules/RGNDS_Engine/engine.h	/^                ENGINE_SCREEN_BOTTOM$/;"	e	enum:RGNDS::Engine::Screen
+ENGINE_SCREEN_TOP	modules/RGNDS_Engine/engine.h	/^                ENGINE_SCREEN_TOP,$/;"	e	enum:RGNDS::Engine::Screen
+Engine	modules/RGNDS_Engine/engine.cpp	/^    Engine::Engine() {$/;"	f	class:RGNDS::Engine
+Engine	modules/RGNDS_Engine/engine.h	/^    class Engine {$/;"	c	namespace:RGNDS
+Engine_Color16	modules/RGNDS_Engine/engine.h	24;"	d
+Engine_Debug_Init	modules/RGNDS_Engine/engine.h	16;"	d
+Engine_Debug_Init	modules/RGNDS_Engine/engine.h	19;"	d
+Engine_Log	modules/RGNDS_Engine/engine.h	17;"	d
+Engine_Log	modules/RGNDS_Engine/engine.h	20;"	d
+Engine_RandF	modules/RGNDS_Engine/engine.h	23;"	d
+FontTilesTextureID	modules/RGNDS_Engine/engine.cpp	/^    int     Engine::FontTilesTextureID;$/;"	m	class:RGNDS::Engine
+FontTilesTextureID	modules/RGNDS_Engine/engine.h	/^            static int FontTilesTextureID;$/;"	m	class:RGNDS::Engine
+GAMESTATEMAINGAME_H	source/gamestatemaingame.h	2;"	d
+GAME_ICON	Makefile	/^      export GAME_ICON := $(CURDIR)\/icon.bmp$/;"	m
+GAME_ICON	Makefile	/^    export GAME_ICON := $(CURDIR)\/$(BUILD)\/$(notdir $(basename $(ICON))).grf$/;"	m
+GAME_ICON	Makefile	/^    export GAME_ICON := $(CURDIR)\/$(ICON)$/;"	m
+GAME_ICON	Makefile	/^    export GAME_ICON := $(CURDIR)\/$(TARGET).bmp$/;"	m
+GL2D	modules/RGNDS_Engine/gl2d_polyshape.h	/^    namespace GL2D {$/;"	n	namespace:RGNDS
+GL2D	modules/RGNDS_Engine/inc/gl2d.h	/^    namespace GL2D {$/;"	n	namespace:RGNDS
+GL2D	modules/RGNDS_Engine/src/gl2d.cpp	/^    namespace GL2D {$/;"	n	namespace:RGNDS
+GL2D	modules/RGNDS_Engine/src/polyshape.cpp	/^    namespace GL2D {$/;"	n	namespace:RGNDS
+GL_FLIP_H	modules/RGNDS_Engine/inc/gl2d.h	/^        GL_FLIP_H$/;"	e	enum:RGNDS::GL_FLIP_MODE
+GL_FLIP_MODE	modules/RGNDS_Engine/inc/gl2d.h	/^    enum GL_FLIP_MODE {$/;"	g	namespace:RGNDS
+GL_FLIP_NONE	modules/RGNDS_Engine/inc/gl2d.h	/^        GL_FLIP_NONE = 0,$/;"	e	enum:RGNDS::GL_FLIP_MODE
+GL_FLIP_V	modules/RGNDS_Engine/inc/gl2d.h	/^        GL_FLIP_V,$/;"	e	enum:RGNDS::GL_FLIP_MODE
+GRAPHICS	Makefile	/^GRAPHICS :=$/;"	m
+GameStateMainGame	source/gamestatemaingame.cpp	/^GameStateMainGame::GameStateMainGame() {$/;"	f	class:GameStateMainGame
+GameStateMainGame	source/gamestatemaingame.h	/^class GameStateMainGame : public RGNDS::Engine$/;"	c
+HFILES	Makefile	/^export HFILES := $(PNGFILES:.png=.h) $(addsuffix .h,$(subst .,_,$(BINFILES)))$/;"	m
+ICON	Makefile	/^ICON     :=$/;"	m
+INCLUDE	Makefile	/^export INCLUDE  := $(foreach dir,$(INCLUDES),-iquote $(CURDIR)\/$(dir))\\$/;"	m
+INCLUDES	Makefile	/^INCLUDES :=$/;"	m
+LD	Makefile	/^  export LD := $(CC)$/;"	m
+LD	Makefile	/^  export LD := $(CXX)$/;"	m
+LDFLAGS	Makefile	/^LDFLAGS   = -specs=ds_arm9.specs -g $(ARCH) -Wl,-Map,$(notdir $*.map)$/;"	m
+LIBDIRS	Makefile	/^LIBDIRS := $(LIBDIRS) $(addprefix $(CURDIR)\/, $(LIBPATH))$/;"	m
+LIBDIRS	Makefile	/^LIBDIRS := $(LIBNDS) $(PORTLIBS)$/;"	m
+LIBPATH	Makefile	/^LIBPATH  :=$/;"	m
+LIBPATHS	Makefile	/^export LIBPATHS := $(foreach dir,$(LIBDIRS),-L$(dir)\/lib)$/;"	m
+LIBS	Makefile	/^LIBS := $(USERLIBS) $(LIBS)$/;"	m
+LIBS	Makefile	/^LIBS := -lfilesystem -lfat $(LIBS)$/;"	m
+LIBS	Makefile	/^LIBS := -lmm9 $(LIBS)$/;"	m
+LIBS	Makefile	/^LIBS := -lnds9$/;"	m
+MAX_ASTEROIDS	source/gamestatemaingame.h	13;"	d
+MODFILES	Makefile	/^  export MODFILES	:=	$(foreach dir,$(notdir $(wildcard $(AUDIO)\/*.*)),$(CURDIR)\/$(AUDIO)\/$(dir))$/;"	m
+MainGameDrawData	source/gamestatemaingame.h	/^struct MainGameDrawData {$/;"	s
+MainGameUpdateData	source/gamestatemaingame.h	/^struct MainGameUpdateData {$/;"	s
+NITRO	Makefile	/^NITRO    :=$/;"	m
+NITRO_FILES	Makefile	/^  export NITRO_FILES := $(CURDIR)\/$(NITRO)$/;"	m
+OFILES	Makefile	/^export OFILES := $(PNGFILES:.png=.o) $(OFILES_BIN) $(OFILES_SOURCES)$/;"	m
+OFILES_BIN	Makefile	/^export OFILES_BIN   :=	$(addsuffix .o,$(BINFILES))$/;"	m
+OFILES_SOURCES	Makefile	/^export OFILES_SOURCES := $(CPPFILES:.cpp=.o) $(CFILES:.c=.o) $(SFILES:.s=.o)$/;"	m
+OUTPUT	Makefile	/^export OUTPUT := $(CURDIR)\/$(TARGET)$/;"	m
+PI	modules/RGNDS_Engine/engine.h	7;"	d
+PI2	modules/RGNDS_Engine/engine.h	11;"	d
+PNGFILES	Makefile	/^PNGFILES := $(foreach dir,$(GRAPHICS),$(notdir $(wildcard $(dir)\/*.png)))$/;"	m
+Point	modules/RGNDS_Engine/inc/point.h	/^    struct Point {$/;"	s	namespace:RGNDS
+PolyShape	modules/RGNDS_Engine/gl2d_polyshape.h	/^        class PolyShape {$/;"	c	namespace:RGNDS::GL2D
+PolyShape	modules/RGNDS_Engine/src/polyshape.cpp	/^        PolyShape::PolyShape(short c, const Point<double> aPoints[], GL_GLBEGIN_ENUM renderMode) {$/;"	f	class:RGNDS::GL2D::PolyShape
+RGNDS	modules/RGNDS_Engine/broadcast.h	/^namespace RGNDS$/;"	n
+RGNDS	modules/RGNDS_Engine/engine.cpp	/^namespace RGNDS {$/;"	n
+RGNDS	modules/RGNDS_Engine/engine.h	/^namespace RGNDS {$/;"	n
+RGNDS	modules/RGNDS_Engine/gl2d/gl2d.cpp	/^namespace RGNDS {$/;"	n
+RGNDS	modules/RGNDS_Engine/gl2d_polyshape.h	/^namespace RGNDS {$/;"	n
+RGNDS	modules/RGNDS_Engine/inc/fonts_res.h	/^namespace RGNDS {$/;"	n
+RGNDS	modules/RGNDS_Engine/inc/gl2d.h	/^namespace RGNDS {$/;"	n
+RGNDS	modules/RGNDS_Engine/inc/point.h	/^namespace RGNDS {$/;"	n
+RGNDS	modules/RGNDS_Engine/inc/timer.h	/^namespace RGNDS {$/;"	n
+RGNDS	modules/RGNDS_Engine/src/broadcast.cpp	/^namespace RGNDS {$/;"	n
+RGNDS	modules/RGNDS_Engine/src/gl2d.cpp	/^namespace RGNDS {$/;"	n
+RGNDS	modules/RGNDS_Engine/src/polyshape.cpp	/^namespace RGNDS {$/;"	n
+RGNDS	modules/RGNDS_Engine/src/timer.cpp	/^namespace RGNDS {$/;"	n
+RGNDS	modules/RGNDS_Engine/src/transform.cpp	/^namespace RGNDS {$/;"	n
+RGNDS	modules/RGNDS_Engine/transform.h	/^namespace RGNDS {$/;"	n
+RGNDS	source/collision.cpp	/^namespace RGNDS {$/;"	n
+RGNDS	source/collision.h	/^namespace RGNDS {$/;"	n
+RandF	source/asteroid.cpp	11;"	d
+SCREEN_HEIGHT2	source/asteroid.cpp	10;"	d
+SCREEN_HEIGHT2	source/ship.cpp	7;"	d
+SFILES	Makefile	/^SFILES   := $(foreach dir,$(SOURCES),$(notdir $(wildcard $(dir)\/*.s)))$/;"	m
+SHIPENGINE_H	source/shipengine.h	2;"	d
+SHIP_H	source/ship.h	2;"	d
+SOUNDBANK	Makefile	/^    export SOUNDBANK := $(NITRO_FILES)\/soundbank.bin$/;"	m
+SOUNDBANK	Makefile	/^    export SOUNDBANK := soundbank.bin$/;"	m
+SOURCES	Makefile	/^SOURCES  := source modules\/RGNDS_Engine$/;"	m
+Screen	modules/RGNDS_Engine/engine.h	/^            enum Screen {$/;"	g	class:RGNDS::Engine
+SetOrtho	modules/RGNDS_Engine/src/gl2d.cpp	/^        void SetOrtho( void ) {$/;"	f	namespace:RGNDS::GL2D
+Ship	source/ship.cpp	/^Ship::Ship() : SpaceObj(16.0f) {$/;"	f	class:Ship
+Ship	source/ship.h	/^class Ship : public SpaceObj {$/;"	c
+ShipEngine	source/shipengine.h	/^class ShipEngine$/;"	c
+Shot	source/shot.cpp	/^Shot::Shot( float angle, RGNDS::Point<float>* pos )$/;"	f	class:Shot
+Shot	source/shot.h	/^class Shot : public RGNDS::GL2D::PolyShape, public SpaceObj {$/;"	c
+SpaceObj	source/spaceobj.cpp	/^SpaceObj::SpaceObj( float radius ) {$/;"	f	class:SpaceObj
+SpaceObj	source/spaceobj.cpp	/^SpaceObj::SpaceObj() : SpaceObj::SpaceObj(1.0f){}$/;"	f	class:SpaceObj
+SpaceObj	source/spaceobj.h	/^class SpaceObj : public RGNDS::Transform {$/;"	c
+Spawn	source/shot.cpp	/^void Shot::Spawn(float ang, RGNDS::Point<float> *pos) {$/;"	f	class:Shot
+Star	source/gamestatemaingame.h	/^        struct Star {$/;"	s	class:GameStateMainGame
+TARGET	Makefile	/^TARGET   := $(shell basename $(CURDIR))$/;"	m
+Timer	modules/RGNDS_Engine/inc/timer.h	/^    namespace Timer {$/;"	n	namespace:RGNDS
+Timer	modules/RGNDS_Engine/src/timer.cpp	/^    namespace Timer {$/;"	n	namespace:RGNDS
+Transform	modules/RGNDS_Engine/src/transform.cpp	/^    Transform::Transform(){}$/;"	f	class:RGNDS::Transform
+Transform	modules/RGNDS_Engine/transform.h	/^    class Transform {$/;"	c	namespace:RGNDS
+USERLIBS	Makefile	/^USERLIBS :=$/;"	m
+VPATH	Makefile	/^export VPATH := $(CURDIR)\/$(subst \/,,$(dir $(ICON)))\\$/;"	m
+WRAPAROUNDRENDERER_H	source/wraparoundrenderer.h	2;"	d
+WrapAroundRenderer	source/wraparoundrenderer.cpp	/^WrapAroundRenderer::WrapAroundRenderer() {$/;"	f	class:WrapAroundRenderer
+WrapAroundRenderer	source/wraparoundrenderer.h	/^class WrapAroundRenderer$/;"	c
+_8x8pixelfont_palette	modules/RGNDS_Engine/inc/fonts_res.h	/^    u16 _8x8pixelfont_palette[4] = {$/;"	m	namespace:RGNDS
+_8x8pixelfont_pixels	modules/RGNDS_Engine/inc/fonts_res.h	/^    u8 _8x8pixelfont_pixels[4096] = {$/;"	m	namespace:RGNDS
+__ASTEROID_H__	source/asteroid.h	2;"	d
+__BROADCASTCHANNELS_H__	source/broadcastchannels.h	2;"	d
+__COLLISION_H__	source/collision.h	2;"	d
+__RGNDS_BROADCAST_H__	modules/RGNDS_Engine/broadcast.h	2;"	d
+__RGNDS_ENGINE_GL2D_C__	modules/RGNDS_Engine/gl2d/gl2d.cpp	15;"	d
+__RGNDS_ENGINE_H__	modules/RGNDS_Engine/engine.h	2;"	d
+__RGNDS_FONT_RES_CPP__	modules/RGNDS_Engine/inc/fonts_res.h	2;"	d
+__RGNDS_GL2D_CPP__	modules/RGNDS_Engine/src/gl2d.cpp	2;"	d
+__RGNDS_GL2D_H__	modules/RGNDS_Engine/inc/gl2d.h	2;"	d
+__RGNDS_GL2D_POLYSHAPE_CPP__	modules/RGNDS_Engine/src/polyshape.cpp	2;"	d
+__RGNDS_GL2D_POLYSHAPE_H__	modules/RGNDS_Engine/gl2d_polyshape.h	2;"	d
+__RGNDS_POINT_H__	modules/RGNDS_Engine/inc/point.h	2;"	d
+__RGNDS_TIMER_CPP__	modules/RGNDS_Engine/src/timer.cpp	2;"	d
+__RGNDS_TIMER_H__	modules/RGNDS_Engine/inc/timer.h	2;"	d
+__RGNDS_TRANSFORM_CPP__	modules/RGNDS_Engine/src/transform.cpp	2;"	d
+__RGNDS_TRANSFORM_H__	modules/RGNDS_Engine/transform.h	2;"	d
+__SHOT_H__	source/shot.h	2;"	d
+__SPACEOBJ_H__	source/spaceobj.h	2;"	d
+_default	modules/RGNDS_Engine/src/transform.cpp	/^    Transform Transform::_default = Transform();$/;"	m	class:RGNDS::Transform
+_default	modules/RGNDS_Engine/transform.h	/^        static Transform _default;$/;"	m	class:RGNDS::Transform
+_instances	source/shot.cpp	/^std::vector<Shot*> Shot::_instances;$/;"	m	class:Shot
+_instances	source/shot.h	/^    static std::vector<Shot*> _instances;$/;"	m	class:Shot
+accelerate	source/shipengine.cpp	/^void ShipEngine::accelerate(float deltaTime) {$/;"	f	class:ShipEngine
+acceleration	source/shipengine.h	/^        float acceleration;$/;"	m	class:ShipEngine
+alpha	source/gamestatemaingame.h	/^            int alpha;$/;"	m	struct:GameStateMainGame::Star
+ang	modules/RGNDS_Engine/transform.h	/^        float ang = 0.0;$/;"	m	class:RGNDS::Transform
+angRes	source/ship.h	/^        float angRes = PI\/20;$/;"	m	class:Ship
+asteroids	source/gamestatemaingame.h	/^		std::vector<Asteroid*> asteroids;$/;"	m	class:GameStateMainGame
+bceDead	source/broadcastchannels.h	/^    bceDead,$/;"	e	enum:BroadcastEvent
+bceDraw	source/broadcastchannels.h	/^    bceDraw$/;"	e	enum:BroadcastEvent
+bceGameStart	source/broadcastchannels.h	/^    bceGameStart,$/;"	e	enum:BroadcastEvent
+bceHitPlayer	source/broadcastchannels.h	/^    bceHitPlayer,$/;"	e	enum:BroadcastEvent
+bceMove	source/broadcastchannels.h	/^    bceMove = 0,$/;"	e	enum:BroadcastEvent
+bcePlayerShotsFired	source/broadcastchannels.h	/^    bcePlayerShotsFired,$/;"	e	enum:BroadcastEvent
+bceSpawn	source/broadcastchannels.h	/^    bceSpawn,$/;"	e	enum:BroadcastEvent
+bceTick	source/broadcastchannels.h	/^    bceTick,$/;"	e	enum:BroadcastEvent
+bottom	source/wraparoundrenderer.h	/^        int top, right, bottom, left, width, height;$/;"	m	class:WrapAroundRenderer
+bringBackToLife	source/asteroid.cpp	/^void Asteroid::bringBackToLife(RGNDS::Broadcast* gameHeartbeat, RGNDS::Point<float> pos, bool generateNewShape, float scale) {$/;"	f	class:Asteroid
+broadcast	source/asteroid.cpp	/^RGNDS::Broadcast Asteroid::broadcast;$/;"	m	class:Asteroid
+broadcast	source/asteroid.h	/^        static RGNDS::Broadcast broadcast;$/;"	m	class:Asteroid
+broadcast	source/ship.cpp	/^RGNDS::Broadcast Ship::broadcast;$/;"	m	class:Ship
+broadcast	source/ship.h	/^        static RGNDS::Broadcast broadcast;$/;"	m	class:Ship
+broadcast	source/shot.cpp	/^RGNDS::Broadcast Shot::broadcast;$/;"	m	class:Shot
+broadcast	source/shot.h	/^    static RGNDS::Broadcast broadcast;$/;"	m	class:Shot
+checkCircleOnCircle	source/collision.cpp	/^    bool Collision::checkCircleOnCircle(Point<float>* const pos1, float radius1, Point<float>* const pos2, float radius2, Collision* overlapdata)$/;"	f	class:RGNDS::Collision
+color	modules/RGNDS_Engine/gl2d_polyshape.h	/^            unsigned short color;$/;"	m	class:RGNDS::GL2D::PolyShape
+createCircle	modules/RGNDS_Engine/src/polyshape.cpp	/^        PolyShape* PolyShape::createCircle(float radius, int edges, float thickness) {$/;"	f	class:RGNDS::GL2D::PolyShape
+decerlerate	source/shipengine.cpp	/^void ShipEngine::decerlerate(float deltaTime) {$/;"	f	class:ShipEngine
+defaultFont	modules/RGNDS_Engine/src/gl2d.cpp	/^        glImage defaultFont[64];$/;"	m	namespace:RGNDS::GL2D
+defaultFont_TextureID	modules/RGNDS_Engine/src/gl2d.cpp	/^        int defaultFont_TextureID;$/;"	m	namespace:RGNDS::GL2D
+defineWrappingArea	source/wraparoundrenderer.cpp	/^void WrapAroundRenderer::defineWrappingArea(int t, int r, int b, int l) {$/;"	f	class:WrapAroundRenderer
+deltaTime	source/gamestatemaingame.h	/^    float deltaTime; $/;"	m	struct:MainGameUpdateData
+deltaTime	source/gamestatemaingame.h	/^    float deltaTime;$/;"	m	struct:MainGameDrawData
+dir	modules/RGNDS_Engine/transform.h	/^        Point<float> dir = {1.0f, 0.0f};$/;"	m	class:RGNDS::Transform
+dist	modules/RGNDS_Engine/inc/point.h	/^        T dist() const {$/;"	f	struct:RGNDS::Point
+draw	modules/RGNDS_Engine/src/polyshape.cpp	/^        void PolyShape::draw(unsigned short color, Transform* t, int alpha) {$/;"	f	class:RGNDS::GL2D::PolyShape
+draw	source/shot.cpp	/^void Shot::draw() {$/;"	f	class:Shot
+draw	source/spaceobj.cpp	/^void SpaceObj::draw(std::function<void(RGNDS::Transform*)> drawingLambda) {$/;"	f	class:SpaceObj
+drawingInstanceCnt	source/wraparoundrenderer.h	/^        byte drawingInstanceCnt = 1;$/;"	m	class:WrapAroundRenderer
+drawingInstances	source/wraparoundrenderer.h	/^        RGNDS::Point<float> drawingInstances[4];$/;"	m	class:WrapAroundRenderer
+elapsedTime	modules/RGNDS_Engine/src/timer.cpp	/^        int elapsedTime = 0;$/;"	m	namespace:RGNDS::Timer
+error	modules/RGNDS_Engine/engine.cpp	/^    void Engine::error(const char* msg, int code) {$/;"	f	class:RGNDS::Engine
+exit	modules/RGNDS_Engine/engine.cpp	/^    void Engine::exit() {$/;"	f	class:RGNDS::Engine
+g_depth	modules/RGNDS_Engine/src/gl2d.cpp	/^v16 g_depth = 0;$/;"	v
+game_difficulty	source/gamestatemaingame.cpp	/^float GameStateMainGame::game_difficulty = 1.0f;$/;"	m	class:GameStateMainGame
+game_difficulty	source/gamestatemaingame.h	/^        static float game_difficulty;        \/\/ difficulty goes from 1 to 16;$/;"	m	class:GameStateMainGame
+generateShape	source/asteroid.cpp	/^void Asteroid::generateShape() {$/;"	f	class:Asteroid
+getCollisionSphere	source/spaceobj.cpp	/^void SpaceObj::getCollisionSphere(RGNDS::Point<float> *pos, float *radius) {$/;"	f	class:SpaceObj
+getDeltaTime	modules/RGNDS_Engine/src/timer.cpp	/^        int getDeltaTime() {$/;"	f	namespace:RGNDS::Timer
+getInstance	source/wraparoundrenderer.cpp	/^RGNDS::Point<float> WrapAroundRenderer::getInstance(byte index) {$/;"	f	class:WrapAroundRenderer
+getInstanceCnt	source/wraparoundrenderer.cpp	/^byte WrapAroundRenderer::getInstanceCnt() {$/;"	f	class:WrapAroundRenderer
+glBegin2D	modules/RGNDS_Engine/src/gl2d.cpp	/^        void glBegin2D( float screenoffset ) {$/;"	f	namespace:RGNDS::GL2D
+glBox	modules/RGNDS_Engine/gl2d/gl2d.cpp	/^        void EngineGL2D::glBox( int x1, int y1, int x2, int y2, int color )$/;"	f	class:RGNDS::EngineGL2D
+glBoxFilled	modules/RGNDS_Engine/gl2d/gl2d.cpp	/^        void EngineGL2D::glBoxFilled( int x1, int y1, int x2, int y2, int color )$/;"	f	class:RGNDS::EngineGL2D
+glBoxFilledGradient	modules/RGNDS_Engine/gl2d/gl2d.cpp	/^        void EngineGL2D::glBoxFilledGradient( int x1, int y1, int x2, int y2,$/;"	f	class:RGNDS::EngineGL2D
+glEnd2D	modules/RGNDS_Engine/src/gl2d.cpp	/^        void glEnd2D( void ) {$/;"	f	namespace:RGNDS::GL2D
+glImage	modules/RGNDS_Engine/inc/gl2d.h	/^} glImage;$/;"	t	typeref:struct:__anon1
+glLine	modules/RGNDS_Engine/gl2d/gl2d.cpp	/^        void EngineGL2D::glLine( int x1, int y1, int x2, int y2, int color )$/;"	f	class:RGNDS::EngineGL2D
+glLoadSpriteSet	modules/RGNDS_Engine/gl2d/gl2d.cpp	/^        int EngineGL2D::glLoadSpriteSet( EngineGL2D::glImage              *sprite,$/;"	f	class:RGNDS::EngineGL2D
+glLoadTileSet	modules/RGNDS_Engine/src/gl2d.cpp	/^        int glLoadTileSet( glImage              *sprite,$/;"	f	namespace:RGNDS::GL2D
+glPixel	modules/RGNDS_Engine/src/gl2d.cpp	/^        void glPixel(int x, int y, int color, int alpha) {$/;"	f	namespace:RGNDS::GL2D
+glPutPixel	modules/RGNDS_Engine/gl2d/gl2d.cpp	/^        void EngineGL2D::glPutPixel( int x, int y, int color ) {$/;"	f	class:RGNDS::EngineGL2D
+glScreen2D	modules/RGNDS_Engine/src/gl2d.cpp	/^        void glScreen2D( void ) {$/;"	f	namespace:RGNDS::GL2D
+glShape	modules/RGNDS_Engine/src/gl2d.cpp	/^        void glShape(GL_GLBEGIN_ENUM mode, int color, int numPoints, const Point<double> aPoints[], Transform* tra, int alpha) {$/;"	f	namespace:RGNDS::GL2D
+glSprite	modules/RGNDS_Engine/gl2d/gl2d.cpp	/^        void EngineGL2D::glSprite( int x, int y, int flipmode, const EngineGL2D::glImage *spr )$/;"	f	class:RGNDS::EngineGL2D
+glSprite	modules/RGNDS_Engine/src/gl2d.cpp	/^        void glSprite(int flipmode, const glImage *spr, Transform* tra ) {$/;"	f	namespace:RGNDS::GL2D
+glSpriteOnQuad	modules/RGNDS_Engine/gl2d/gl2d.cpp	/^        void EngineGL2D::glSpriteOnQuad( int x1, int y1,$/;"	f	class:RGNDS::EngineGL2D
+glSpriteRotate	modules/RGNDS_Engine/gl2d/gl2d.cpp	/^        void EngineGL2D::glSpriteRotate( int x, int y, s32 angle, int flipmode, const EngineGL2D::glImage *spr )$/;"	f	class:RGNDS::EngineGL2D
+glSpriteRotateScale	modules/RGNDS_Engine/gl2d/gl2d.cpp	/^        void EngineGL2D::glSpriteRotateScale( int x, int y, s32 angle, s32 scale, int flipmode, const EngineGL2D::glImage *spr)$/;"	f	class:RGNDS::EngineGL2D
+glSpriteRotateScaleXY	modules/RGNDS_Engine/gl2d/gl2d.cpp	/^        void EngineGL2D::glSpriteRotateScaleXY( int x, int y, s32 angle, s32 scaleX, s32 scaleY, int flipmode, const EngineGL2D::glImage *spr)$/;"	f	class:RGNDS::EngineGL2D
+glSpriteScale	modules/RGNDS_Engine/gl2d/gl2d.cpp	/^        void EngineGL2D::glSpriteScale( int x, int y, s32 scale, int flipmode, const EngineGL2D::glImage *spr )$/;"	f	class:RGNDS::EngineGL2D
+glSpriteScaleXY	modules/RGNDS_Engine/gl2d/gl2d.cpp	/^        void EngineGL2D::glSpriteScaleXY( int x, int y, s32 scaleX, s32 scaleY, int flipmode, const EngineGL2D::glImage *spr )$/;"	f	class:RGNDS::EngineGL2D
+glSpriteStretchHorizontal	modules/RGNDS_Engine/gl2d/gl2d.cpp	/^        void EngineGL2D::glSpriteStretchHorizontal(int x, int y, int length_x, const EngineGL2D::glImage *spr )$/;"	f	class:RGNDS::EngineGL2D
+glText	modules/RGNDS_Engine/src/gl2d.cpp	/^        void glText(const char* text, unsigned short color, Transform* tra,  glImage font[64]) {$/;"	f	namespace:RGNDS::GL2D
+glTriangle	modules/RGNDS_Engine/gl2d/gl2d.cpp	/^        void EngineGL2D::glTriangle( int x1, int y1, int x2, int y2, int x3, int y3, int color )$/;"	f	class:RGNDS::EngineGL2D
+glTriangleFilled	modules/RGNDS_Engine/gl2d/gl2d.cpp	/^        void EngineGL2D::glTriangleFilled( int x1, int y1, int x2, int y2, int x3, int y3, int color )$/;"	f	class:RGNDS::EngineGL2D
+glTriangleFilledGradient	modules/RGNDS_Engine/gl2d/gl2d.cpp	/^        void EngineGL2D::glTriangleFilledGradient( int x1, int y1, int x2, int y2, int x3, int y3,$/;"	f	class:RGNDS::EngineGL2D
+gxScalef32	modules/RGNDS_Engine/src/gl2d.cpp	/^inline void gxScalef32(s32 x, s32 y, s32 z) {$/;"	f
+gxTexcoord2i	modules/RGNDS_Engine/src/gl2d.cpp	/^inline void gxTexcoord2i(t16 u, t16 v) {$/;"	f
+gxTranslate3f32	modules/RGNDS_Engine/src/gl2d.cpp	/^inline void gxTranslate3f32( int32 x, int32 y, int32 z ) {$/;"	f
+gxVertex2i	modules/RGNDS_Engine/src/gl2d.cpp	/^inline void gxVertex2i(v16 x, v16 y) {$/;"	f
+gxVertex3i	modules/RGNDS_Engine/src/gl2d.cpp	/^inline void gxVertex3i(v16 x, v16 y, v16 z) {$/;"	f
+heartbeat	source/ship.h	/^        std::function<void(int, void*)> heartbeat;$/;"	m	class:Ship
+heartbeat	source/shot.cpp	/^std::function<void(int, void*)> Shot::heartbeat = [](int event, void* data){$/;"	m	class:Shot
+heartbeat	source/shot.h	/^    static std::function<void(int, void*)> heartbeat;$/;"	m	class:Shot
+height	modules/RGNDS_Engine/inc/gl2d.h	/^            int 	height;		\/*!< Height of the Sprite *\/$/;"	m	struct:__anon1
+height	source/wraparoundrenderer.h	/^        int top, right, bottom, left, width, height;$/;"	m	class:WrapAroundRenderer
+icons	Makefile	/^  icons := $(wildcard *.bmp)$/;"	m
+init	modules/RGNDS_Engine/engine.cpp	/^    void Engine::init() {$/;"	f	class:RGNDS::Engine
+init	modules/RGNDS_Engine/src/timer.cpp	/^        void init() {$/;"	f	namespace:RGNDS::Timer
+initialized	modules/RGNDS_Engine/engine.cpp	/^    bool    Engine::initialized = false;$/;"	m	class:RGNDS::Engine
+initialized	modules/RGNDS_Engine/engine.h	/^            static bool initialized;    \/\/ tells if the Engine has been initialized$/;"	m	class:RGNDS::Engine
+keepRunning	modules/RGNDS_Engine/engine.h	/^            bool keepRunning;           \/\/ set to false, if the Main-Loop should stop to repeat itself$/;"	m	class:RGNDS::Engine
+keys_held	source/gamestatemaingame.h	/^    int keys_held; $/;"	m	struct:MainGameUpdateData
+keys_justpressed	source/gamestatemaingame.h	/^    int keys_justpressed; $/;"	m	struct:MainGameUpdateData
+keys_up	source/gamestatemaingame.h	/^    int keys_up; $/;"	m	struct:MainGameUpdateData
+kill	source/asteroid.cpp	/^void Asteroid::kill(RGNDS::Broadcast* gameHeartbeat) {$/;"	f	class:Asteroid
+kill	source/shot.cpp	/^void Shot::kill() {$/;"	f	class:Shot
+lastRead	modules/RGNDS_Engine/src/timer.cpp	/^        int lastRead = 0;$/;"	m	namespace:RGNDS::Timer
+left	source/wraparoundrenderer.h	/^        int top, right, bottom, left, width, height;$/;"	m	class:WrapAroundRenderer
+lifetime	source/shot.h	/^    int lifetime = 1000;$/;"	m	class:Shot
+listeners	modules/RGNDS_Engine/broadcast.h	/^        std::vector<std::function<void(int, void*)>*> listeners;$/;"	m	class:RGNDS::Broadcast
+main	source/main.cpp	/^int main(void) {$/;"	f
+mainGameBroadcast	source/gamestatemaingame.h	/^        RGNDS::Broadcast mainGameBroadcast;$/;"	m	class:GameStateMainGame
+moveInDirection	modules/RGNDS_Engine/src/transform.cpp	/^    void Transform::moveInDirection( float distance ) {$/;"	f	class:RGNDS::Transform
+nextCycle	modules/RGNDS_Engine/src/timer.cpp	/^        void nextCycle() {$/;"	f	namespace:RGNDS::Timer
+normalize	modules/RGNDS_Engine/inc/point.h	/^        Point<T> normalize() const {$/;"	f	struct:RGNDS::Point
+numPoints	modules/RGNDS_Engine/gl2d_polyshape.h	/^            short numPoints = 0;$/;"	m	class:RGNDS::GL2D::PolyShape
+objRadius	source/spaceobj.h	/^    float objRadius;$/;"	m	class:SpaceObj
+onAsteroidBroadcast	source/gamestatemaingame.h	/^        std::function<void(int, void*)> onAsteroidBroadcast;$/;"	m	class:GameStateMainGame
+onDraw	modules/RGNDS_Engine/engine.h	/^            virtual void onDraw(float deltaTime, Screen screen){};$/;"	f	class:RGNDS::Engine
+onDraw	source/gamestatemaingame.cpp	/^void GameStateMainGame::onDraw(float deltaTime, RGNDS::Engine::Screen screen) {$/;"	f	class:GameStateMainGame
+onEnd	modules/RGNDS_Engine/engine.h	/^            virtual void onEnd(){}$/;"	f	class:RGNDS::Engine
+onEnd	source/gamestatemaingame.cpp	/^void GameStateMainGame::onEnd() {$/;"	f	class:GameStateMainGame
+onGameHeartbeat	source/asteroid.h	/^        std::function<void(int, void*)> onGameHeartbeat;$/;"	m	class:Asteroid
+onShipAction	source/asteroid.h	/^        std::function<void(int, void*)> onShipAction;$/;"	m	class:Asteroid
+onShotAction	source/asteroid.cpp	/^std::function<void(int, void*)> Asteroid::onShotAction = [](int event, void* obj){$/;"	m	class:Asteroid
+onShotAction	source/asteroid.h	/^        static std::function<void(int, void*)> onShotAction;$/;"	m	class:Asteroid
+onStart	modules/RGNDS_Engine/engine.h	/^            virtual int onStart(){ return 2; }$/;"	f	class:RGNDS::Engine
+onStart	source/gamestatemaingame.cpp	/^int GameStateMainGame::onStart() {$/;"	f	class:GameStateMainGame
+onUpdate	modules/RGNDS_Engine/engine.h	/^            virtual void onUpdate( float deltaTime ){};$/;"	f	class:RGNDS::Engine
+onUpdate	source/gamestatemaingame.cpp	/^void GameStateMainGame::onUpdate(float deltaTime) {$/;"	f	class:GameStateMainGame
+operator *	modules/RGNDS_Engine/inc/point.h	/^        Point<T> operator*(const A& p) const {$/;"	f	struct:RGNDS::Point
+operator *	modules/RGNDS_Engine/inc/point.h	/^        Point<T> operator*(const Point<A>& p) const {$/;"	f	struct:RGNDS::Point
+operator *=	modules/RGNDS_Engine/inc/point.h	/^        Point<T>* operator*=(const A& p) {$/;"	f	struct:RGNDS::Point
+operator *=	modules/RGNDS_Engine/inc/point.h	/^        Point<T>* operator*=(const Point<A>& p) {$/;"	f	struct:RGNDS::Point
+operator +	modules/RGNDS_Engine/inc/point.h	/^        Point<T> operator+(const Point<A>& p) const {$/;"	f	struct:RGNDS::Point
+operator +=	modules/RGNDS_Engine/inc/point.h	/^        Point<T>* operator+=(const A& p) {$/;"	f	struct:RGNDS::Point
+operator +=	modules/RGNDS_Engine/inc/point.h	/^        Point<T>* operator+=(const Point<A>& p) {$/;"	f	struct:RGNDS::Point
+operator -	modules/RGNDS_Engine/inc/point.h	/^        Point<T> operator-(const A& p) const {$/;"	f	struct:RGNDS::Point
+operator -	modules/RGNDS_Engine/inc/point.h	/^        Point<T> operator-(const Point<A>& p) const {$/;"	f	struct:RGNDS::Point
+operator /	modules/RGNDS_Engine/inc/point.h	/^        Point<T> operator\/(const A& p) const {$/;"	f	struct:RGNDS::Point
+operator =	modules/RGNDS_Engine/inc/point.h	/^        Point<T>* operator=(const Point<A>& p) const {$/;"	f	struct:RGNDS::Point
+overlapDir	source/collision.h	/^            Point<float> overlapDir;$/;"	m	class:RGNDS::Collision
+pause	modules/RGNDS_Engine/src/timer.cpp	/^        void pause() {$/;"	f	namespace:RGNDS::Timer
+ph	source/ship.h	/^        ShipEngine ph;$/;"	m	class:Ship
+points	modules/RGNDS_Engine/gl2d_polyshape.h	/^            Point<double> *points;$/;"	m	class:RGNDS::GL2D::PolyShape
+polyId	modules/RGNDS_Engine/src/gl2d.cpp	/^        static int polyId=0;$/;"	m	namespace:RGNDS::GL2D
+pos	modules/RGNDS_Engine/transform.h	/^        Point<float>   pos;$/;"	m	class:RGNDS::Transform
+renderer	source/spaceobj.h	/^    WrapAroundRenderer renderer;$/;"	m	class:SpaceObj
+rendertype	modules/RGNDS_Engine/gl2d_polyshape.h	/^            GL_GLBEGIN_ENUM rendertype;$/;"	m	class:RGNDS::GL2D::PolyShape
+reset	source/ship.cpp	/^void Ship::reset() {$/;"	f	class:Ship
+right	source/wraparoundrenderer.h	/^        int top, right, bottom, left, width, height;$/;"	m	class:WrapAroundRenderer
+run	modules/RGNDS_Engine/engine.cpp	/^    void Engine::run() {$/;"	f	class:RGNDS::Engine
+running	modules/RGNDS_Engine/src/timer.cpp	/^        byte running = 1;$/;"	m	namespace:RGNDS::Timer
+scale	modules/RGNDS_Engine/transform.h	/^        float scale = 1.0f;$/;"	m	class:RGNDS::Transform
+score	source/gamestatemaingame.h	/^        int score = 0;$/;"	m	class:GameStateMainGame
+scoreTimer	source/gamestatemaingame.h	/^        float scoreTimer;$/;"	m	class:GameStateMainGame
+scorelocation	source/gamestatemaingame.h	/^        RGNDS::Transform scorelocation;$/;"	m	class:GameStateMainGame
+screen	source/gamestatemaingame.h	/^    RGNDS::Engine::Screen screen;$/;"	m	struct:MainGameDrawData
+setAngle	modules/RGNDS_Engine/src/transform.cpp	/^    void Transform::setAngle( float radiants ) {$/;"	f	class:RGNDS::Transform
+setAngleRel	modules/RGNDS_Engine/src/transform.cpp	/^    void Transform::setAngleRel( float radiants ) {$/;"	f	class:RGNDS::Transform
+setPoint	modules/RGNDS_Engine/src/polyshape.cpp	/^        void PolyShape::setPoint(short index, float x, float y) {$/;"	f	class:RGNDS::GL2D::PolyShape
+shaBody	source/ship.h	/^        RGNDS::GL2D::PolyShape* shaBody;$/;"	m	class:Ship
+shaThruster	source/ship.h	/^        RGNDS::GL2D::PolyShape* shaThruster;$/;"	m	class:Ship
+ship	source/asteroid.h	/^        Ship* ship;$/;"	m	class:Asteroid
+ship	source/gamestatemaingame.h	/^        Ship ship;$/;"	m	class:GameStateMainGame
+shots	source/asteroid.cpp	/^std::vector<Shot*> Asteroid::shots;$/;"	m	class:Asteroid
+shots	source/asteroid.h	/^        static std::vector<Shot*> shots;$/;"	m	class:Asteroid
+spinSpeed	source/asteroid.h	/^        float spinSpeed;$/;"	m	class:Asteroid
+stars	source/gamestatemaingame.h	/^        std::vector<Star> stars;$/;"	m	class:GameStateMainGame
+subscribe	modules/RGNDS_Engine/src/broadcast.cpp	/^    void Broadcast::subscribe(std::function<void(int, void*)>* fnc) {$/;"	f	class:RGNDS::Broadcast
+textureID	modules/RGNDS_Engine/inc/gl2d.h	/^            int		textureID;  \/*!< Texture handle ( used in glDeleteTextures() ) <Br>$/;"	m	struct:__anon1
+thrusting	source/ship.h	/^        bool thrusting = false;$/;"	m	class:Ship
+to	modules/RGNDS_Engine/inc/point.h	/^        Point<A> to() const {$/;"	f	struct:RGNDS::Point
+top	source/wraparoundrenderer.h	/^        int top, right, bottom, left, width, height;$/;"	m	class:WrapAroundRenderer
+touch	source/gamestatemaingame.h	/^    touchPosition touch;$/;"	m	struct:MainGameUpdateData
+translate	modules/RGNDS_Engine/transform.h	/^    void Transform::translate(Point<TI>* in, Point<TO>* out, Transform* parent) {$/;"	f	class:RGNDS::Transform
+transmit	modules/RGNDS_Engine/src/broadcast.cpp	/^    void Broadcast::transmit(int event, void* data) {$/;"	f	class:RGNDS::Broadcast
+u_off	modules/RGNDS_Engine/inc/gl2d.h	/^            int 	u_off;		\/*!< S texture offset *\/$/;"	m	struct:__anon1
+unpause	modules/RGNDS_Engine/src/timer.cpp	/^        void unpause() {$/;"	f	namespace:RGNDS::Timer
+unsubscribe	modules/RGNDS_Engine/src/broadcast.cpp	/^    void Broadcast::unsubscribe(std::function<void(int, void*)>* fnc) {$/;"	f	class:RGNDS::Broadcast
+update	source/asteroid.cpp	/^void Asteroid::update(float deltatime) {$/;"	f	class:Asteroid
+update	source/ship.cpp	/^void Ship::update(float deltaTime, int keys_held, int keys_up, int keys_justpressed, touchPosition& touch) {$/;"	f	class:Ship
+update	source/shot.cpp	/^bool Shot::update(float deltaTime) {$/;"	f	class:Shot
+updateDrawingInstances	source/wraparoundrenderer.cpp	/^void WrapAroundRenderer::updateDrawingInstances(RGNDS::Point<float>* pos, float shipRadius) {$/;"	f	class:WrapAroundRenderer
+updatePosition	source/spaceobj.cpp	/^void SpaceObj::updatePosition() {$/;"	f	class:SpaceObj
+v_off	modules/RGNDS_Engine/inc/gl2d.h	/^            int 	v_off;		\/*!< T texture offset *\/$/;"	m	struct:__anon1
+velocity	source/spaceobj.h	/^    RGNDS::Point<double> velocity;$/;"	m	class:SpaceObj
+width	modules/RGNDS_Engine/inc/gl2d.h	/^            int		width;		\/*!< Width of the Sprite *\/$/;"	m	struct:__anon1
+width	source/wraparoundrenderer.h	/^        int top, right, bottom, left, width, height;$/;"	m	class:WrapAroundRenderer
+x	modules/RGNDS_Engine/inc/point.h	/^        T x = 0, y = 0;$/;"	m	struct:RGNDS::Point
+x	source/gamestatemaingame.h	/^            int x;$/;"	m	struct:GameStateMainGame::Star
+y	modules/RGNDS_Engine/inc/point.h	/^        T x = 0, y = 0;$/;"	m	struct:RGNDS::Point
+y	source/gamestatemaingame.h	/^            int y;$/;"	m	struct:GameStateMainGame::Star
+~Asteroid	source/asteroid.cpp	/^Asteroid::~Asteroid() {$/;"	f	class:Asteroid
+~Collision	source/collision.cpp	/^    Collision::~Collision() {}$/;"	f	class:RGNDS::Collision
+~Engine	modules/RGNDS_Engine/engine.cpp	/^    Engine::~Engine(){$/;"	f	class:RGNDS::Engine
+~PolyShape	modules/RGNDS_Engine/src/polyshape.cpp	/^        PolyShape::~PolyShape(){$/;"	f	class:RGNDS::GL2D::PolyShape
+~Ship	source/ship.cpp	/^Ship::~Ship() {$/;"	f	class:Ship
+~Shot	source/shot.cpp	/^Shot::~Shot() {}$/;"	f	class:Shot
+~Transform	modules/RGNDS_Engine/src/transform.cpp	/^    Transform::~Transform(){}$/;"	f	class:RGNDS::Transform
+~WrapAroundRenderer	source/wraparoundrenderer.cpp	/^WrapAroundRenderer::~WrapAroundRenderer() {}$/;"	f	class:WrapAroundRenderer

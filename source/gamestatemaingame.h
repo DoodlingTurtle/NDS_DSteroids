@@ -28,6 +28,7 @@ struct MainGameDrawData {
 class GameStateMainGame : public RGNDS::Engine
 {
     public:
+		GameStateMainGame();
         int score = 0;
 
         std::function<void(int, void*)> onAsteroidBroadcast;
@@ -42,8 +43,8 @@ class GameStateMainGame : public RGNDS::Engine
         };
 
         Ship ship;
-        Asteroid asteroids[MAX_ASTEROIDS];
         std::vector<Star> stars;
+		std::vector<Asteroid*> asteroids;
 
         RGNDS::Transform scorelocation;
         float scoreTimer;
