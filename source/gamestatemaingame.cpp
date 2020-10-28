@@ -15,14 +15,21 @@ GameStateMainGame::GameStateMainGame() {
             break;
         case bceDead:   // In case of bceDead - Event stop heartbeat to the sending asteroid
             Engine_Log("Kill Asteroid");
-            ((Asteroid*)data)->kill(&mainGameBroadcast);
 
 			for(int a = asteroids.size()-1; a >= 0; a--) {
 				if(asteroids.at(a) == ((Asteroid*)data)) {
-					Engine_Log("delete asteroid data/pointer");
+					Asteroid* ast = (Asteroid*)data;
+					ast->kill(&mainGameBroadcast);
+
+					Engine_Log("delete asteroid data/pointer " << ast->scale/2);
 
 					asteroids.erase(asteroids.begin()+a);
-					delete ((Asteroid*)data);
+					if(ast->scale > 0.25) {
+						Asteroid* ast2 = new Asteroid();
+						ast2->bringBackToLife(&mainGameBroadcast, ast->pos, true, ast->scale/2);
+						asteroids.push_back(ast2);
+					}
+					delete ast;
 					break;
 				}
 			}
@@ -60,7 +67,7 @@ int GameStateMainGame::onStart() {
     for(a = 0; a < (int)game_difficulty; a++) {
         Asteroid* ast = new Asteroid();
 		ast->bringBackToLife(&mainGameBroadcast, ship.pos, false, 1);
-
+		ast->moveInDirection(64);
 		asteroids.push_back(ast);
     }
 

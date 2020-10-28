@@ -141,8 +141,9 @@ void Asteroid::bringBackToLife(RGNDS::Broadcast* gameHeartbeat, RGNDS::Point<flo
     velocity.y = (RandF() * 2) - 1;
     spinSpeed = (RandF() * 0.5 + 0.5) * 0.0625; // Spin by 360� every 16 Seconds (at max spinspeed)
 
-    pos = pos;
-    scale = scale;
+    this->pos.x = pos.x;
+	this->pos.y = pos.y;
+    this->scale = scale;
 
     if(generateNewShape)
         generateShape();
