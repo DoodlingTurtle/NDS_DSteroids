@@ -269,7 +269,8 @@ onDraw	source/gamestatemaingame.cpp	/^void GameStateMainGame::onDraw(float delta
 onEnd	modules/RGNDS_Engine/engine.h	/^            virtual void onEnd(){}$/;"	f	class:RGNDS::Engine
 onEnd	source/gamestatemaingame.cpp	/^void GameStateMainGame::onEnd() {$/;"	f	class:GameStateMainGame
 onGameHeartbeat	source/asteroid.h	/^        std::function<void(int, void*)> onGameHeartbeat;$/;"	m	class:Asteroid
-onShipAction	source/asteroid.h	/^        std::function<void(int, void*)> onShipAction;$/;"	m	class:Asteroid
+onShipAction	source/asteroid.cpp	/^std::function<void(int, void*)> Asteroid::onShipAction = [](int event, void* data) {$/;"	m	class:Asteroid
+onShipAction	source/asteroid.h	/^		static std::function<void(int, void*)> onShipAction;$/;"	m	class:Asteroid
 onShotAction	source/asteroid.cpp	/^std::function<void(int, void*)> Asteroid::onShotAction = [](int event, void* obj){$/;"	m	class:Asteroid
 onShotAction	source/asteroid.h	/^        static std::function<void(int, void*)> onShotAction;$/;"	m	class:Asteroid
 onStart	modules/RGNDS_Engine/engine.h	/^            virtual int onStart(){ return 2; }$/;"	f	class:RGNDS::Engine
@@ -309,7 +310,8 @@ setAngleRel	modules/RGNDS_Engine/src/transform.cpp	/^    void Transform::setAngl
 setPoint	modules/RGNDS_Engine/src/polyshape.cpp	/^        void PolyShape::setPoint(short index, float x, float y) {$/;"	f	class:RGNDS::GL2D::PolyShape
 shaBody	source/ship.h	/^        RGNDS::GL2D::PolyShape* shaBody;$/;"	m	class:Ship
 shaThruster	source/ship.h	/^        RGNDS::GL2D::PolyShape* shaThruster;$/;"	m	class:Ship
-ship	source/asteroid.h	/^        Ship* ship;$/;"	m	class:Asteroid
+ship	source/asteroid.cpp	/^Ship* Asteroid::ship = nullptr;$/;"	m	class:Asteroid
+ship	source/asteroid.h	/^        static Ship* ship;$/;"	m	class:Asteroid
 ship	source/gamestatemaingame.h	/^        Ship ship;$/;"	m	class:GameStateMainGame
 shots	source/asteroid.cpp	/^std::vector<Shot*> Asteroid::shots;$/;"	m	class:Asteroid
 shots	source/asteroid.h	/^        static std::vector<Shot*> shots;$/;"	m	class:Asteroid

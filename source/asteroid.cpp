@@ -13,6 +13,23 @@
 RGNDS::Broadcast Asteroid::broadcast;
 std::vector<Shot*> Asteroid::shots;
 
+Ship* Asteroid::ship = nullptr;
+
+std::function<void(int, void*)> Asteroid::onShipAction = [](int event, void* data) {
+	switch(event) {
+		case bceSpawn:
+			Engine_Log("Asteroid register ship spawn event");
+			ship = (Ship*)data;
+			break;
+
+		case bceDead:
+			Engine_Log("Asteroid register ship dead event");
+			ship = nullptr;
+			break;
+	}
+};
+
+
 std::function<void(int, void*)> Asteroid::onShotAction = [](int event, void* obj){
     switch(event) {
         case bceSpawn: {
@@ -32,7 +49,6 @@ std::function<void(int, void*)> Asteroid::onShotAction = [](int event, void* obj
         } break;
     }
 };
-
 
 
 Asteroid::Asteroid() : 
@@ -55,13 +71,7 @@ Asteroid::Asteroid() :
         }
     };
 
-    onShipAction = [this](int event, void* data) {
-        switch(event) {
-            case bceSpawn:
-                Engine_Log("Asteroid register ship spawn event");
-                this->ship = (Ship*)data;
-        }
-    };
+
 }
 
 void Asteroid::update(float deltatime) {
