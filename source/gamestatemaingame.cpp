@@ -1,4 +1,5 @@
 #include "gamestatemaingame.h"
+#include "scorepopup.h"
 
 #include <climits>
 
@@ -35,7 +36,11 @@ GameStateMainGame::GameStateMainGame() {
                             asteroidsToRevive.push_back(ast2);
 						}
 					}
-                    this->score += 100/ast->scale;
+
+                    int addScore = 100/ast->scale;
+
+                    this->score += addScore;
+                    ScorePopup::spawn(addScore, ast->pos.x, ast->pos.y);
 					delete ast;
 					break;
 				}
@@ -79,8 +84,9 @@ int GameStateMainGame::onStart() {
     }
 
 
-    // Attach all the game components to each other 
+    // Attach all the game components to each other #
     Asteroid::broadcast.subscribe(&onAsteroidBroadcast);
+    mainGameBroadcast.subscribe(&ScorePopup::heartbeat);
     mainGameBroadcast.subscribe(&Shot::heartbeat);
     Shot::broadcast.subscribe(&Asteroid::onShotAction);
 	ship.broadcast.subscribe(&Asteroid::onShipAction);
@@ -94,6 +100,8 @@ int GameStateMainGame::onStart() {
 }
 
 void GameStateMainGame::onEnd() {
+
+    ScorePopup::cleanup();
 
     Engine_Log("Game Over");
 
@@ -110,6 +118,7 @@ void GameStateMainGame::onEnd() {
 	ship.broadcast.unsubscribe(&Asteroid::onShipAction);
     Shot::broadcast.unsubscribe(&Asteroid::onShotAction);
     mainGameBroadcast.unsubscribe(&Shot::heartbeat);
+    mainGameBroadcast.unsubscribe(&ScorePopup::heartbeat);
     Asteroid::broadcast.unsubscribe(&onAsteroidBroadcast);
 
     stars.clear();
