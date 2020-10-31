@@ -1,5 +1,7 @@
 #include "asteroid.h"
 
+#include "../modules/RGNDS_Engine/engine.h"
+
 #include "gamestatemaingame.h"
 #include "ship.h"
 
@@ -40,7 +42,6 @@ std::function<void(int, void*)> Asteroid::onShotAction = [](int event, void* obj
         } break;
 
         case bceDead: {
-
             Engine_Log("Remove Shot from asteroids");
             for(int a = Asteroid::shots.size()-1; a >= 0; a--)
                 if(Asteroid::shots.at(a) == (Shot*)obj)
@@ -64,9 +65,18 @@ Asteroid::Asteroid() :
                 break;
 
             case bceDraw:
-                SpaceObj::draw([this](RGNDS::Transform* tr){
-                    RGNDS::GL2D::PolyShape::draw(Engine_Color16(1, 14, 11, 10), tr);
-                });
+
+                if(
+                    pos.y < 16 || pos.y > SCREEN_HEIGHT2 - 16
+                    ||
+                    (((MainGameDrawData*)data)->screen == 0 && pos.y < SCREEN_HEIGHT+16)
+                    ||
+                    (((MainGameDrawData*)data)->screen == 1 && pos.y > SCREEN_HEIGHT-16)
+                ) {
+                    SpaceObj::draw([this](RGNDS::Transform* tr){
+                        RGNDS::GL2D::PolyShape::draw(Engine_Color16(1, 14, 11, 10), tr);
+                    });
+                }
                 break;
         }
     };
@@ -95,8 +105,8 @@ void Asteroid::update(float deltatime) {
         if(RGNDS::Collision::checkCircleOnCircle(
             &this->pos, this->scale * 14, &s->pos, 2
         )) {
-            broadcast.transmit(bceDead, this);
             s->kill();
+            broadcast.transmit(bceDead, this);
         } 
 
     }

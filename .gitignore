@@ -5,3 +5,4 @@ raw
 *.elf
 *.layout
 commit.txt
+*.swp

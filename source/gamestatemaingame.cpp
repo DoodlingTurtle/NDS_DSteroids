@@ -4,6 +4,8 @@
 
 float GameStateMainGame::game_difficulty = 1.0f;
 
+static std::vector<Asteroid*> asteroidsToRevive;
+
 GameStateMainGame::GameStateMainGame() {
 
     onAsteroidBroadcast = [this](int event, void* data) {
@@ -20,21 +22,26 @@ GameStateMainGame::GameStateMainGame() {
 				if(asteroids.at(a) == ((Asteroid*)data)) {
 					Asteroid* ast = (Asteroid*)data;
 					ast->kill(&mainGameBroadcast);
-
 					Engine_Log("delete asteroid data/pointer " << ast->scale/2);
 
 					asteroids.erase(asteroids.begin()+a);
 					if(ast->scale > 0.25) {
-						Asteroid* ast2 = new Asteroid();
-						ast2->bringBackToLife(&mainGameBroadcast, ast->pos, true, ast->scale/2);
-						asteroids.push_back(ast2);
+                        Asteroid* ast2;
+						for(int b = 0; b < 2; b++) {
+							ast2 = new Asteroid();
+                            ast2->scale = ast->scale;
+                            ast2->pos.x = ast->pos.x;
+                            ast2->pos.y = ast->pos.y;
+                            asteroidsToRevive.push_back(ast2);
+						}
 					}
+                    this->score += 100/ast->scale;
 					delete ast;
 					break;
 				}
 			}
 
-            //TODO; Award Points
+            //DONE; Award Points
         }
     };
 }
@@ -110,6 +117,12 @@ void GameStateMainGame::onEnd() {
 }
 
 void GameStateMainGame::onUpdate(float deltaTime) {
+// Add missing Asteroids
+    for(auto ast2 : asteroidsToRevive) {
+        ast2->bringBackToLife(&mainGameBroadcast, ast2->pos, true, ast2->scale/2);
+        asteroids.push_back(ast2);
+    }
+    asteroidsToRevive.clear();
 
 // Read Player input
     MainGameUpdateData data;
@@ -126,15 +139,6 @@ void GameStateMainGame::onUpdate(float deltaTime) {
     mainGameBroadcast.transmit(bceTick, &data);
 
 // Update Scores
-    scoreTimer += deltaTime * 1000.0f;
-    // award 1 Point for each Second survived
-    if(scoreTimer > 1000.0f) {
-        score++;
-        scoreTimer -= 1000.0f;
-    }
-
-    //TODO: punish player if he stayed still for to long
-    //TODO: alternatively award points for ship movement instead of time
 }
 
 void GameStateMainGame::onDraw(float deltaTime, RGNDS::Engine::Screen screen) {
