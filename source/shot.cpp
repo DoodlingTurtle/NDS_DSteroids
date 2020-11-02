@@ -7,6 +7,13 @@
 RGNDS::Broadcast Shot::broadcast;
 std::vector<Shot*> Shot::_instances;
 
+void Shot::cleanup() {
+    for(auto s : _instances)
+        delete s;
+
+    _instances.clear();
+}
+
 void Shot::Spawn(float ang, RGNDS::Point<float> *pos) {
     Shot *shot = new Shot(ang, pos);
     _instances.push_back(shot);
@@ -14,7 +21,6 @@ void Shot::Spawn(float ang, RGNDS::Point<float> *pos) {
 }
 
 std::function<void(int, void*)> Shot::heartbeat = [](int event, void* data){
-
     switch(event) {
         case bceTick: {
             float deltaTime = ((MainGameUpdateData*)data)->deltaTime;

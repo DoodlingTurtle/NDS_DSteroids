@@ -13,6 +13,8 @@ class Shot : public RGNDS::GL2D::PolyShape, public SpaceObj {
 public:
     static void Spawn(float angle, RGNDS::Point<float>* pos);
     
+    static void cleanup();
+
     static std::function<void(int, void*)> heartbeat;
     
     virtual ~Shot();

@@ -111,6 +111,8 @@ void GameStateMainGame::onEnd() {
 	}
 	asteroids.clear();
 
+    Shot::cleanup();
+
 	Engine_Log("Detach all game components");	
 
 	// Detach all game components from each other
