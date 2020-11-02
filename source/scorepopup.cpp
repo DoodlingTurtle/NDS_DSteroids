@@ -15,6 +15,11 @@ ScorePopup::~ScorePopup() {}
 
 std::vector<ScorePopup*> ScorePopup::_instances = std::vector<ScorePopup*>();
 
+static int color[2] = {
+    Engine_Color16(1, 31, 0, 0),
+    Engine_Color16(1, 0, 31, 0)
+};
+
 void ScorePopup::cleanup(){
     for(auto s : _instances)
         delete s;
@@ -50,7 +55,8 @@ std::function<void(int, void*)> ScorePopup::heartbeat = [](int event, void* data
             for(auto s : _instances) {
                 char buffer[7];
                 sprintf(buffer, "%d", s->score);
-                RGNDS::GL2D::glText(buffer, Engine_Color16(1, 20, 20, 20), &s->tra);                
+                s->tra.pos.y -= 0.25;
+                RGNDS::GL2D::glText(buffer, color[s->lifetime&1], &s->tra, ((s->lifetime/45.0f)) * 31); 
             }
         } break;
     }
