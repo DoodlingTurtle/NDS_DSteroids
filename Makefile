@@ -178,7 +178,7 @@ else
   endif
 endif
 
-.PHONY: $(BUILD) clean
+.PHONY: $(BUILD) clean run
 
 #---------------------------------------------------------------------------------
 $(BUILD):
@@ -191,7 +191,8 @@ clean:
 	@rm -fr $(BUILD) $(TARGET).elf $(TARGET).nds $(SOUNDBANK)
 
 #---------------------------------------------------------------------------------
-run: $(TARGET).nds
+run:
+	make
 	@echo run
 	@desmume $(TARGET).nds
 
