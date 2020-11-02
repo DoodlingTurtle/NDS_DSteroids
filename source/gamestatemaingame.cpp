@@ -87,10 +87,10 @@ int GameStateMainGame::onStart() {
     // Attach all the game components to each other #
     Asteroid::broadcast.subscribe(&onAsteroidBroadcast);
     mainGameBroadcast.subscribe(&ScorePopup::heartbeat);
-    mainGameBroadcast.subscribe(&Shot::heartbeat);
     Shot::broadcast.subscribe(&Asteroid::onShotAction);
 	ship.broadcast.subscribe(&Asteroid::onShipAction);
     mainGameBroadcast.subscribe(&ship.heartbeat);
+    mainGameBroadcast.subscribe(&Shot::heartbeat);
 	
     ship.reset();
     Engine_Log("Ship transmit Spawn-Event");
