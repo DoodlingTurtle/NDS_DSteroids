@@ -29,8 +29,10 @@ class Asteroid
         static std::function<void(int, void*)> onShotAction;
 		static std::function<void(int, void*)> onShipAction;
 
-        void bringBackToLife(RGNDS::Broadcast* gameHeartbeat, RGNDS::Point<float> pos, bool generateNewShape, float scale);
-        void kill(RGNDS::Broadcast* gameHeartbeat);
+        void bringBackToLife(RGNDS::Point<float> pos, bool generateNewShape, float scale);
+
+        void onDraw(SpaceObj::MainGameDrawData*);
+        void onUpdate(SpaceObj::MainGameUpdateData*);
 
     protected:
         // Objects for Asteroid to keep track of

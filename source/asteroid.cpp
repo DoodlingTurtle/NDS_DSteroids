@@ -57,59 +57,13 @@ Asteroid::Asteroid() :
     , SpaceObj(16.0f)    
 {
     generateShape();
-    
-    onGameHeartbeat = [this](int event, void* data) {
-        switch(event) {
-            case bceTick:
-                this->update(((MainGameUpdateData*)data)->deltaTime);
-                break;
 
-            case bceDraw:
-
-                if(
-                    pos.y < 16 || pos.y > SCREEN_HEIGHT2 - 16
-                    ||
-                    (((MainGameDrawData*)data)->screen == 0 && pos.y < SCREEN_HEIGHT+16)
-                    ||
-                    (((MainGameDrawData*)data)->screen == 1 && pos.y > SCREEN_HEIGHT-16)
-                ) {
-                    SpaceObj::draw([this](RGNDS::Transform* tr){
-                        RGNDS::GL2D::PolyShape::draw(Engine_Color16(1, 14, 11, 10), tr);
-                    });
-                }
-                break;
-        }
-    };
-
-
+    bIsAlive = false;
 }
 
 void Asteroid::update(float deltatime) {
 
-    setAngleRel(PI2 * (deltatime * spinSpeed));
-    updatePosition();
 
-    // Check for collision with Ship
-    if(this->ship != nullptr) {
-        RGNDS::Point <float> p;
-        float r;
-        ship->getCollisionSphere(&p, &r);
-
-        if(RGNDS::Collision::checkCircleOnCircle(
-            &this->pos, this->scale * 14,
-            &p, r
-        )) broadcast.transmit(bceHitPlayer, this);
-    }
-
-    for(Shot* s : shots) {
-        if(RGNDS::Collision::checkCircleOnCircle(
-            &this->pos, this->scale * 14, &s->pos, 2
-        )) {
-            s->kill();
-            broadcast.transmit(bceDead, this);
-        } 
-
-    }
 }
 
 void Asteroid::generateShape() {
@@ -143,7 +97,7 @@ void Asteroid::generateShape() {
     return;
 }
 
-void Asteroid::bringBackToLife(RGNDS::Broadcast* gameHeartbeat, RGNDS::Point<float> pos, bool generateNewShape, float scale) {
+void Asteroid::bringBackToLife(RGNDS::Point<float> pos, bool generateNewShape, float scale) {
     Engine_Log("Bring asteroid back to life");
 
     setAngle(RandF() * PI2);
@@ -158,13 +112,55 @@ void Asteroid::bringBackToLife(RGNDS::Broadcast* gameHeartbeat, RGNDS::Point<flo
     if(generateNewShape)
         generateShape();
 
-
-    gameHeartbeat->subscribe(&onGameHeartbeat);
+    bIsAlive = true;
 }
 
-void Asteroid::kill(RGNDS::Broadcast* gameHeartbeat) {
-    gameHeartbeat->unsubscribe(&onGameHeartbeat);
+void Asteroid::onDraw(SpaceObj::MainGameDrawData* data) {
+    if(
+        pos.y < 16 || pos.y > SCREEN_HEIGHT2 - 16
+        ||
+        (((MainGameDrawData*)data)->screen == 0 && pos.y < SCREEN_HEIGHT+16)
+        ||
+        (((MainGameDrawData*)data)->screen == 1 && pos.y > SCREEN_HEIGHT-16)
+    ) {
+        SpaceObj::draw([this](RGNDS::Transform* tr){
+            RGNDS::GL2D::PolyShape::draw(Engine_Color16(1, 14, 11, 10), tr);
+        });
+    }
 }
+
+void Asteroid::onUpdate(SpaceObj::MainGameUpdateData* data) {
+    float deltatime = data->deltaTime;
+
+    setAngleRel(PI2 * (deltatime * spinSpeed));
+    updatePosition();
+
+/*
+    // Check for collision with Ship
+    if(this->ship != nullptr) {
+        RGNDS::Point <float> p;
+        float r;
+        ship->getCollisionSphere(&p, &r);
+
+        if(RGNDS::Collision::checkCircleOnCircle(
+            &this->pos, this->scale * 14,
+            &p, r
+        )) broadcast.transmit(bceHitPlayer, this);
+    }
+
+    for(Shot* s : shots) {
+        if(RGNDS::Collision::checkCircleOnCircle(
+            &this->pos, this->scale * 14, &s->pos, 2
+        )) {
+            s->kill();
+            broadcast.transmit(bceDead, this);
+        } 
+
+    }
+*/
+}
+
+
 
 Asteroid::~Asteroid() {
 }

@@ -2,13 +2,25 @@
 #include "scorepopup.h"
 
 #include <climits>
+#include <cstdio>
 
 float GameStateMainGame::game_difficulty = 1.0f;
 
-static std::vector<Asteroid*> asteroidsToRevive;
+static std::vector<SpaceObj*>   gameObjList[3];
+static std::vector<SpaceObj*>*  gameObjects         = &gameObjList[0];
+static std::vector<SpaceObj*>*  prevGameObjects     = &gameObjects[1];
+static std::vector<SpaceObj*>*  newGameObjects      = &gameObjects[2];
+static byte tick = 0;
+
+GameStateMainGame::~GameStateMainGame() {
+    Shot::shotGameObjects = nullptr;
+}
 
 GameStateMainGame::GameStateMainGame() {
 
+    Shot::shotGameObjects = newGameObjects;
+
+/*
     onAsteroidBroadcast = [this](int event, void* data) {
         Engine_Log("Asteroids broadcast "<<event);
         switch(event) {
@@ -49,14 +61,15 @@ GameStateMainGame::GameStateMainGame() {
             //DONE; Award Points
         }
     };
+*/
 }
 
 int GameStateMainGame::onStart() {
     int a;
 
     Engine_Log("Start application");
-	
 
+    Engine_Log("Generate Star field");
     // setup the scoreboard
     scorelocation.pos.x = 5;
     scorelocation.pos.y = 5;
@@ -67,89 +80,91 @@ int GameStateMainGame::onStart() {
 
     // Create a star field for the background
     for(a = 0; a < 64; a++) {
-        stars.push_back((const Star){
-                rand() / (INT_MAX/256),
-                rand() / (INT_MAX/(SCREEN_HEIGHT*2)),
-                rand() / (INT_MAX/15) + 16
-        });
+        stars[a] = { 
+            rand() / (INT_MAX/256),
+            rand() / (INT_MAX/(SCREEN_HEIGHT*2)),
+            rand() / (INT_MAX/15) + 16
+        };
     }
+
+    Engine_Log("Register Ship");
+    ship.reset();
+    newGameObjects->push_back(&ship);
 
     // Initialize the asteroids
     Engine_Log("setting ub asteroids");
     for(a = 0; a < (int)game_difficulty; a++) {
-        Asteroid* ast = new Asteroid();
-		ast->bringBackToLife(&mainGameBroadcast, ship.pos, false, 1);
-		ast->moveInDirection(64);
-		asteroids.push_back(ast);
+        Asteroid* ast = &asteroids[a];
+        ast->bringBackToLife(ship.pos, true, 1);
+        ast->moveInDirection(64);
+
+        newGameObjects->push_back(ast);
     }
-
-
-    // Attach all the game components to each other #
-    Asteroid::broadcast.subscribe(&onAsteroidBroadcast);
-    mainGameBroadcast.subscribe(&ScorePopup::heartbeat);
-    Shot::broadcast.subscribe(&Asteroid::onShotAction);
-	ship.broadcast.subscribe(&Asteroid::onShipAction);
-    mainGameBroadcast.subscribe(&ship.heartbeat);
-    mainGameBroadcast.subscribe(&Shot::heartbeat);
-	
-    ship.reset();
-    Engine_Log("Ship transmit Spawn-Event");
-    ship.broadcast.transmit(bceSpawn, &ship);
 
     return 0;
 }
 
 void GameStateMainGame::onEnd() {
-
-    ScorePopup::cleanup();
+    int a;
 
     Engine_Log("Game Over");
+	
+    Engine_Log("clean Score Popup");
+    ScorePopup::cleanup();
 
-	for(auto a : asteroids) {
-		a->kill(&mainGameBroadcast);
-		delete a;
-	}
-	asteroids.clear();
-
+    Engine_Log("clean asteroids;");
+    for(a = 0; a < MAX_ASTEROIDS; a++)
+        asteroids[a].kill();
+	
+    Engine_Log("Clean Shots");
     Shot::cleanup();
 
 	Engine_Log("Detach all game components");	
+    gameObjects->clear();
+    prevGameObjects->clear();
+    newGameObjects->clear();
 
 	// Detach all game components from each other
-    mainGameBroadcast.unsubscribe(&ship.heartbeat);
-	ship.broadcast.unsubscribe(&Asteroid::onShipAction);
-    Shot::broadcast.unsubscribe(&Asteroid::onShotAction);
-    mainGameBroadcast.unsubscribe(&Shot::heartbeat);
-    mainGameBroadcast.unsubscribe(&ScorePopup::heartbeat);
-    Asteroid::broadcast.unsubscribe(&onAsteroidBroadcast);
-
-    stars.clear();
-
+    Engine_Log("Clear stars");
 }
 
 void GameStateMainGame::onUpdate(float deltaTime) {
-// Add missing Asteroids
-    for(auto ast2 : asteroidsToRevive) {
-        ast2->bringBackToLife(&mainGameBroadcast, ast2->pos, true, ast2->scale/2);
-        asteroids.push_back(ast2);
-    }
-    asteroidsToRevive.clear();
+    tick++;
+    tick = (tick&1);
+
+    gameObjects         = &gameObjList[0 + tick];
+    prevGameObjects     = &gameObjList[1 - tick];
+
+// Add Gameobjects, that are still alive to the cycle
+    gameObjects->clear();
+    for(SpaceObj* go : *prevGameObjects)
+        if(go->isAlive())
+            gameObjects->push_back(go);
+    
+// Add new GameObjects to the cycle
+    for(SpaceObj* go : *newGameObjects)
+        if(go->isAlive())
+            gameObjects->push_back(go);
+    
+    newGameObjects->clear();
 
 // Read Player input
-    MainGameUpdateData data;
+    SpaceObj::MainGameUpdateData data;
 
     touchRead(&(data.touch));
     scanKeys();
 
-    data.keys_held = keysHeld();
+    data.keys_held = keysHeld();    
     data.keys_up   = keysUp();
     data.keys_justpressed = keysDown();
     data.deltaTime = deltaTime;
 
 // Send out an update heartbeat to all attached objects
-    mainGameBroadcast.transmit(bceTick, &data);
+    for(SpaceObj* go : *gameObjects) {
+        go->onUpdate(&data);
+    }
 
-// Update Scores
+
 }
 
 void GameStateMainGame::onDraw(float deltaTime, RGNDS::Engine::Screen screen) {
@@ -159,8 +174,10 @@ void GameStateMainGame::onDraw(float deltaTime, RGNDS::Engine::Screen screen) {
         RGNDS::GL2D::glPixel(star.x, star.y, Engine_Color16(1, 15, 15, 15), star.alpha);
 
 // Sendout a draw heartbeat
-    MainGameDrawData data = { deltaTime, screen };
-    mainGameBroadcast.transmit(bceDraw, &data);    
+    SpaceObj::MainGameDrawData data = { deltaTime, screen };
+
+    for(SpaceObj* go : *gameObjects)
+        go->onDraw(&data);
 
 // Render Score, but only if the Top-Screen is rendered
     if(screen == ENGINE_SCREEN_TOP) {

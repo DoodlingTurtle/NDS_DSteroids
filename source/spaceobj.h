@@ -10,6 +10,19 @@
 
 class SpaceObj : public RGNDS::Transform {
 public:
+    struct MainGameUpdateData {
+        float deltaTime; 
+        int keys_held; 
+        int keys_up; 
+        int keys_justpressed; 
+        touchPosition touch;
+    };
+
+    struct MainGameDrawData {
+        float deltaTime;
+        RGNDS::Engine::Screen screen;
+    };
+
     SpaceObj();
     SpaceObj(float objectRadius);
 
@@ -20,9 +33,16 @@ public:
 
     void draw(std::function<void(RGNDS::Transform*)> drawingLambda);
 
+    virtual void onUpdate(MainGameUpdateData* ) {};
+    virtual void onDraw(MainGameDrawData* ){};
+
+    void kill();
+    bool isAlive();
+
 protected:
     WrapAroundRenderer renderer;
     float objRadius;
+    bool bIsAlive;
 
 
 };

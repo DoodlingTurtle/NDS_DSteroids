@@ -1,7 +1,10 @@
 #include "./spaceobj.h"
+#include <nds.h>
+
 SpaceObj::SpaceObj() : SpaceObj::SpaceObj(1.0f){}
 SpaceObj::SpaceObj( float radius ) {
     objRadius = radius;
+    bIsAlive = false;
     renderer.defineWrappingArea(0, SCREEN_WIDTH, SCREEN_HEIGHT*2, 0);
 }
 
@@ -27,5 +30,12 @@ void SpaceObj::draw(std::function<void(RGNDS::Transform*)> drawingLambda) {
     }
 
     this->pos = posOrig;
+}
 
+void SpaceObj::kill() {
+    bIsAlive = false;
+}
+
+bool SpaceObj::isAlive() {
+    return bIsAlive;
 }

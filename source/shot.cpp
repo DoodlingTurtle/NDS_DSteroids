@@ -3,47 +3,36 @@
 
 #include "gamestatemaingame.h"
 
-
-RGNDS::Broadcast Shot::broadcast;
-std::vector<Shot*> Shot::_instances;
+Shot _instances[32];
+std::vector<SpaceObj*>* Shot::shotGameObjects = nullptr;
 
 void Shot::cleanup() {
-    for(auto s : _instances)
-        delete s;
-
-    _instances.clear();
+    for(int a = 0; a < 32; a++)
+        _instances[a].kill();
 }
 
 void Shot::Spawn(float ang, RGNDS::Point<float> *pos) {
-    Shot *shot = new Shot(ang, pos);
-    _instances.push_back(shot);
-    broadcast.transmit(bceSpawn, shot);
+    if(shotGameObjects == nullptr) return;
+
+    for(int a = 0; a < 32; a++) {
+        if(_instances[a].bIsAlive) continue;
+
+        Shot* shot = &_instances[a];
+        shot->pos.x = pos->x;
+        shot->pos.y = pos->y;
+        shot->setAngle(ang);
+        shot->lifetime = 1000;
+        shot->moveInDirection(8.0);
+        shot->bIsAlive = true;
+        shotGameObjects->push_back(shot);
+        Engine_Log("Shot fired: " << shot);
+        return;
+    }
+
+    Engine_Log("Shot-Limit of 32 exceded");
 }
 
-std::function<void(int, void*)> Shot::heartbeat = [](int event, void* data){
-    switch(event) {
-        case bceTick: {
-            float deltaTime = ((MainGameUpdateData*)data)->deltaTime;
-            Shot* s;
-            for(int a = Shot::_instances.size()-1; a >= 0; a--) {
-                s = Shot::_instances.at(a);
-                if(!(s->update(deltaTime))) {
-                    broadcast.transmit(bceDead, s);
-                    _instances.erase(_instances.begin()+a);
-                }
-            };
-        } break;
-
-        case bceDraw: {
-            for(int a = Shot::_instances.size()-1; a >= 0; a--)
-                _instances.at(a)->draw();
-        } break;
-    }
-};
-
-
-
-Shot::Shot( float angle, RGNDS::Point<float>* pos )
+Shot::Shot()
     :PolyShape(3, (const RGNDS::Point<double>[3]){
         {  2,  0 },
         { -2, -2 },
@@ -51,32 +40,30 @@ Shot::Shot( float angle, RGNDS::Point<float>* pos )
     }, GL_TRIANGLES)
     ,SpaceObj(3.0f)    
 {
-    setAngle(angle);
-    this->pos = *pos;
-    Engine_Log("Spawn Shot Pos: " << this->pos.x << this->pos.y);
     scale=1;
+    bIsAlive = false;
+    velocity.x = 0;
+    velocity.y = 0;
 }
 
 Shot::~Shot() {}
 
-void Shot::draw() {
+void Shot::onDraw(SpaceObj::MainGameDrawData* d) {
     SpaceObj::draw([this](RGNDS::Transform *tr){
         RGNDS::GL2D::PolyShape::draw(Engine_Color16(1, 31, 31, 31), tr, 21 * ((float)lifetime/1000.0f) + 10);
     });
 }
 
-bool Shot::update(float deltaTime) {
+void Shot::onUpdate(SpaceObj::MainGameUpdateData* dat) {
+
+    float deltaTime =dat->deltaTime;
 
     lifetime -= deltaTime * 250;        // 1000 / 4 = 4 Seconds of lifetime
     if(lifetime <= 0) {
-        return false;
+        this->bIsAlive = false;
     }
-    moveInDirection(64.0f * deltaTime);
-    updatePosition();
-
-    return true;
-}
-
-void Shot::kill() {
-    lifetime = 0;
+    else {
+        moveInDirection(64.0f * deltaTime);
+        updatePosition();
+    }
 }

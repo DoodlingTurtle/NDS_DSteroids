@@ -1,8 +1,6 @@
 #ifndef GAMESTATEMAINGAME_H
 #define GAMESTATEMAINGAME_H
 
-#include <cstdio>
-
 #include "../modules/RGNDS_Engine/engine.h"
 #include "../modules/RGNDS_Engine/broadcast.h"
 #include "broadcastchannels.h"
@@ -12,23 +10,14 @@
 
 #define MAX_ASTEROIDS 48
 
-struct MainGameUpdateData {
-    float deltaTime; 
-    int keys_held; 
-    int keys_up; 
-    int keys_justpressed; 
-    touchPosition touch;
-};
 
-struct MainGameDrawData {
-    float deltaTime;
-    RGNDS::Engine::Screen screen;
-};
 
 class GameStateMainGame : public RGNDS::Engine
 {
     public:
 		GameStateMainGame();
+        virtual ~GameStateMainGame();
+        
         int score = 0;
 
         std::function<void(int, void*)> onAsteroidBroadcast;
@@ -43,13 +32,12 @@ class GameStateMainGame : public RGNDS::Engine
         };
 
         Ship ship;
-        std::vector<Star> stars;
-		std::vector<Asteroid*> asteroids;
+        Star stars[64];
+		Asteroid asteroids[MAX_ASTEROIDS];
+
 
         RGNDS::Transform scorelocation;
         float scoreTimer;
-
-        RGNDS::Broadcast mainGameBroadcast;
 
     protected:
         int onStart();

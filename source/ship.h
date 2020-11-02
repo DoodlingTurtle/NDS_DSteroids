@@ -29,6 +29,8 @@ class Ship : public SpaceObj {
 
         std::function<void(int, void*)> heartbeat;
 
+        void onUpdate(SpaceObj::MainGameUpdateData*);
+        void onDraw(SpaceObj::MainGameDrawData*);
 
     private:
         float angRes = PI/20;

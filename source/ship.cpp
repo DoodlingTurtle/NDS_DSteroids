@@ -13,10 +13,10 @@ Ship::Ship() : SpaceObj(16.0f) {
     shaBody = new RGNDS::GL2D::PolyShape(
           4,
           (const RGNDS::Point<double>[4]){
-                { -16.0f, -16.0f }
-              , { - 8.0f,   0.0f }
-              , {  16.0f,   0.0f }
-              , { -16.0f,  16.0f }
+                { -16, -16 }
+              , { - 8,   0 }
+              , {  16,   0 }
+              , { -16,  16 }
           },
           GL_TRIANGLE_STRIP
     );
@@ -31,37 +31,10 @@ Ship::Ship() : SpaceObj(16.0f) {
          GL_TRIANGLE
     );
 
+    this->bIsAlive = true;
+
 // Setup Coordinats of the ship and varables needed for Wrap-Arround functionality
     reset();
-    
-// define Heartbeat;
-    heartbeat = [this](int event, void* data) {
-        switch(event) {
-            case bceTick: {
-                MainGameUpdateData *dat = (MainGameUpdateData*)data;
-                this->update(
-                    dat->deltaTime
-                  , dat->keys_held
-                  , dat->keys_up
-                  , dat->keys_justpressed
-                  , dat->touch
-                );
-            } break;
-
-            case bceDraw:
-                SpaceObj::draw([this](Transform* tr) {
-                    if(this->thrusting)
-                        this->shaThruster->draw(Engine_Color16(1, 31, 31,  0), tr);
-
-                    this->shaBody->draw(Engine_Color16(1, 31,  0,  0), tr);
-                });
-                break;
-
-        }
-    };
-
-// start broadcasting
-    broadcast.transmit(bceSpawn, this);
 }
 
 Ship::~Ship() {
@@ -110,4 +83,23 @@ void Ship::reset() {
     setAngle(PI/2);
     velocity.x = 0;
     velocity.y = 0;
+}
+
+void Ship::onUpdate(SpaceObj::MainGameUpdateData* dat) {
+    this->update(
+        dat->deltaTime
+        , dat->keys_held
+        , dat->keys_up
+        , dat->keys_justpressed
+        , dat->touch
+    );
+}
+
+void Ship::onDraw(SpaceObj::MainGameDrawData* data) {
+    SpaceObj::draw([this](Transform* tr) {
+        if(this->thrusting)
+            this->shaThruster->draw(Engine_Color16(1, 31, 31,  0), tr);
+
+        this->shaBody->draw(Engine_Color16(1, 31,  0,  0), tr);
+    });
 }

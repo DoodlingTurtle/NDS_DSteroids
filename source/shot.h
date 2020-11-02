@@ -11,26 +11,19 @@
 class Shot : public RGNDS::GL2D::PolyShape, public SpaceObj {
 
 public:
+    static std::vector<SpaceObj*>* shotGameObjects;
+
     static void Spawn(float angle, RGNDS::Point<float>* pos);
-    
     static void cleanup();
-
-    static std::function<void(int, void*)> heartbeat;
     
+    Shot();
     virtual ~Shot();
-    static RGNDS::Broadcast broadcast;
 
-    void kill();
-
-private:
-    static std::vector<Shot*> _instances;
-
-    Shot( float angle, RGNDS::Point<float>* pos );
+    void onDraw(SpaceObj::MainGameDrawData*);
+    void onUpdate(SpaceObj::MainGameUpdateData*);
     
+private:
     int lifetime = 1000;
-
-    void draw();
-    bool update( float deltaTime );
 
 };
 
