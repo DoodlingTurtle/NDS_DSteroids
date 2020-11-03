@@ -35,9 +35,11 @@ public:
 
     virtual void onUpdate(MainGameUpdateData* ) {};
     virtual void onDraw(MainGameDrawData* ){};
+    virtual short getScoreValue() { return 0; }
 
-    void kill();
+    virtual void kill();
     bool isAlive();
+
 
 protected:
     WrapAroundRenderer renderer;

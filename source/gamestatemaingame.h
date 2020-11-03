@@ -10,8 +10,6 @@
 
 #define MAX_ASTEROIDS 48
 
-
-
 class GameStateMainGame : public RGNDS::Engine
 {
     public:

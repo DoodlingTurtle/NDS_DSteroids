@@ -16,27 +16,24 @@ class Asteroid
     , public SpaceObj
 {
     public:
-   
-        static RGNDS::Broadcast broadcast;
+        static Ship* ship;
         
         Asteroid();
         virtual ~Asteroid();
 
         void update(float deltaTime);
        
-        std::function<void(int, void*)> onGameHeartbeat;
-
-        static std::function<void(int, void*)> onShotAction;
-		static std::function<void(int, void*)> onShipAction;
+       static std::function<void(int, void*)> onShipAction;
 
         void bringBackToLife(RGNDS::Point<float> pos, bool generateNewShape, float scale);
 
         void onDraw(SpaceObj::MainGameDrawData*);
         void onUpdate(SpaceObj::MainGameUpdateData*);
 
+        short getScoreValue();
+
     protected:
         // Objects for Asteroid to keep track of
-        static Ship* ship;
         static std::vector<Shot*> shots;
 
     private:

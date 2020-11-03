@@ -12,44 +12,9 @@
 #define SCREEN_HEIGHT2 384
 #define RandF() ((float)rand() / (float)RAND_MAX)
 
-RGNDS::Broadcast Asteroid::broadcast;
 std::vector<Shot*> Asteroid::shots;
 
 Ship* Asteroid::ship = nullptr;
-
-std::function<void(int, void*)> Asteroid::onShipAction = [](int event, void* data) {
-	switch(event) {
-		case bceSpawn:
-			Engine_Log("Asteroid register ship spawn event");
-			ship = (Ship*)data;
-			break;
-
-		case bceDead:
-			Engine_Log("Asteroid register ship dead event");
-			ship = nullptr;
-			break;
-	}
-};
-
-
-std::function<void(int, void*)> Asteroid::onShotAction = [](int event, void* obj){
-    switch(event) {
-        case bceSpawn: {
-
-            Engine_Log("Register Shot to asteroids");
-            Asteroid::shots.push_back((Shot*)obj);
-
-        } break;
-
-        case bceDead: {
-            Engine_Log("Remove Shot from asteroids");
-            for(int a = Asteroid::shots.size()-1; a >= 0; a--)
-                if(Asteroid::shots.at(a) == (Shot*)obj)
-                    Asteroid::shots.erase(Asteroid::shots.begin()+a);
-
-        } break;
-    }
-};
 
 
 Asteroid::Asteroid() : 
@@ -59,11 +24,6 @@ Asteroid::Asteroid() :
     generateShape();
 
     bIsAlive = false;
-}
-
-void Asteroid::update(float deltatime) {
-
-
 }
 
 void Asteroid::generateShape() {
@@ -135,9 +95,7 @@ void Asteroid::onUpdate(SpaceObj::MainGameUpdateData* data) {
     setAngleRel(PI2 * (deltatime * spinSpeed));
     updatePosition();
 
-/*
-    // Check for collision with Ship
-    if(this->ship != nullptr) {
+    if(ship != nullptr) {
         RGNDS::Point <float> p;
         float r;
         ship->getCollisionSphere(&p, &r);
@@ -145,22 +103,29 @@ void Asteroid::onUpdate(SpaceObj::MainGameUpdateData* data) {
         if(RGNDS::Collision::checkCircleOnCircle(
             &this->pos, this->scale * 14,
             &p, r
-        )) broadcast.transmit(bceHitPlayer, this);
-    }
-
-    for(Shot* s : shots) {
-        if(RGNDS::Collision::checkCircleOnCircle(
-            &this->pos, this->scale * 14, &s->pos, 2
         )) {
-            s->kill();
-            broadcast.transmit(bceDead, this);
-        } 
+            Engine_Log("Asteroid " << this << " hit ship " << ship);
+            ship->kill();
 
+            return;
+        }
+
+        for(Shot* s : Shot::getShots()) {
+            if(RGNDS::Collision::checkCircleOnCircle(
+                &this->pos
+              , this->scale * 14
+              , &s->pos, 2
+            )) {
+                s->kill();
+                this->kill();
+            }
+        }
     }
-*/
 }
 
-
+short Asteroid::getScoreValue() {
+    return 100/scale;
+}
 
 Asteroid::~Asteroid() {
 }

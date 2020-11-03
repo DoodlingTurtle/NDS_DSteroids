@@ -8,30 +8,36 @@
 #include "../modules/RGNDS_Engine/broadcast.h"
 #include "../modules/RGNDS_Engine/transform.h"
 
+#include "spaceobj.h"
 
-class ScorePopup {
+
+class ScorePopup : public SpaceObj {
 public:
 
     static void cleanup();
-    static void spawn(short score, float x, float y);
+    static ScorePopup* spawn(short score, float x, float y);
+
+    /** \brief deletes all dead instances from the memeory */
+    static void refreshInstanceList();
 
     RGNDS::Broadcast* mainGameBroadcast;
 
     ScorePopup(short score, float x, float y);
     virtual~ScorePopup();
 
-    static std::function<void(int, void*)> heartbeat;
+    void onUpdate(SpaceObj::MainGameUpdateData*);
+    void onDraw(SpaceObj::MainGameDrawData*);
+
+    void kill();
 
 protected:
     short score;        // Keeps track of what score is displayed
     byte lifetime;      // for how many ticks this popup will stay 
-    
-
-    RGNDS::Transform tra;
-
 
 private:
     static std::vector<ScorePopup*> _instances;
+
+    static bool bDirty;
 
 };
 

@@ -83,6 +83,7 @@ void Ship::reset() {
     setAngle(PI/2);
     velocity.x = 0;
     velocity.y = 0;
+    bIsAlive = true;
 }
 
 void Ship::onUpdate(SpaceObj::MainGameUpdateData* dat) {

@@ -1,3 +1,4 @@
+#include <nds.h>
 #include "gamestatemaingame.h"
 #include "scorepopup.h"
 
@@ -14,54 +15,12 @@ static byte tick = 0;
 
 GameStateMainGame::~GameStateMainGame() {
     Shot::shotGameObjects = nullptr;
+    Asteroid::ship = nullptr;
 }
 
 GameStateMainGame::GameStateMainGame() {
-
+    Asteroid::ship = &ship;
     Shot::shotGameObjects = newGameObjects;
-
-/*
-    onAsteroidBroadcast = [this](int event, void* data) {
-        Engine_Log("Asteroids broadcast "<<event);
-        switch(event) {
-        case bceHitPlayer:
-            Engine_Log("Asteroid hit Ship");
-            exit();     // Meteor hits player = game over;
-            break;
-        case bceDead:   // In case of bceDead - Event stop heartbeat to the sending asteroid
-            Engine_Log("Kill Asteroid");
-
-			for(int a = asteroids.size()-1; a >= 0; a--) {
-				if(asteroids.at(a) == ((Asteroid*)data)) {
-					Asteroid* ast = (Asteroid*)data;
-					ast->kill(&mainGameBroadcast);
-					Engine_Log("delete asteroid data/pointer " << ast->scale/2);
-
-					asteroids.erase(asteroids.begin()+a);
-					if(ast->scale > 0.25) {
-                        Asteroid* ast2;
-						for(int b = 0; b < 2; b++) {
-							ast2 = new Asteroid();
-                            ast2->scale = ast->scale;
-                            ast2->pos.x = ast->pos.x;
-                            ast2->pos.y = ast->pos.y;
-                            asteroidsToRevive.push_back(ast2);
-						}
-					}
-
-                    int addScore = 100/ast->scale;
-
-                    this->score += addScore;
-                    ScorePopup::spawn(addScore, ast->pos.x, ast->pos.y);
-					delete ast;
-					break;
-				}
-			}
-
-            //DONE; Award Points
-        }
-    };
-*/
 }
 
 int GameStateMainGame::onStart() {
@@ -100,32 +59,26 @@ int GameStateMainGame::onStart() {
 
         newGameObjects->push_back(ast);
     }
-
     return 0;
 }
 
 void GameStateMainGame::onEnd() {
-    int a;
-
     Engine_Log("Game Over");
-	
-    Engine_Log("clean Score Popup");
-    ScorePopup::cleanup();
 
     Engine_Log("clean asteroids;");
-    for(a = 0; a < MAX_ASTEROIDS; a++)
+    for(int a = 0; a < MAX_ASTEROIDS; a++)
         asteroids[a].kill();
+
+    Engine_Log("clear ScorePopup");
+    ScorePopup::cleanup();
 	
-    Engine_Log("Clean Shots");
+    Engine_Log("Clean Shot");
     Shot::cleanup();
 
 	Engine_Log("Detach all game components");	
     gameObjects->clear();
     prevGameObjects->clear();
     newGameObjects->clear();
-
-	// Detach all game components from each other
-    Engine_Log("Clear stars");
 }
 
 void GameStateMainGame::onUpdate(float deltaTime) {
@@ -138,15 +91,52 @@ void GameStateMainGame::onUpdate(float deltaTime) {
 // Add Gameobjects, that are still alive to the cycle
     gameObjects->clear();
     for(SpaceObj* go : *prevGameObjects)
-        if(go->isAlive())
+        if(go->isAlive()) {
             gameObjects->push_back(go);
-    
+        }
+        else {
+            short addScore = go->getScoreValue();
+            if(addScore > 0) {
+                this->score += addScore;    
+            }
+
+            // Check if killed object is part of the Asteroids List
+            if(go >= asteroids && go < (&asteroids[MAX_ASTEROIDS-1] + sizeof(Asteroid))) {
+                // If yes, Spawn ScorePopups
+                newGameObjects->push_back(ScorePopup::spawn(addScore, go->pos.x, go->pos.y));
+					
+                // And if scale is bigger then 25% spawn 2 new Asteroids at half the size of the killed one
+                if(go->scale > 0.25) {
+                    byte found = 0;
+                    for(int a = 0; a < MAX_ASTEROIDS; a++) {
+                        if(found > 1) break;
+                        if(asteroids[a].isAlive()) continue;
+                        if(&asteroids[a] == go) continue;
+
+                        Asteroid* ast2 = &asteroids[a];
+                        ast2->bringBackToLife(go->pos, true, go->scale/2);
+                        newGameObjects->push_back(ast2);
+
+                        found++;
+                    }                        
+
+                    if(found != 2) {
+                        Engine_Log("Asteroid ObjectLimit of " << MAX_ASTEROIDS << " reached");
+                        found=0;
+                    }
+                }
+            }
+        }
+
 // Add new GameObjects to the cycle
     for(SpaceObj* go : *newGameObjects)
         if(go->isAlive())
             gameObjects->push_back(go);
     
     newGameObjects->clear();
+
+// Update all GameObject-Managers/Factorys
+    ScorePopup::refreshInstanceList();
 
 // Read Player input
     SpaceObj::MainGameUpdateData data;
@@ -164,6 +154,9 @@ void GameStateMainGame::onUpdate(float deltaTime) {
         go->onUpdate(&data);
     }
 
+// If Ship is dead, exit game
+// TODO: (DoTu) add "multiple lifes game mechanic"
+    if(!ship.isAlive()) exit();
 
 }
 
@@ -186,4 +179,3 @@ void GameStateMainGame::onDraw(float deltaTime, RGNDS::Engine::Screen screen) {
         RGNDS::GL2D::glText(buffer, Engine_Color16(1, 0, 10, 31), &scorelocation);
     }
 }
-

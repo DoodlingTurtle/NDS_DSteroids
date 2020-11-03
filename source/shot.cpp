@@ -3,18 +3,18 @@
 
 #include "gamestatemaingame.h"
 
-Shot _instances[32];
+Shot _instances[MAX_SHOT_CNT];
 std::vector<SpaceObj*>* Shot::shotGameObjects = nullptr;
 
 void Shot::cleanup() {
-    for(int a = 0; a < 32; a++)
+    for(int a = 0; a < MAX_SHOT_CNT; a++)
         _instances[a].kill();
 }
 
 void Shot::Spawn(float ang, RGNDS::Point<float> *pos) {
     if(shotGameObjects == nullptr) return;
 
-    for(int a = 0; a < 32; a++) {
+    for(int a = 0; a < MAX_SHOT_CNT; a++) {
         if(_instances[a].bIsAlive) continue;
 
         Shot* shot = &_instances[a];
@@ -25,11 +25,10 @@ void Shot::Spawn(float ang, RGNDS::Point<float> *pos) {
         shot->moveInDirection(8.0);
         shot->bIsAlive = true;
         shotGameObjects->push_back(shot);
-        Engine_Log("Shot fired: " << shot);
         return;
     }
 
-    Engine_Log("Shot-Limit of 32 exceded");
+    Engine_Log("Shot-Limit of " << MAX_SHOT_CNT << " exceded");
 }
 
 Shot::Shot()
@@ -66,4 +65,14 @@ void Shot::onUpdate(SpaceObj::MainGameUpdateData* dat) {
         moveInDirection(64.0f * deltaTime);
         updatePosition();
     }
+}
+
+std::vector<Shot*> Shot::getShots() {
+    std::vector<Shot*> out;
+
+    for(int a = 0; a < MAX_SHOT_CNT; a++) 
+        if(_instances[a].isAlive())
+            out.push_back(&_instances[a]);
+
+    return out;
 }
