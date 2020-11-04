@@ -164,7 +164,7 @@ void GameStateMainGame::onDraw(float deltaTime, RGNDS::Engine::Screen screen) {
 
 // Draw Stars
     for(auto star : stars)
-        RGNDS::GL2D::glPixel(star.x, star.y, Engine_Color16(1, 15, 15, 15), star.alpha);
+        RGNDS::GL2D::glPixel(star.x, star.y, Engine_Color16(1, 15, 15, 15), star.alpha, -1);
 
 // Sendout a draw heartbeat
     SpaceObj::MainGameDrawData data = { deltaTime, screen };

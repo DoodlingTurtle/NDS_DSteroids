@@ -101,6 +101,6 @@ void Ship::onDraw(SpaceObj::MainGameDrawData* data) {
         if(this->thrusting)
             this->shaThruster->draw(Engine_Color16(1, 31, 31,  0), tr);
 
-        this->shaBody->draw(Engine_Color16(1, 31,  0,  0), tr);
+        this->shaBody->draw(Engine_Color16(1, 31,  0,  0), tr, 0, 1);
     });
 }
