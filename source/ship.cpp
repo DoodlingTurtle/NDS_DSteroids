@@ -99,8 +99,8 @@ void Ship::onUpdate(SpaceObj::MainGameUpdateData* dat) {
 void Ship::onDraw(SpaceObj::MainGameDrawData* data) {
     SpaceObj::draw([this](Transform* tr) {
         if(this->thrusting)
-            this->shaThruster->draw(Engine_Color16(1, 31, 31,  0), tr);
+            this->shaThruster->draw(Engine_Color16(1, 31, 31,  1), tr);
 
-        this->shaBody->draw(Engine_Color16(1, 31,  0,  0), tr, 0, 1);
+        this->shaBody->draw(Engine_Color16(1, 31,  0,  0), tr, 0, 2);
     });
 }
