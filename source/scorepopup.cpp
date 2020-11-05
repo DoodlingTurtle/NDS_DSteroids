@@ -70,5 +70,5 @@ void ScorePopup::onDraw(SpaceObj::MainGameDrawData* data) {
     char buffer[7];
     sprintf(buffer, "%d", this->score);
     this->pos.y -= 0.25;
-    RGNDS::GL2D::glText(buffer, color[this->lifetime&1], this, ((this->lifetime/45.0f)) * 31); 
+    RGNDS::GL2D::glText(buffer, color[this->lifetime&1], this, ((this->lifetime/45.0f)) * 31, 3); 
 };
