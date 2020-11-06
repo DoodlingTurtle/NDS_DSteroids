@@ -13,18 +13,22 @@ static std::vector<SpaceObj*>*  prevGameObjects     = &gameObjects[1];
 static std::vector<SpaceObj*>*  newGameObjects      = &gameObjects[2];
 static byte tick = 0;
 
+static ShipExplosion* shipexp = nullptr;
+
 GameStateMainGame::~GameStateMainGame() {
     Shot::shotGameObjects = nullptr;
-    Asteroid::ship = nullptr;
+    
 }
 
 GameStateMainGame::GameStateMainGame() {
-    Asteroid::ship = &ship;
     Shot::shotGameObjects = newGameObjects;
 }
 
 int GameStateMainGame::onStart() {
     int a;
+    
+    Asteroid::ship = &ship;
+    
 
     Engine_Log("Start application");
 
@@ -65,6 +69,11 @@ int GameStateMainGame::onStart() {
 void GameStateMainGame::onEnd() {
     Engine_Log("Game Over");
 
+    if(shipexp != nullptr)
+        delete shipexp;
+    
+    shipexp = nullptr;
+
     Engine_Log("clean asteroids;");
     for(int a = 0; a < MAX_ASTEROIDS; a++)
         asteroids[a].kill();
@@ -79,6 +88,8 @@ void GameStateMainGame::onEnd() {
     gameObjects->clear();
     prevGameObjects->clear();
     newGameObjects->clear();
+
+    Asteroid::ship = nullptr;
 }
 
 void GameStateMainGame::onUpdate(float deltaTime) {
@@ -164,7 +175,15 @@ void GameStateMainGame::onUpdate(float deltaTime) {
 
 // If Ship is dead, exit game
 // TODO: (DoTu) add "multiple lifes game mechanic"
-    if(!ship.isAlive()) exit();
+    if(!ship.isAlive() and shipexp == nullptr) {
+        Asteroid::ship = nullptr;
+
+        shipexp = new ShipExplosion(&ship);
+        newGameObjects->push_back(shipexp);
+    }
+    else if(shipexp != nullptr and !shipexp->isAlive()) {
+        exit();
+    }
 
 }
 

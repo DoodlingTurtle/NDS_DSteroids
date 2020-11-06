@@ -1,5 +1,5 @@
 #ifndef SHIP_H
-#define SHIP_H
+#define SHIP_H 1
 
 #include <nds.h>
 #include "../modules/RGNDS_Engine/engine.h"
@@ -14,6 +14,30 @@
 #include "spaceobj.h"
 
 #include "shot.h"
+
+#include "./particles.h"
+
+
+class ShipExplosionParticle 
+  : public ParticleSystem::Particle
+  , public RGNDS::Transform 
+{
+public:
+    static ShipExplosionParticle proto;
+
+    ShipExplosionParticle();
+    ~ShipExplosionParticle();
+
+    bool update(float deltaTime);
+    void attachToVector(float deltaTime, int renderIndex, std::vector<RGNDS::Point<double>>*);
+    ShipExplosionParticle* getNewInstance(int index);
+    
+protected:
+    float lifetime;
+    float velocity;
+};
+
+
 
 class Ship : public SpaceObj {
     public:
@@ -39,5 +63,18 @@ class Ship : public SpaceObj {
         RGNDS::GL2D::PolyShape* shaBody;
         RGNDS::GL2D::PolyShape* shaThruster;
 };
+
+
+class ShipExplosion : public ParticleSystem::Emitter, public SpaceObj {
+public:
+    ShipExplosion(Ship* ship);
+    ~ShipExplosion();
+
+    void onUpdate(SpaceObj::MainGameUpdateData*);
+    void onDraw(SpaceObj::MainGameDrawData*);
+
+    void onNoParticlesLeft();
+};
+
 
 #endif // SHIP_H
