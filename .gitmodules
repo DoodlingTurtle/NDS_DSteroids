@@ -1,3 +1,4 @@
 [submodule "modules/RGNDS_Engine"]
 	path = modules/RGNDS_Engine
 	url = ssh://git.raspberrypi/~/repo/NDS_RGNDS_Engine.git
+	branch = master
