@@ -3,12 +3,12 @@
 
 #include "../modules/RGNDS_Engine/engine.h"
 #include "../modules/RGNDS_Engine/broadcast.h"
-#include "broadcastchannels.h"
 
 #include "./ship.h"
 #include "./asteroid.h"
 
 #define MAX_ASTEROIDS 48
+
 
 class GameStateMainGame : public RGNDS::Engine
 {
@@ -32,6 +32,7 @@ class GameStateMainGame : public RGNDS::Engine
         Ship ship;
         Star stars[64];
 		Asteroid asteroids[MAX_ASTEROIDS];
+        
 
 
         RGNDS::Transform scorelocation;

@@ -17,6 +17,21 @@ std::vector<Shot*> Asteroid::shots;
 Ship* Asteroid::ship = nullptr;
 
 
+AsteroidParticle AsteroidParticle::proto = AsteroidParticle();
+
+AsteroidParticle::AsteroidParticle() {
+    pos.x = Engine_RandF() * 8 - 4;
+    pos.y = Engine_RandF() * 8 - 4;
+}
+
+AsteroidExplosion::AsteroidExplosion(float x, float y) : ParticleSystem::Emitter::Emitter(x, y, 5, &AsteroidParticle::proto) {
+}
+
+
+
+
+
+
 Asteroid::Asteroid() : 
     RGNDS::GL2D::PolyShape(18, nullptr, GL_QUAD_STRIP) 
     , SpaceObj(16.0f)    

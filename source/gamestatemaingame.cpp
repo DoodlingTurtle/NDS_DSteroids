@@ -125,6 +125,9 @@ void GameStateMainGame::onUpdate(float deltaTime) {
                         found=0;
                     }
                 }
+                else {
+                    
+                }
             }
         }
 
