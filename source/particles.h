@@ -9,7 +9,7 @@ namespace ParticleSystem
     class Particle {
     public:
         Particle();
-        ~Particle();
+        virtual ~Particle();
 
         /** \brief create a new instance of this particle */ 
         virtual Particle* getNewInstance(int renderIndex) = 0;
@@ -23,7 +23,7 @@ namespace ParticleSystem
         /** \brief gets the coordinates of this particle to render (vertices must be attached in sets of 3)
          * 
         */
-        virtual void attachToVector(float deltaTime, int renderIndex, std::vector<RGNDS::Point<float>>) = 0;
+        virtual void attachToVector(float deltaTime, int renderIndex, std::vector<RGNDS::Point<double>>*) = 0;
 
         /** \brief returns how many vertices this particular particle instance provides */
         int numberOfVerticesPerParticle();
@@ -37,7 +37,7 @@ namespace ParticleSystem
         Emitter(float x, float y, int numberofparticles, Particle* prototypeParticle);
         virtual ~Emitter();
 
-        void spawnNewParticle();
+        void spawnNewParticles(int cnt=1);
 
         virtual Particle* onParticleDeath(Particle* particle) { return nullptr; }       // Called, when one of the particles has reached its max lifetime
         virtual void onNoParticlesLeft() { return; }     // Called, once all particles in the list have reached its max lifetime
@@ -60,14 +60,13 @@ namespace ParticleSystem
 
     protected:
         Particle* protoParticle;
-        int initialSize;
         
     private:
         std::vector<Particle*> particles;
-        std::vector<RGNDS::Point<float>> vertices;
+        std::vector<RGNDS::Point<double>> vertices;
         
     };
 
 } // namespace ParticleSystem
 
-#endif;
+#endif

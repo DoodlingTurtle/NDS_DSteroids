@@ -12,6 +12,9 @@
 #define SCREEN_HEIGHT2 384
 #define RandF() ((float)rand() / (float)RAND_MAX)
 
+static const int COLOR_ASTEROIDS = Engine_Color16(1, 14, 11, 10);
+
+
 std::vector<Shot*> Asteroid::shots;
 
 Ship* Asteroid::ship = nullptr;
@@ -19,14 +22,72 @@ Ship* Asteroid::ship = nullptr;
 
 AsteroidParticle AsteroidParticle::proto = AsteroidParticle();
 
+AsteroidParticle::~AsteroidParticle(){}
+
 AsteroidParticle::AsteroidParticle() {
     pos.x = Engine_RandF() * 8 - 4;
     pos.y = Engine_RandF() * 8 - 4;
+
+    directionFromPositionVector();
+
+    lifetime = 2000;
 }
 
-AsteroidExplosion::AsteroidExplosion(float x, float y) : ParticleSystem::Emitter::Emitter(x, y, 5, &AsteroidParticle::proto) {
+AsteroidParticle* AsteroidParticle::getNewInstance(int index) { return new AsteroidParticle(); }
+
+bool AsteroidParticle::update(float deltaTime) {
+    lifetime -= deltaTime * 1000.0;
+    if(lifetime <= 0) return false;
+
+    moveInDirection(6 * deltaTime);
+
+    return true;
 }
 
+void AsteroidParticle::attachToVector(float deltaTime, int index, std::vector<RGNDS::Point<double>>* vec) {
+
+    RGNDS::Point<double> d;
+    d.x = pos.x;
+    d.y = pos.y;
+
+    vec->push_back(d);
+    
+    d.x += 2;
+    vec->push_back(d);
+    d.x -= 2;
+
+    d.y += 2;
+    vec->push_back(d);
+    
+
+}
+
+
+AsteroidExplosion::AsteroidExplosion(float x, float y) 
+    : ParticleSystem::Emitter::Emitter(x, y, 5, &AsteroidParticle::proto) 
+    , SpaceObj(16)
+{}
+
+void AsteroidExplosion::onUpdate(SpaceObj::MainGameUpdateData* data) { 
+    update(data->deltaTime);
+ }
+
+void AsteroidExplosion::onDraw(SpaceObj::MainGameDrawData* data) {
+    ParticleSystem::Emitter::draw(COLOR_ASTEROIDS, 31, 0);
+}
+
+void AsteroidExplosion::revive(float x, float y) {
+    spawnNewParticles(5);
+
+    this->transform.pos.x = x;
+    this->transform.pos.y = y;
+    this->bIsAlive = true;
+}
+
+void AsteroidExplosion::onNoParticlesLeft() {
+    Engine_Log("No Particles left");
+    this->kill();
+}
 
 
 
@@ -99,7 +160,7 @@ void Asteroid::onDraw(SpaceObj::MainGameDrawData* data) {
         (((MainGameDrawData*)data)->screen == 1 && pos.y > SCREEN_HEIGHT-16)
     ) {
         SpaceObj::draw([this](RGNDS::Transform* tr){
-            RGNDS::GL2D::PolyShape::draw(Engine_Color16(1, 14, 11, 10), tr);
+            RGNDS::GL2D::PolyShape::draw(COLOR_ASTEROIDS, tr);
         });
     }
 }

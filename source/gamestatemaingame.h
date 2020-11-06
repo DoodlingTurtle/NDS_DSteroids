@@ -32,6 +32,7 @@ class GameStateMainGame : public RGNDS::Engine
         Ship ship;
         Star stars[64];
 		Asteroid asteroids[MAX_ASTEROIDS];
+        AsteroidExplosion asteroidexplosions[MAX_ASTEROIDS];
         
 
 

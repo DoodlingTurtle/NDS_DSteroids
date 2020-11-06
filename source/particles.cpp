@@ -17,24 +17,19 @@ namespace ParticleSystem {
         transform.pos.y = y;
         transform.scale = 1;
 
-        initialSize = num;
         protoParticle = proto;
 
-        particles.reserve(initialSize);
+        particles.reserve(num);
+        spawnNewParticles(num);
+    }
 
+    void Emitter::spawnNewParticles(int cnt) {
         Particle* p;
-        for(int a = 0; a < initialSize; a++) {
-            p = proto->getNewInstance(a);
+        for(int a = 0; a < cnt; a++) {
+            p = protoParticle->getNewInstance(particles.size()-1);
             if(p!=nullptr)
                 particles.push_back(p);
         }
-    }
-
-    void Emitter::spawnNewParticle() {
-        Particle* p = protoParticle->getNewInstance(particles.size()-1);
-
-        if(p != nullptr)
-            particles.push_back(p);
     }
 
     Emitter::~Emitter() {

@@ -101,7 +101,7 @@ void GameStateMainGame::onUpdate(float deltaTime) {
             }
 
             // Check if killed object is part of the Asteroids List
-            if(go >= asteroids && go < (&asteroids[MAX_ASTEROIDS-1] + sizeof(Asteroid))) {
+            if(go >= asteroids && go < (&asteroids[MAX_ASTEROIDS-1])) {
                 // If yes, Spawn ScorePopups
                 newGameObjects->push_back(ScorePopup::spawn(addScore, go->pos.x, go->pos.y));
 					
@@ -126,7 +126,12 @@ void GameStateMainGame::onUpdate(float deltaTime) {
                     }
                 }
                 else {
-                    
+                    for(int a = 0; a < MAX_ASTEROIDS; a++) {
+                        if(asteroidexplosions[a].isAlive()) continue;
+                        asteroidexplosions[a].revive(go->pos.x, go->pos.y);
+                        newGameObjects->push_back(&asteroidexplosions[a]);
+                        break;
+                    }
                 }
             }
         }
@@ -171,6 +176,8 @@ void GameStateMainGame::onDraw(float deltaTime, RGNDS::Engine::Screen screen) {
 
 // Sendout a draw heartbeat
     SpaceObj::MainGameDrawData data = { deltaTime, screen };
+
+    Engine_Log("Drawing " << gameObjects->size() << " Objects");
 
     for(SpaceObj* go : *gameObjects)
         go->onDraw(&data);

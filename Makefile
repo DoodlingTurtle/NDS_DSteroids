@@ -52,7 +52,7 @@ ARCH := -marm -mthumb-interwork -march=armv5te -mtune=arm946e-s
 
 
 CFLAGS   := -Wall -O3\
-            $(ARCH) $(INCLUDE) -DARM9
+            $(ARCH) $(INCLUDE) -DARM9 -Wno-psabi
 
 ifneq ($(strip $(BUILDASDEBUG)),)
 CFLAGS	 := -g -DTARGET_DEBUG $(CFLAGS)

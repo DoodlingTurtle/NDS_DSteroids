@@ -1,8 +1,6 @@
 #ifndef __ASTEROID_H__
 #define __ASTEROID_H__
 
-#include <vector>
-
 #include "../modules/RGNDS_Engine/gl2d_polyshape.h"
 #include "../modules/RGNDS_Engine/transform.h"
 
@@ -17,22 +15,31 @@ class AsteroidParticle : public ParticleSystem::Particle, public RGNDS::Transfor
 public:
     static AsteroidParticle proto;
 
-    AsteroidParticle(){}
-    ~AsteroidParticle(){}
+    AsteroidParticle();
+    ~AsteroidParticle();
 
     bool update(float deltaTime);
-    void attachToVector(float deltaTime, int renderIndex, std::vector<RGNDS::Point<float>>);
+    void attachToVector(float deltaTime, int renderIndex, std::vector<RGNDS::Point<double>>*);
     AsteroidParticle* getNewInstance(int index);
 
 protected:
-    int lifetime;
+    float lifetime;
 
 };
 
-class AsteroidExplosion : public ParticleSystem::Emitter {
+class AsteroidExplosion 
+    : public ParticleSystem::Emitter
+    , public SpaceObj 
+{
 public:
-    AsteroidExplosion(float x, float y);
+    AsteroidExplosion(float x=0, float y=0);
 
+    void onUpdate(SpaceObj::MainGameUpdateData*);
+    void onDraw(SpaceObj::MainGameDrawData*);
+
+    void revive(float x, float y);
+
+    void onNoParticlesLeft();
 
 };
 
