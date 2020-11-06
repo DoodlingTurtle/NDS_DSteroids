@@ -15,7 +15,7 @@ ShipExplosionParticle::ShipExplosionParticle() : ParticleSystem::Particle() {
     pos.x = Engine_RandF() * 16 - 8;
     pos.y = Engine_RandF() * 16 - 8;
 
-    velocity = Engine_RandF() * 4+3;
+    velocity = Engine_RandF() * 64+32;
     lifetime = Engine_RandF() * 1000+1000;
 
     directionFromPositionVector();
@@ -28,10 +28,10 @@ bool ShipExplosionParticle::update(float deltatime) {
     if(lifetime <= 0) return false;
 
     moveInDirection(velocity*deltatime);
+    velocity *= 0.90;
 
     return true;
 }
-
 void ShipExplosionParticle::attachToVector(float deltaTime, int index, std::vector<RGNDS::Point<double>>* vec) {
     RGNDS::Point<double> d;
     d.x = pos.x-1;
@@ -46,7 +46,6 @@ void ShipExplosionParticle::attachToVector(float deltaTime, int index, std::vect
     d.y += 3;
     vec->push_back(d);
 }
-
 ShipExplosionParticle* ShipExplosionParticle::getNewInstance(int index) {
     return new ShipExplosionParticle();
 }
