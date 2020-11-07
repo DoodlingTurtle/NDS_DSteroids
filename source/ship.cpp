@@ -120,11 +120,11 @@ void Ship::update(float deltaTime, int keys_held, int keys_up, int keys_justpres
     if(keys_held&(KEY_LEFT|KEY_Y))
         this->setAngleRel(-angRes);
 
-    if(keys_held&KEY_START)
-        this->scale += 0.05;
-
-    if(keys_held&KEY_SELECT)
-        this->scale -= 0.05;
+//    if(keys_held&KEY_START)
+//        this->scale += 0.05;
+//
+//    if(keys_held&KEY_SELECT)
+//        this->scale -= 0.05;
 
     if(keys_justpressed&(KEY_R|KEY_L))
         Shot::Spawn(ang, &pos);

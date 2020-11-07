@@ -41,8 +41,8 @@ int main(void) {
         gameOver.stars = stars;
 
     while(1) {
-        mainGame.run();
         gameOver.run();
+        mainGame.run();
     }
 
     return 0;
