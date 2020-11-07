@@ -6,9 +6,9 @@
 
 #include "./ship.h"
 #include "./asteroid.h"
+#include "./star.h"
 
-#define MAX_ASTEROIDS 48
-
+#include "config.h"
 
 class GameStateMainGame : public RGNDS::Engine
 {
@@ -16,26 +16,16 @@ class GameStateMainGame : public RGNDS::Engine
 		GameStateMainGame();
         virtual ~GameStateMainGame();
         
-        int score = 0;
-
-        std::function<void(int, void*)> onAsteroidBroadcast;
-
+        int *score;
+        Star *stars;
+		Asteroid* asteroids;
+        
     private:
         static float game_difficulty;        // difficulty goes from 1 to 16;
 
-        struct Star {
-            int x;
-            int y;
-            int alpha;
-        };
-
         Ship ship;
-        Star stars[64];
-		Asteroid asteroids[MAX_ASTEROIDS];
         AsteroidExplosion asteroidexplosions[MAX_ASTEROIDS];
         
-
-
         RGNDS::Transform scorelocation;
         float scoreTimer;
 
@@ -43,7 +33,7 @@ class GameStateMainGame : public RGNDS::Engine
         int onStart();
         void onEnd();
         void onUpdate(float deltaTime);
-        void onDraw(float deltaTime, RGNDS::Engine::Screen screen);
+        void onDraw(RGNDS::Engine::Screen screen);
 
 };
 

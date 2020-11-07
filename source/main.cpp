@@ -12,8 +12,12 @@
 #include "../modules/RGNDS_Engine/engine.h"
 
 #include "gamestatemaingame.h"
+#include "gamestategameover.h"
 
+#include "asteroid.h"
+#include "star.h"
 
+#include "config.h"
 
 //-----------------------------------------------------------------------------
 int main(void) {
@@ -22,10 +26,23 @@ int main(void) {
 
     srand(time(nullptr));
 
+    Star stars[CNT_STARS];
+    Asteroid asteroids[MAX_ASTEROIDS];
+    int score = 0;
+
     GameStateMainGame mainGame;
+        mainGame.asteroids = asteroids;
+        mainGame.score = &score;
+        mainGame.stars = stars;
+
+    GameStateGameOver gameOver;
+        gameOver.score = &score;
+        gameOver.asteroids = asteroids;
+        gameOver.stars = stars;
 
     while(1) {
         mainGame.run();
+        gameOver.run();
     }
 
     return 0;

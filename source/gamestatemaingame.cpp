@@ -28,34 +28,25 @@ int GameStateMainGame::onStart() {
     int a;
     
     Asteroid::ship = &ship;
-    
 
     Engine_Log("Start application");
 
-    Engine_Log("Generate Star field");
     // setup the scoreboard
     scorelocation.pos.x = 5;
     scorelocation.pos.y = 5;
     scorelocation.scale = 2;
-    score = 0;
+    *score = 0;
     scoreTimer = 0.0f;
     game_difficulty = 4;
-
-    // Create a star field for the background
-    for(a = 0; a < 64; a++) {
-        stars[a] = { 
-            rand() / (INT_MAX/256),
-            rand() / (INT_MAX/(SCREEN_HEIGHT*2)),
-            rand() / (INT_MAX/15) + 16
-        };
-    }
 
     Engine_Log("Register Ship");
     ship.reset();
     newGameObjects->push_back(&ship);
 
     // Initialize the asteroids
-    Engine_Log("setting ub asteroids");
+    for(int a = 0; a < MAX_ASTEROIDS; a++)
+        asteroids[a].kill();
+
     for(a = 0; a < (int)game_difficulty; a++) {
         Asteroid* ast = &asteroids[a];
         ast->bringBackToLife(ship.pos, true, 1);
@@ -67,24 +58,16 @@ int GameStateMainGame::onStart() {
 }
 
 void GameStateMainGame::onEnd() {
-    Engine_Log("Game Over");
 
     if(shipexp != nullptr)
         delete shipexp;
     
     shipexp = nullptr;
 
-    Engine_Log("clean asteroids;");
-    for(int a = 0; a < MAX_ASTEROIDS; a++)
-        asteroids[a].kill();
-
-    Engine_Log("clear ScorePopup");
     ScorePopup::cleanup();
 	
-    Engine_Log("Clean Shot");
     Shot::cleanup();
 
-	Engine_Log("Detach all game components");	
     gameObjects->clear();
     prevGameObjects->clear();
     newGameObjects->clear();
@@ -108,7 +91,7 @@ void GameStateMainGame::onUpdate(float deltaTime) {
         else {
             short addScore = go->getScoreValue();
             if(addScore > 0) {
-                this->score += addScore;    
+                *score += addScore;    
             }
 
             // Check if killed object is part of the Asteroids List
@@ -121,7 +104,7 @@ void GameStateMainGame::onUpdate(float deltaTime) {
                     byte found = 0;
                     for(int a = 0; a < MAX_ASTEROIDS; a++) {
                         if(found > 1) break;
-                        if(asteroids[a].isAlive()) continue;
+                        if((asteroids[a]).isAlive()) continue;
                         if(&asteroids[a] == go) continue;
 
                         Asteroid* ast2 = &asteroids[a];
@@ -187,14 +170,14 @@ void GameStateMainGame::onUpdate(float deltaTime) {
 
 }
 
-void GameStateMainGame::onDraw(float deltaTime, RGNDS::Engine::Screen screen) {
+void GameStateMainGame::onDraw(RGNDS::Engine::Screen screen) {
 
 // Draw Stars
-    for(auto star : stars)
-        RGNDS::GL2D::glPixel(star.x, star.y, Engine_Color16(1, 15, 15, 15), star.alpha, -1);
-
+    for(int a = 0; a < CNT_STARS; a++)
+        stars[a].draw();
+        
 // Sendout a draw heartbeat
-    SpaceObj::MainGameDrawData data = { deltaTime, screen };
+    SpaceObj::MainGameDrawData data = { 0.0f , screen };
 
     Engine_Log("Drawing " << gameObjects->size() << " Objects");
 
@@ -204,7 +187,7 @@ void GameStateMainGame::onDraw(float deltaTime, RGNDS::Engine::Screen screen) {
 // Render Score, but only if the Top-Screen is rendered
     if(screen == ENGINE_SCREEN_TOP) {
         char buffer[16];
-        sprintf(buffer, "Score: % 8d", score);
+        sprintf(buffer, "Score: % 8d", *score);
         RGNDS::GL2D::glText(buffer, Engine_Color16(1, 0, 10, 31), &scorelocation);
     }
 }
