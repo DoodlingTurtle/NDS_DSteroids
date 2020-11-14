@@ -12,6 +12,7 @@
 #define SCREEN_HEIGHT2 384
 #define RandF() ((float)rand() / (float)RAND_MAX)
 
+
 static const int COLOR_ASTEROIDS = Engine_Color16(1, 14, 11, 10);
 
 
@@ -19,14 +20,15 @@ std::vector<Shot*> Asteroid::shots;
 
 Ship* Asteroid::ship = nullptr;
 
+float AsteroidParticle::scale = 1.0f;
 
 AsteroidParticle AsteroidParticle::proto = AsteroidParticle();
 
 AsteroidParticle::~AsteroidParticle(){}
 
 AsteroidParticle::AsteroidParticle() {
-    pos.x = Engine_RandF() * 8 - 4;
-    pos.y = Engine_RandF() * 8 - 4;
+    pos.x = (Engine_RandF() * 8 - 4) * scale;
+    pos.y = (Engine_RandF() * 8 - 4) * scale;
 
     directionFromPositionVector();
 
@@ -58,7 +60,6 @@ void AsteroidParticle::attachToVector(float deltaTime, int index, std::vector<RG
 
     d.y += 2;
     vec->push_back(d);
-    
 
 }
 
@@ -76,8 +77,13 @@ void AsteroidExplosion::onDraw(SpaceObj::MainGameDrawData* data) {
     ParticleSystem::Emitter::draw(COLOR_ASTEROIDS, 31, 0);
 }
 
-void AsteroidExplosion::revive(float x, float y) {
-    spawnNewParticles(5);
+void AsteroidExplosion::revive(float x, float y, float scale) {
+   
+   
+    Engine_Log("revive particles" << scale);
+    AsteroidParticle::scale = scale;
+    spawnNewParticles(5*scale);
+    AsteroidParticle::scale = 1;
 
     this->transform.pos.x = x;
     this->transform.pos.y = y;
@@ -88,7 +94,6 @@ void AsteroidExplosion::onNoParticlesLeft() {
     Engine_Log("No Particles left");
     this->kill();
 }
-
 
 
 

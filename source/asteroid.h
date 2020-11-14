@@ -22,6 +22,8 @@ public:
     void attachToVector(float deltaTime, int renderIndex, std::vector<RGNDS::Point<double>>*);
     AsteroidParticle* getNewInstance(int index);
 
+    static float scale;
+
 protected:
     float lifetime;
 
@@ -37,7 +39,7 @@ public:
     void onUpdate(SpaceObj::MainGameUpdateData*);
     void onDraw(SpaceObj::MainGameDrawData*);
 
-    void revive(float x, float y);
+    void revive(float x, float y, float scale=1.0f);
 
     void onNoParticlesLeft();
 

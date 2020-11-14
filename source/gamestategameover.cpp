@@ -55,7 +55,7 @@ void GameStateGameOver::onDraw(RGNDS::Engine::Screen scr) {
         scoreAnimation.getLerp(&tra);
         char buffer[16];
         sprintf(buffer, "% 8d", *score);
-        RGNDS::GL2D::glText(buffer, Engine_Color16(1, 0, 10, 31), &tra);
+        RGNDS::GL2D::glText(buffer, Engine_Color16(1, 0, 10, 31), &tra, 31, 2);
     }
     else {
 

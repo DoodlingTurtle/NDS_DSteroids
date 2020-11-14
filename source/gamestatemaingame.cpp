@@ -119,13 +119,12 @@ void GameStateMainGame::onUpdate(float deltaTime) {
                         found=0;
                     }
                 }
-                else {
-                    for(int a = 0; a < MAX_ASTEROIDS; a++) {
-                        if(asteroidexplosions[a].isAlive()) continue;
-                        asteroidexplosions[a].revive(go->pos.x, go->pos.y);
-                        newGameObjects->push_back(&asteroidexplosions[a]);
-                        break;
-                    }
+
+                for(int a = 0; a < MAX_ASTEROIDS; a++) {
+                    if(asteroidexplosions[a].isAlive()) continue;
+                    asteroidexplosions[a].revive(go->pos.x, go->pos.y, 4.0f * go->scale);
+                    newGameObjects->push_back(&asteroidexplosions[a]);
+                    break;
                 }
             }
         }
