@@ -34,7 +34,7 @@ BUILDASDEBUG := true
 
 TARGET   := $(shell basename $(CURDIR))
 BUILD    := build
-SOURCES  := source modules/RGNDS_Engine
+SOURCES  := source modules/RGNDS_Engine modules/RGNDS_Engine/addons/TextMenu
 INCLUDES :=
 DATA     :=
 GRAPHICS :=

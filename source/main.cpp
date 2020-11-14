@@ -52,8 +52,11 @@ int main(void) {
 
     while(1) {
         title.run();
-        mainGame.run();
-        gameOver.run();
+        switch(title.selected()) {
+            case 0:
+                mainGame.run();
+                gameOver.run();
+        }
     }
 
     return 0;
