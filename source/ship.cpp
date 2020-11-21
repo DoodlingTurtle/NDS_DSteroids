@@ -4,6 +4,8 @@
 #include "gamestatemaingame.h"
 #include "broadcastchannels.h"
 
+#include "shipupgrade_shield.h"
+
 #define SCREEN_HEIGHT2 384
 
 static const int COLOR_SHIP = Engine_Color16(1, 31, 0, 0);
@@ -11,7 +13,8 @@ static const int COLOR_SHIP = Engine_Color16(1, 31, 0, 0);
 
 ShipExplosionParticle ShipExplosionParticle::proto = ShipExplosionParticle();
 
-ShipExplosionParticle::ShipExplosionParticle() : ParticleSystem::Particle() {
+ShipExplosionParticle::ShipExplosionParticle() : ParticleSystem::Particle() 
+{
     pos.x = Engine_RandF() * 16 - 8;
     pos.y = Engine_RandF() * 16 - 8;
 
@@ -23,7 +26,8 @@ ShipExplosionParticle::ShipExplosionParticle() : ParticleSystem::Particle() {
 }
 ShipExplosionParticle::~ShipExplosionParticle() {}
 
-bool ShipExplosionParticle::update(float deltatime) {
+bool ShipExplosionParticle::update(float deltatime) 
+{
     lifetime -= deltatime*1000.0f;
     if(lifetime <= 0) return false;
 
@@ -32,7 +36,8 @@ bool ShipExplosionParticle::update(float deltatime) {
 
     return true;
 }
-void ShipExplosionParticle::attachToVector(float deltaTime, int index, std::vector<RGNDS::Point<double>>* vec) {
+void ShipExplosionParticle::attachToVector(float deltaTime, int index, std::vector<RGNDS::Point<double>>* vec) 
+{
     RGNDS::Point<double> d;
     d.x = pos.x-1;
     d.y = pos.y-1;
@@ -46,7 +51,8 @@ void ShipExplosionParticle::attachToVector(float deltaTime, int index, std::vect
     d.y += 3;
     vec->push_back(d);
 }
-ShipExplosionParticle* ShipExplosionParticle::getNewInstance(int index) {
+ShipExplosionParticle* ShipExplosionParticle::getNewInstance(int index) 
+{
     return new ShipExplosionParticle();
 }
 
@@ -63,21 +69,24 @@ ShipExplosion::ShipExplosion(Ship* ship) : ParticleSystem::Emitter(ship->pos.x, 
 }
 ShipExplosion::~ShipExplosion(){};
 
-void ShipExplosion::onUpdate(SpaceObj::MainGameUpdateData* data){
+void ShipExplosion::onUpdate(SpaceObj::MainGameUpdateData* data)
+{
     SpaceObj::updatePosition();
     transform.pos.x = pos.x;
     transform.pos.y = pos.y;
 
     ParticleSystem::Emitter::update(data->deltaTime);
 }
-void ShipExplosion::onDraw(SpaceObj::MainGameDrawData* data) {
+void ShipExplosion::onDraw(SpaceObj::MainGameDrawData* data) 
+{
     ParticleSystem::Emitter::draw(COLOR_SHIP, 31, 2);
 }
 void ShipExplosion::onNoParticlesLeft() { SpaceObj::kill(); }
 
 
 
-Ship::Ship() : SpaceObj(16.0f) {
+Ship::Ship() : SpaceObj(16.0f) 
+{
 
     shaBody = new RGNDS::GL2D::PolyShape(
           4,
@@ -99,19 +108,34 @@ Ship::Ship() : SpaceObj(16.0f) {
          },
          GL_TRIANGLE
     );
-
+    
     this->bIsAlive = true;
 
 // Setup Coordinats of the ship and varables needed for Wrap-Arround functionality
     reset();
 }
 
-Ship::~Ship() {
+Ship::~Ship() 
+{
     delete shaBody;
     delete shaThruster;
+
+    clearUpgrades();
 }
 
-void Ship::update(float deltaTime, int keys_held, int keys_up, int keys_justpressed, touchPosition& touch) {
+void Ship::clearUpgrades() 
+{
+
+    currentShield = nullptr;
+
+    for (auto upgrade : upgrades)
+        delete upgrade;
+
+    upgrades.clear();
+}
+
+void Ship::update(float deltaTime, int keys_held, int keys_up, int keys_justpressed, touchPosition& touch) 
+{
 
 // Process user Input
     if(keys_held&(KEY_RIGHT|KEY_A))
@@ -119,12 +143,6 @@ void Ship::update(float deltaTime, int keys_held, int keys_up, int keys_justpres
 
     if(keys_held&(KEY_LEFT|KEY_Y))
         this->setAngleRel(-angRes);
-
-//    if(keys_held&KEY_START)
-//        this->scale += 0.05;
-//
-//    if(keys_held&KEY_SELECT)
-//        this->scale -= 0.05;
 
     if(keys_justpressed&(KEY_R|KEY_L))
         Shot::Spawn(ang, &pos);
@@ -146,16 +164,24 @@ void Ship::update(float deltaTime, int keys_held, int keys_up, int keys_justpres
 
 }
 
-void Ship::reset() {
+void Ship::reset() 
+{
     pos = { SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2};
     scale = .75;
     setAngle(PI/2);
     velocity.x = 0;
     velocity.y = 0;
     bIsAlive = true;
+
+    clearUpgrades();
+
+    currentShield = new ShipUpgrade_Shield();
+    upgrades.push_back(currentShield);  
+
 }
 
-void Ship::onUpdate(SpaceObj::MainGameUpdateData* dat) {
+void Ship::onUpdate(SpaceObj::MainGameUpdateData* dat) 
+{
     this->update(
         dat->deltaTime
         , dat->keys_held
@@ -165,11 +191,27 @@ void Ship::onUpdate(SpaceObj::MainGameUpdateData* dat) {
     );
 }
 
-void Ship::onDraw(SpaceObj::MainGameDrawData* data) {
+void Ship::onDraw(SpaceObj::MainGameDrawData* data) 
+{
     SpaceObj::draw([this](Transform* tr) {
         if(this->thrusting)
             this->shaThruster->draw(Engine_Color16(1, 31, 31,  1), tr);
 
         this->shaBody->draw(COLOR_SHIP, tr, 0, 2);
+
+        for(auto upgrade : upgrades) {
+            upgrade->draw(*tr);
+        }
     });
+}
+
+bool Ship::isShieldUp(float* radius) {
+    if(currentShield != nullptr) {
+        if(radius != nullptr)
+            *radius = currentShield->getRadius();
+
+        return true;
+    }
+
+    return false;
 }

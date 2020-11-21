@@ -178,8 +178,6 @@ void GameStateMainGame::onDraw(RGNDS::Engine::Screen screen) {
 // Sendout a draw heartbeat
     SpaceObj::MainGameDrawData data = { 0.0f , screen };
 
-    Engine_Log("Drawing " << gameObjects->size() << " Objects");
-
     for(SpaceObj* go : *gameObjects)
         go->onDraw(&data);
 

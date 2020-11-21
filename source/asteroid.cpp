@@ -26,7 +26,8 @@ AsteroidParticle AsteroidParticle::proto = AsteroidParticle();
 
 AsteroidParticle::~AsteroidParticle(){}
 
-AsteroidParticle::AsteroidParticle() {
+AsteroidParticle::AsteroidParticle() 
+{
     pos.x = (Engine_RandF() * 8 - 4) * scale;
     pos.y = (Engine_RandF() * 8 - 4) * scale;
 
@@ -37,7 +38,8 @@ AsteroidParticle::AsteroidParticle() {
 
 AsteroidParticle* AsteroidParticle::getNewInstance(int index) { return new AsteroidParticle(); }
 
-bool AsteroidParticle::update(float deltaTime) {
+bool AsteroidParticle::update(float deltaTime) 
+{
     lifetime -= deltaTime * 1000.0;
     if(lifetime <= 0) return false;
 
@@ -46,7 +48,8 @@ bool AsteroidParticle::update(float deltaTime) {
     return true;
 }
 
-void AsteroidParticle::attachToVector(float deltaTime, int index, std::vector<RGNDS::Point<double>>* vec) {
+void AsteroidParticle::attachToVector(float deltaTime, int index, std::vector<RGNDS::Point<double>>* vec) 
+{
 
     RGNDS::Point<double> d;
     d.x = pos.x;
@@ -69,15 +72,18 @@ AsteroidExplosion::AsteroidExplosion(float x, float y)
     , SpaceObj(16)
 {}
 
-void AsteroidExplosion::onUpdate(SpaceObj::MainGameUpdateData* data) { 
+void AsteroidExplosion::onUpdate(SpaceObj::MainGameUpdateData* data) 
+{ 
     update(data->deltaTime);
  }
 
-void AsteroidExplosion::onDraw(SpaceObj::MainGameDrawData* data) {
+void AsteroidExplosion::onDraw(SpaceObj::MainGameDrawData* data) 
+{
     ParticleSystem::Emitter::draw(COLOR_ASTEROIDS, 31, 0);
 }
 
-void AsteroidExplosion::revive(float x, float y, float scale) {
+void AsteroidExplosion::revive(float x, float y, float scale) 
+{
    
    
     Engine_Log("revive particles" << scale);
@@ -90,7 +96,8 @@ void AsteroidExplosion::revive(float x, float y, float scale) {
     this->bIsAlive = true;
 }
 
-void AsteroidExplosion::onNoParticlesLeft() {
+void AsteroidExplosion::onNoParticlesLeft() 
+{
     Engine_Log("No Particles left");
     this->kill();
 }
@@ -107,7 +114,8 @@ Asteroid::Asteroid() :
     bIsAlive = false;
 }
 
-void Asteroid::generateShape() {
+void Asteroid::generateShape() 
+{
     float angSteps = PI2 / ((numPoints-2) / 2);
     float radius = 16;
     float ang = 0;
@@ -138,7 +146,8 @@ void Asteroid::generateShape() {
     return;
 }
 
-void Asteroid::bringBackToLife(RGNDS::Point<float> pos, bool generateNewShape, float scale) {
+void Asteroid::bringBackToLife(RGNDS::Point<float> pos, bool generateNewShape, float scale) 
+{
     Engine_Log("Bring asteroid back to life");
 
     setAngle(RandF() * PI2);
@@ -156,7 +165,8 @@ void Asteroid::bringBackToLife(RGNDS::Point<float> pos, bool generateNewShape, f
     bIsAlive = true;
 }
 
-void Asteroid::onDraw(SpaceObj::MainGameDrawData* data) {
+void Asteroid::onDraw(SpaceObj::MainGameDrawData* data) 
+{
     if(
         pos.y < 16 || pos.y > SCREEN_HEIGHT2 - 16
         ||
@@ -170,7 +180,8 @@ void Asteroid::onDraw(SpaceObj::MainGameDrawData* data) {
     }
 }
 
-void Asteroid::onUpdate(SpaceObj::MainGameUpdateData* data) {
+void Asteroid::onUpdate(SpaceObj::MainGameUpdateData* data) 
+{
     float deltatime = data->deltaTime;
 
     setAngleRel(PI2 * (deltatime * spinSpeed));
@@ -180,16 +191,6 @@ void Asteroid::onUpdate(SpaceObj::MainGameUpdateData* data) {
         RGNDS::Point <float> p;
         float r;
         ship->getCollisionSphere(&p, &r);
-
-        if(RGNDS::Collision::checkCircleOnCircle(
-            &this->pos, this->scale * 14,
-            &p, r
-        )) {
-            Engine_Log("Asteroid " << this << " hit ship " << ship);
-            ship->kill();
-
-            return;
-        }
 
         for(Shot* s : Shot::getShots()) {
             if(RGNDS::Collision::checkCircleOnCircle(
@@ -201,12 +202,39 @@ void Asteroid::onUpdate(SpaceObj::MainGameUpdateData* data) {
                 this->kill();
             }
         }
+      
+        if(isAlive()) {
+            float shieldRad = 0.0f;
+            if(ship->isShieldUp(&shieldRad)) {
+              
+                RGNDS::Collision col;
+
+                if(RGNDS::Collision::checkCircleOnCircle(&this->pos, this->scale*12, &p, shieldRad-1, &col)) {
+
+                    this->velocity.x = col.overlapDir.x + ship->velocity.x;
+                    this->velocity.y = col.overlapDir.y + ship->velocity.y;
+               
+                }
+            }
+            else if(RGNDS::Collision::checkCircleOnCircle(
+                &this->pos, this->scale * 14,
+                &p, r
+            )) {
+                Engine_Log("Asteroid " << this << " hit ship " << ship);
+                ship->kill();
+
+                return;
+            }
+        }
     }
+
 }
 
-short Asteroid::getScoreValue() {
+short Asteroid::getScoreValue() 
+{
     return 100/scale;
 }
 
-Asteroid::~Asteroid() {
+Asteroid::~Asteroid() 
+{
 }

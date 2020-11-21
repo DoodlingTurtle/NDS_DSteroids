@@ -1,6 +1,7 @@
 #ifndef SHIP_H
 #define SHIP_H 1
 
+#include <vector>
 #include <nds.h>
 #include "../modules/RGNDS_Engine/engine.h"
 #include "../modules/RGNDS_Engine/gl2d_polyshape.h"
@@ -12,6 +13,8 @@
 
 #include "shipengine.h"
 #include "spaceobj.h"
+#include "shipupgrade.h"
+#include "shipupgrade_shield.h"
 
 #include "shot.h"
 
@@ -38,7 +41,6 @@ protected:
 };
 
 
-
 class Ship : public SpaceObj {
     public:
         static RGNDS::Broadcast broadcast;
@@ -56,12 +58,25 @@ class Ship : public SpaceObj {
         void onUpdate(SpaceObj::MainGameUpdateData*);
         void onDraw(SpaceObj::MainGameDrawData*);
 
+        bool isShieldUp(float* radius); 
+        
+        
+
+    protected:
+        ShipUpgrade_Shield* currentShield; 
+
     private:
+
+        void clearUpgrades();
+
         float angRes = PI/20;
         bool thrusting = false;
+        bool shieldIsUp = false;
 
         RGNDS::GL2D::PolyShape* shaBody;
         RGNDS::GL2D::PolyShape* shaThruster;
+
+        std::vector<ShipUpgrade*> upgrades;
 };
 
 
