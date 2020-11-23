@@ -156,7 +156,20 @@ void Ship::update(float deltaTime, int keys_held, int keys_up, int keys_justpres
         ph.decerlerate(1);
     }
 
-// Update Position based on physics
+    ShipUpgrade* upgrade;
+    for(int a = upgrades.size()-1; a >= 0; a--) {
+        upgrade = upgrades.at(a);
+        if(!upgrade->update(deltaTime)) {
+            Engine_Log("remove upgrade " << upgrade);
+            if(upgrade == currentShield)
+                currentShield = nullptr;
+
+            delete upgrade;
+            upgrades.erase(upgrades.begin()+a);
+        }
+    }
+
+    // Update Position based on physics
     velocity += dir * ph.acceleration;
     
     // Update Position based on Screen-Borders
@@ -205,7 +218,8 @@ void Ship::onDraw(SpaceObj::MainGameDrawData* data)
     });
 }
 
-bool Ship::isShieldUp(float* radius) {
+bool Ship::isShieldUp(float* radius) 
+{
     if(currentShield != nullptr) {
         if(radius != nullptr)
             *radius = currentShield->getRadius();

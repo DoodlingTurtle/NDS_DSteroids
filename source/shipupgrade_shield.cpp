@@ -4,6 +4,7 @@
 ShipUpgrade_Shield::ShipUpgrade_Shield() 
 {
     circle = RGNDS::GL2D::PolyShape::createCircle( 28, 16 );
+    lifetime = 5000;
 }
 
 ShipUpgrade_Shield::~ShipUpgrade_Shield() 
@@ -13,12 +14,13 @@ ShipUpgrade_Shield::~ShipUpgrade_Shield()
 
 void ShipUpgrade_Shield::draw(RGNDS::Transform& ship) 
 {
-    circle->draw(Engine_Color16(1, 8, 31, 31), &ship, 7, 3);
+    circle->draw(Engine_Color16(1, 8, 31, 31), &ship, 3 + (4 * (lifetime / 5000.0f)), 3);
 }
 
-void ShipUpgrade_Shield::update(float dt) 
+bool ShipUpgrade_Shield::update(float dt) 
 {
-
+    lifetime -= dt * 1000.0f;
+    return (lifetime > 0.0f);
 }
 
 float ShipUpgrade_Shield::getRadius() {

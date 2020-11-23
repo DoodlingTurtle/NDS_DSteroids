@@ -8,7 +8,8 @@ public:
     virtual ~ShipUpgrade(){};
 
     virtual void draw(RGNDS::Transform& ship) = 0;
-    virtual void update(float deltaTime) = 0;
+    virtual bool update(float deltaTime) = 0;
+
 };
 
 #endif

@@ -14,13 +14,14 @@ public:
     ShipUpgrade_Shield();
     ~ShipUpgrade_Shield();
     void draw(RGNDS::Transform& ship);
-    void update(float deltaTime);
+    bool update(float deltaTime);
 
     virtual float getRadius();
 
 private:
     RGNDS::GL2D::PolyShape* circle;
 
+    float lifetime;
 
 };
 
