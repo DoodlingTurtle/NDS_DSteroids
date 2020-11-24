@@ -40,7 +40,6 @@ public:
     virtual void kill();
     bool isAlive();
 
-
 protected:
     WrapAroundRenderer renderer;
     float objRadius;

@@ -34,7 +34,8 @@ public:
     bool update(float deltaTime);
     void attachToVector(float deltaTime, int renderIndex, std::vector<RGNDS::Point<double>>*);
     ShipExplosionParticle* getNewInstance(int index);
-    
+
+
 protected:
     float lifetime;
     float velocity;
@@ -58,9 +59,7 @@ class Ship : public SpaceObj {
         void onUpdate(SpaceObj::MainGameUpdateData*);
         void onDraw(SpaceObj::MainGameDrawData*);
 
-        bool isShieldUp(float* radius); 
-        
-        
+        bool gotHit(SpaceObj* culprit);
 
     protected:
         ShipUpgrade_Shield* currentShield; 

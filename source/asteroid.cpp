@@ -204,26 +204,16 @@ void Asteroid::onUpdate(SpaceObj::MainGameUpdateData* data)
         }
       
         if(isAlive()) {
-            float shieldRad = 0.0f;
-            if(ship->isShieldUp(&shieldRad)) {
-              
-                RGNDS::Collision col;
-
-                if(RGNDS::Collision::checkCircleOnCircle(&this->pos, this->scale*12, &p, shieldRad-1, &col)) {
-
+            RGNDS::Collision col;
+            if(RGNDS::Collision::checkCircleOnCircle(
+                &this->pos, this->scale * 16,
+                &p, r,
+                &col
+            )) {
+                if(!ship->gotHit(this)) {
                     this->velocity.x = col.overlapDir.x + ship->velocity.x;
                     this->velocity.y = col.overlapDir.y + ship->velocity.y;
-               
                 }
-            }
-            else if(RGNDS::Collision::checkCircleOnCircle(
-                &this->pos, this->scale * 14,
-                &p, r
-            )) {
-                Engine_Log("Asteroid " << this << " hit ship " << ship);
-                ship->kill();
-
-                return;
             }
         }
     }

@@ -18,10 +18,14 @@ public:
 
     virtual float getRadius();
 
+    void gotHit();
+
 private:
     RGNDS::GL2D::PolyShape* circle;
 
     float lifetime;
+
+    float lastHitTime;
 
 };
 

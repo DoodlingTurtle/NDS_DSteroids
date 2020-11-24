@@ -8,6 +8,8 @@
 
 #define SCREEN_HEIGHT2 384
 
+#define SHIP_DEFAULT_RADIUS 16.0f
+
 static const int COLOR_SHIP = Engine_Color16(1, 31, 0, 0);
 
 
@@ -85,7 +87,7 @@ void ShipExplosion::onNoParticlesLeft() { SpaceObj::kill(); }
 
 
 
-Ship::Ship() : SpaceObj(16.0f) 
+Ship::Ship() : SpaceObj(SHIP_DEFAULT_RADIUS) 
 {
 
     shaBody = new RGNDS::GL2D::PolyShape(
@@ -125,7 +127,6 @@ Ship::~Ship()
 
 void Ship::clearUpgrades() 
 {
-
     currentShield = nullptr;
 
     for (auto upgrade : upgrades)
@@ -161,8 +162,10 @@ void Ship::update(float deltaTime, int keys_held, int keys_up, int keys_justpres
         upgrade = upgrades.at(a);
         if(!upgrade->update(deltaTime)) {
             Engine_Log("remove upgrade " << upgrade);
-            if(upgrade == currentShield)
+            if(upgrade == currentShield) {
                 currentShield = nullptr;
+                objRadius = SHIP_DEFAULT_RADIUS;
+            }
 
             delete upgrade;
             upgrades.erase(upgrades.begin()+a);
@@ -191,6 +194,8 @@ void Ship::reset()
     currentShield = new ShipUpgrade_Shield();
     upgrades.push_back(currentShield);  
 
+    objRadius = 24;
+
 }
 
 void Ship::onUpdate(SpaceObj::MainGameUpdateData* dat) 
@@ -218,14 +223,14 @@ void Ship::onDraw(SpaceObj::MainGameDrawData* data)
     });
 }
 
-bool Ship::isShieldUp(float* radius) 
-{
+bool Ship::gotHit(SpaceObj* culprit) {
     if(currentShield != nullptr) {
-        if(radius != nullptr)
-            *radius = currentShield->getRadius();
-
+        currentShield->gotHit();
+        return false;
+    }
+    else {
+        Engine_Log("Ship " << this << " got killed by " << culprit);
+        kill(); 
         return true;
     }
-
-    return false;
 }
