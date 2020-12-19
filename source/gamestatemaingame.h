@@ -19,9 +19,11 @@ class GameStateMainGame : public RGNDS::Engine
         int *score;
         Star *stars;
 		Asteroid* asteroids;
-        
+
+        float game_difficulty;        // difficulty goes from 1 to 16;
+    
+        bool wasGameWon();
     private:
-        static float game_difficulty;        // difficulty goes from 1 to 16;
 
         Ship ship;
         AsteroidExplosion asteroidexplosions[MAX_ASTEROIDS];

@@ -5,8 +5,6 @@
 #include <climits>
 #include <cstdio>
 
-float GameStateMainGame::game_difficulty = 1.0f;
-
 static std::vector<SpaceObj*>   gameObjList[3];
 static std::vector<SpaceObj*>*  gameObjects         = &gameObjList[0];
 static std::vector<SpaceObj*>*  prevGameObjects     = &gameObjects[1];
@@ -35,9 +33,7 @@ int GameStateMainGame::onStart() {
     scorelocation.pos.x = 5;
     scorelocation.pos.y = 5;
     scorelocation.scale = 2;
-    *score = 0;
     scoreTimer = 0.0f;
-    game_difficulty = 4;
 
     Engine_Log("Register Ship");
     ship.reset();
@@ -84,7 +80,12 @@ void GameStateMainGame::onUpdate(float deltaTime) {
 
 // Add Gameobjects, that are still alive to the cycle
     gameObjects->clear();
-    for(SpaceObj* go : *prevGameObjects)
+    bool asteroidFound = false;
+    bool hasAsteroids = false;
+    for(SpaceObj* go : *prevGameObjects) {
+        asteroidFound = go >= asteroids && go < (&asteroids[MAX_ASTEROIDS-1]);
+        hasAsteroids |= asteroidFound;
+
         if(go->isAlive()) {
             gameObjects->push_back(go);
         }
@@ -95,7 +96,7 @@ void GameStateMainGame::onUpdate(float deltaTime) {
             }
 
             // Check if killed object is part of the Asteroids List
-            if(go >= asteroids && go < (&asteroids[MAX_ASTEROIDS-1])) {
+            if(asteroidFound) {
                 // If yes, Spawn ScorePopups
                 newGameObjects->push_back(ScorePopup::spawn(addScore, go->pos.x, go->pos.y));
 					
@@ -128,13 +129,21 @@ void GameStateMainGame::onUpdate(float deltaTime) {
                 }
             }
         }
+    }
 
 // Add new GameObjects to the cycle
     for(SpaceObj* go : *newGameObjects)
-        if(go->isAlive())
+        if(go->isAlive()) {
             gameObjects->push_back(go);
+            hasAsteroids |= (go >= asteroids && go < (&asteroids[MAX_ASTEROIDS-1]));
+        }
     
     newGameObjects->clear();
+
+    if(!hasAsteroids) {
+        this->exit();
+        return;
+    }
 
 // Update all GameObject-Managers/Factorys
     ScorePopup::refreshInstanceList();
@@ -187,4 +196,8 @@ void GameStateMainGame::onDraw(RGNDS::Engine::Screen screen) {
         sprintf(buffer, "Score: % 8d", *score);
         RGNDS::GL2D::glText(buffer, Engine_Color16(1, 0, 10, 31), &scorelocation);
     }
+}
+
+bool GameStateMainGame::wasGameWon() {
+    return ship.isAlive();
 }

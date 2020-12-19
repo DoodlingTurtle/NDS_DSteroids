@@ -40,6 +40,7 @@ int main(void) {
         mainGame.asteroids = asteroids;
         mainGame.score = &score;
         mainGame.stars = stars;
+        mainGame.game_difficulty = 1;
 
     GameStateGameOver gameOver;
         gameOver.score = &score;
@@ -54,7 +55,16 @@ int main(void) {
         title.run();
         switch(title.selected()) {
             case 0:
-                mainGame.run();
+                //Setup a new game
+                score = 0;
+                mainGame.game_difficulty = 1;
+
+                while(1) {
+                    mainGame.run();
+                    if(!mainGame.wasGameWon())
+                        break;
+                    mainGame.game_difficulty += 1;
+                }
                 gameOver.run();
         }
     }
