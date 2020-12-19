@@ -7,8 +7,8 @@
 
 static std::vector<SpaceObj*>   gameObjList[3];
 static std::vector<SpaceObj*>*  gameObjects         = &gameObjList[0];
-static std::vector<SpaceObj*>*  prevGameObjects     = &gameObjects[1];
-static std::vector<SpaceObj*>*  newGameObjects      = &gameObjects[2];
+static std::vector<SpaceObj*>*  prevGameObjects     = &gameObjList[1];
+static std::vector<SpaceObj*>*  newGameObjects      = &gameObjList[2];
 static byte tick = 0;
 
 static ShipExplosion* shipexp = nullptr;
@@ -27,7 +27,7 @@ int GameStateMainGame::onStart() {
     
     Asteroid::ship = &ship;
 
-    Engine_Log("Start application");
+    Engine_Log("Start MainGame");
 
     // setup the scoreboard
     scorelocation.pos.x = 5;
@@ -35,7 +35,7 @@ int GameStateMainGame::onStart() {
     scorelocation.scale = 2;
     scoreTimer = 0.0f;
 
-    Engine_Log("Register Ship");
+    Engine_Log("Reset Ship");
     ship.reset();
     newGameObjects->push_back(&ship);
 
@@ -90,6 +90,7 @@ void GameStateMainGame::onUpdate(float deltaTime) {
             gameObjects->push_back(go);
         }
         else {
+            Engine_Log("ignoring dead GameObject " << go);
             short addScore = go->getScoreValue();
             if(addScore > 0) {
                 *score += addScore;    
@@ -134,6 +135,7 @@ void GameStateMainGame::onUpdate(float deltaTime) {
 // Add new GameObjects to the cycle
     for(SpaceObj* go : *newGameObjects)
         if(go->isAlive()) {
+            Engine_Log("adding GameObject " << go);
             gameObjects->push_back(go);
             hasAsteroids |= (go >= asteroids && go < (&asteroids[MAX_ASTEROIDS-1]));
         }
