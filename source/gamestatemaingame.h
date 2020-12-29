@@ -23,6 +23,9 @@ class GameStateMainGame : public RGNDS::Engine
         float game_difficulty;        // difficulty goes from 1 to 16;
     
         bool wasGameWon();
+        
+        int* keys;
+
     private:
 
         Ship ship;

@@ -40,7 +40,7 @@ DATA     :=
 GRAPHICS :=
 AUDIO    :=
 ICON     :=
-NITRO    :=
+NITRO    := nitrofs
 
 USERLIBS :=
 LIBPATH  :=

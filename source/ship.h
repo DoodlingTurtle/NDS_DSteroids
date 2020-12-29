@@ -39,6 +39,7 @@ public:
 protected:
     float lifetime;
     float velocity;
+
 };
 
 
@@ -60,6 +61,8 @@ class Ship : public SpaceObj {
         void onDraw(SpaceObj::MainGameDrawData*);
 
         bool gotHit(SpaceObj* culprit);
+
+        int* controlls;
 
     protected:
         ShipUpgrade_Shield* currentShield; 

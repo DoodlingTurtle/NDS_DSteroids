@@ -1,6 +1,7 @@
 #include "ship.h"
 #include <math.h>
 
+#include "config.h"
 #include "gamestatemaingame.h"
 #include "broadcastchannels.h"
 
@@ -139,16 +140,16 @@ void Ship::update(float deltaTime, int keys_held, int keys_up, int keys_justpres
 {
 
 // Process user Input
-    if(keys_held&(KEY_RIGHT|KEY_A))
+    if(keys_held&GameKeyMap[controlls[GAMEINPUT_TURNRIGHT]])
         this->setAngleRel(angRes);
 
-    if(keys_held&(KEY_LEFT|KEY_Y))
+    if(keys_held&GameKeyMap[controlls[GAMEINPUT_TURNLEFT]])
         this->setAngleRel(-angRes);
 
-    if(keys_justpressed&(KEY_R|KEY_L))
+    if(keys_justpressed&GameKeyMap[controlls[GAMEINPUT_FIRE]])
         Shot::Spawn(ang, &pos);
     
-    if(keys_held&(KEY_UP|KEY_X)) {
+    if(keys_held&GameKeyMap[controlls[GAMEINPUT_ACCELERATE]]) {
         thrusting = true;
         ph.accelerate(deltaTime * 1.5f);
     }

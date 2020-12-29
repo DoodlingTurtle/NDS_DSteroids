@@ -15,7 +15,6 @@ static ShipExplosion* shipexp = nullptr;
 
 GameStateMainGame::~GameStateMainGame() {
     Shot::shotGameObjects = nullptr;
-    
 }
 
 GameStateMainGame::GameStateMainGame() {
@@ -25,6 +24,8 @@ GameStateMainGame::GameStateMainGame() {
 int GameStateMainGame::onStart() {
     int a;
     
+    ship.controlls = keys;
+
     Asteroid::ship = &ship;
 
     Engine_Log("Start MainGame");
