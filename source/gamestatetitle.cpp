@@ -2,7 +2,7 @@
 #include "config.h"
 
 #include "spaceobj.h"
-GameStateTitle::GameStateTitle() {
+GameStateTitle::GameStateTitle() : RGNDS::Engine() {
 
     menu.transform.pos.y = 272;
     menu.transform.pos.x = 32;
