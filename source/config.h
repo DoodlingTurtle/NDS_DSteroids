@@ -18,13 +18,13 @@ enum KeyPadInput {
     KEYPAD_RIGHT,
     KEYPAD_UP,
     KEYPAD_DOWN,
-    KEYPAD_SELECT,
-    KEYPAD_A,
-    KEYPAD_B,
-    KEYPAD_X,
-    KEYPAD_Y,
     KEYPAD_L,
-    KEYPAD_R
+    KEYPAD_Y,
+    KEYPAD_A,
+    KEYPAD_X,
+    KEYPAD_B,
+    KEYPAD_R,
+    KEYPAD_SELECT
 };
 
 extern int GameKeyMap[11];

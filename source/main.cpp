@@ -33,7 +33,7 @@ int main(void) {
     gamecontrolls[GAMEINPUT_ACCELERATE] = KEYPAD_UP;
     gamecontrolls[GAMEINPUT_TURNLEFT] = KEYPAD_LEFT;
     gamecontrolls[GAMEINPUT_TURNRIGHT] = KEYPAD_RIGHT;
-    gamecontrolls[GAMEINPUT_FIRE] = KEYPAD_L;
+    gamecontrolls[GAMEINPUT_FIRE] = KEYPAD_R;
 
 // Initialize Asteroids for the very first start
     for(int a = 0; a < 6; a++)

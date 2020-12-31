@@ -3,10 +3,13 @@
 
 #include <vector>
 
+#include "../modules/RGNDS_Engine/transform.h"
 #include "../modules/RGNDS_Engine/engine.h"
 #include "../modules/RGNDS_Engine/addons/TextMenu/textmenu.h"
 
 #include "config.h"
+
+#define NUM_INPUT_BUTTONS 4
 
 class GameStateSetupController : public RGNDS::Engine {
 public:
@@ -28,12 +31,14 @@ private:
     
     std::vector<RGNDS::TextMenu*> controls;
 
-    glImage bgTopScreen[1]; 
+    glImage bgTopScreen[7]; 
 
 
     u16* bgPalette;
     u8* bgTexture;
 
+    static RGNDS::Transform keyGfxLocation[11];
+    static char* keyLabels[NUM_INPUT_BUTTONS];
 };
 
 #endif
