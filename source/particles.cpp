@@ -49,8 +49,8 @@ namespace ParticleSystem {
             p = particles.at(a);    
 
             if(!p->update(deltaTime)) {
-                delete p;
                 onParticleDeath(p);
+                delete p;
                 particles.erase(particles.begin() + a);
             }
         }
