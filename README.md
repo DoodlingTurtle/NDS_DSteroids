@@ -12,6 +12,12 @@ The upgrades are partially randomized, allowing for each run to turn out slightl
 - Endless gamemode
 
 # TODO
+- Add a pause menu
+  (to allow for quiting the game without having to force a gameover)
+
+- Implement NDS sleep mode
+  (probably a feature, that will be added to RGNDS::Engine)
+
 - Implement saves
   - For the highscore 
   - For the controller config
