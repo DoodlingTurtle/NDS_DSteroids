@@ -1,7 +1,12 @@
 # DSteroids
 A Nintendo DS homebrew game based on "Asteroids".
 
-This project makes use of libNDS, as well as a modified version of GL2D.
+This project makes use of [libNDS](https://github.com/devkitPro/libnds), as well as a modified version of [GL2D](https://github.com/DeathCamel57/libgl2d_ds).
+
+It is also the base for a framework/engine I am currently developing.
+[RGNDS::Engine](https://github.com/DoodlingTurtle/NDS_RGNDS_Engine)
+
+Which is free to use for everyone. Simply add the repository as a Submodule to your GIT project.
 
 ## The Plan
 The idea is, to make a Asteroids game, that will allow the player to purchase "Upgrades" for there ship in between levels.
