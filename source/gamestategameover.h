@@ -18,12 +18,13 @@ public:
     int *score;
     Asteroid *asteroids;
 
+    void onDraw(RGNDS::Engine::Screen screen);
 
 protected:
     int onStart();
     void onEnd();
     void onUpdate(float deltaTime);
-    void onDraw(RGNDS::Engine::Screen screen);
+
 private:
     RGNDS::Transform scoreLocation;
     RGNDS::Transform scoreTargetLocation;

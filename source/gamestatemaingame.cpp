@@ -1,5 +1,6 @@
 #include <nds.h>
 #include "gamestatemaingame.h"
+#include "gamestatepause.h"
 #include "scorepopup.h"
 
 #include <climits>
@@ -73,6 +74,36 @@ void GameStateMainGame::onEnd() {
 }
 
 void GameStateMainGame::onUpdate(float deltaTime) {
+
+// Read Player input
+    SpaceObj::MainGameUpdateData data;
+
+    touchRead(&(data.touch));
+    scanKeys();
+
+    data.keys_held = keysHeld();    
+    data.keys_up   = keysUp();
+    data.keys_justpressed = keysDown();
+    data.deltaTime = deltaTime;
+
+// Check if the pause key (start has been pressed)
+    if(data.keys_justpressed&KEY_START) {
+        GameStatePause* p = new GameStatePause(this);
+        p->run();
+        bool b = p->endGame();
+        delete p;
+
+        if(b) {
+            // Kill the Ship, to signalize a GameOver
+            ship.kill();
+            // End the game
+            exit();
+        }
+
+        return;
+    }
+
+// switch gameobject lists
     tick++;
     tick = (tick&1);
 
@@ -150,17 +181,6 @@ void GameStateMainGame::onUpdate(float deltaTime) {
 
 // Update all GameObject-Managers/Factorys
     ScorePopup::refreshInstanceList();
-
-// Read Player input
-    SpaceObj::MainGameUpdateData data;
-
-    touchRead(&(data.touch));
-    scanKeys();
-
-    data.keys_held = keysHeld();    
-    data.keys_up   = keysUp();
-    data.keys_justpressed = keysDown();
-    data.deltaTime = deltaTime;
 
 // Send out an update heartbeat to all attached objects
     for(SpaceObj* go : *gameObjects) {

@@ -18,11 +18,12 @@ public:
     
     int* keys;
 
+    void onDraw(RGNDS::Engine::Screen screen);
+
 protected:
     int onStart();
      
     void onUpdate(float deltaTime);
-    void onDraw(RGNDS::Engine::Screen screen);
     void onEnd();
 
 private:

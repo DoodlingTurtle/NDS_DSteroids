@@ -18,10 +18,11 @@ public:
 
     int selected();
 
+    void onDraw(RGNDS::Engine::Screen screen);
+
 protected:
     int onStart();
     void onUpdate(float deltaTime);
-    void onDraw(RGNDS::Engine::Screen screen);
 
 private:
     RGNDS::TextMenu menu;
