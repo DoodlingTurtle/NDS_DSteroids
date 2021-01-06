@@ -42,7 +42,7 @@ GameStateSetupController::GameStateSetupController() {
         menu.addOption(keyLabels[a]);
 
     menu.transform.pos.x = 8;
-    menu.transform.pos.y = 8 + SCREEN_HEIGHT;
+    menu.transform.pos.y = 192;
     menu.transform.scale = 1;
 
     backbtnlocation.pos.y = 368;
@@ -91,7 +91,7 @@ int GameStateSetupController::onStart() {
         tm->addOption("R");
         tm->addOption("SELECT");
 
-        tm->transform.pos.y = 200 + 8 * a;
+        tm->transform.pos.y = 192 + 10 * a;
         tm->transform.pos.x = SCREEN_WIDTH - tm->getPXWidth() - 8;    
         tm->setSelection(keys[a]);
 
@@ -156,6 +156,14 @@ void GameStateSetupController::onUpdate(float deltaTime) {
 
 void GameStateSetupController::onDraw(RGNDS::Engine::Screen screen) {
     if(screen == ENGINE_SCREEN_BOTTOM) {
+
+        RGNDS::GL2D::glRectFilled(
+                22, 191 + (10 * menu.selected()), 
+                220 , 10,
+                Engine_Color16(1, 3, 3, 31),
+                12
+        );
+
         menu.draw();
 
         for(auto txt : controls)

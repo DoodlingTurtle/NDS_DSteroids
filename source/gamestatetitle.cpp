@@ -55,8 +55,16 @@ void GameStateTitle::onDraw(RGNDS::Engine::Screen screen) {
         }
     }
 
-    if(screen == ENGINE_SCREEN_BOTTOM)
+    if(screen == ENGINE_SCREEN_BOTTOM) {
+        RGNDS::GL2D::glRectFilled(
+            60, 270 + (20 * menu.selected()), 
+            134 ,20,
+            Engine_Color16(1, 3, 3, 31),
+            12,  1
+        );
+ 
         menu.draw();
+    }
     
     if(screen == ENGINE_SCREEN_TOP)
         RGNDS::GL2D::glText("DSTeroids", 0xffff, &titlelocation, 31, 2);

@@ -5,7 +5,7 @@
 GameStatePause::GameStatePause(RGNDS::Engine* backgroundProvider) {
     this->backgroundProvider = backgroundProvider;
 
-    textMenu.transform.pos.x = 64;
+    textMenu.transform.pos.x = 48;
     textMenu.transform.pos.y = 80;
     textMenu.transform.scale = 2.0f;
     textMenu.zDepth =7;
@@ -42,10 +42,10 @@ void GameStatePause::onDraw(RGNDS::Engine::Screen scr) {
         return;
 
     RGNDS::GL2D::glRectFilled(
-            60, 78 + (18 * textMenu.selected()), 
-            134 ,20,
+            76, 78 + (20 * textMenu.selected()), 
+            102 ,20,
             Engine_Color16(1, 3, 3, 31),
-            12,  5
+            18,  5
     );
     textMenu.draw();
 }
