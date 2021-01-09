@@ -1,4 +1,4 @@
-jjjjjjjjj# DSteroids
+# DSteroids
 A Nintendo DS homebrew game based on "Asteroids".
 
 This project makes use of [libNDS](https://github.com/devkitPro/libnds), as well as a modified version of [GL2D](https://github.com/DeathCamel57/libgl2d_ds).
