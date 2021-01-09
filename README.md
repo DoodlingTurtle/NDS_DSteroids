@@ -1,4 +1,4 @@
-# DSteroids
+jjjjjjjjj# DSteroids
 A Nintendo DS homebrew game based on "Asteroids".
 
 This project makes use of [libNDS](https://github.com/devkitPro/libnds), as well as a modified version of [GL2D](https://github.com/DeathCamel57/libgl2d_ds).
@@ -16,13 +16,7 @@ The upgrades are partially randomized, allowing for each run to turn out slightl
 - Remapable controls
 - Endless gamemode
 
-# TODO
-- Add a pause menu
-  (to allow for quiting the game without having to force a gameover)
-
-- Implement NDS sleep mode
-  (probably a feature, that will be added to RGNDS::Engine)
-
+## TODO
 - Implement saves
   - For the highscore 
   - For the controller config
@@ -36,3 +30,20 @@ The upgrades are partially randomized, allowing for each run to turn out slightl
     
   - Cooldown for shots 
     (the cooldown can be reduced via upgrade purchases)
+
+- Implement NDS sleep mode
+  (probably a feature, that will be added to RGNDS::Engine)
+
+- ~~Add a pause menu
+  (to allow for quiting the game without having to force a gameover)~~
+
+## Changes
+**alpha 0.0.2:**
++ [+] Added a "Pause" gamestate
+  * Pressing start during gameplay will pause the game
+  * Closing the DS during gameplay will also open the pause menu
+  * A running game can now be exited from the pause menu
+- [*] Selected menu entrys are now marked with a blue background 
+
+**alpha 0.0.1:**
+- Initial version

@@ -1,6 +1,7 @@
 #include <nds.h>
 #include "gamestatemaingame.h"
 #include "gamestatepause.h"
+#include "nds/input.h"
 #include "scorepopup.h"
 
 #include <climits>
@@ -87,7 +88,7 @@ void GameStateMainGame::onUpdate(float deltaTime) {
     data.deltaTime = deltaTime;
 
 // Check if the pause key (start has been pressed)
-    if(data.keys_justpressed&KEY_START) {
+    if((data.keys_justpressed&(KEY_START|KEY_LID)) != 0) {
         GameStatePause* p = new GameStatePause(this);
         p->run();
         bool b = p->endGame();
