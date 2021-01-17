@@ -30,13 +30,13 @@ The upgrades are partially randomized, allowing for each run to turn out slightl
 - ~~Add a pause menu
   (to allow for quiting the game without having to force a gameover)~~
 
-- ~~Implement NDS sleep mode
+- ~~Implement NDS sleep mode~~
 
-- ~~Implement saves   
+- ~~Implement saves~~
   (Scrapped, because there is no consistend save method accross different emulators for homebrew)
-  - ~~For the highscore 
-  - ~~For the controller config
-  - ~~(Maybe a qucksave mode, to pause the current run.)
+  - ~~For the highscore~~
+  - ~~For the controller config~~
+  - ~~(Maybe a qucksave mode, to pause the current run.)~~
   
 
 ## Changes
