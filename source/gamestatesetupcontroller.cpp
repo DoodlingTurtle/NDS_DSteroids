@@ -4,7 +4,8 @@
 #include "nds/input.h"
 
 #include "nds.h"
-#include "filesystem.h"
+
+#include "../modules/RGNDS_Engine/nitrofs.h"
 
 #include "res/dsc_bg.h"
 #include "res/dsc_up.h"
@@ -53,10 +54,7 @@ GameStateSetupController::~GameStateSetupController() {}
 
 static void loadSprite(u16* bgPalette, int texSize, const char* texFile, glImage* target) {
 
-    FILE* f1 = fopen(texFile, "rb");
-    u8* bgTexture = (u8*)valloc(texSize+1);
-    fread(bgTexture, texSize, 1, f1);
-    fclose(f1);
+    u8* bgTexture = (u8*)RGNDS::Files::loadNitroFS(texSize+1, texFile);
 
     RGNDS::GL2D::glLoadTileSet(
             target, 
@@ -67,7 +65,7 @@ static void loadSprite(u16* bgPalette, int texSize, const char* texFile, glImage
             bgPalette, 
             bgTexture
     );
-
+    
     free(bgTexture);
 }
 
@@ -99,10 +97,7 @@ int GameStateSetupController::onStart() {
 
     }
 
-    FILE* f = fopen(_DSC_BG_PAL_FILE, "rb");
-    u16* bgPalette = (u16*)valloc(_DSC_BG_PAL_SIZE);   
-    fread(bgPalette, _DSC_BG_PAL_SIZE, 1, f);
-    fclose(f);
+    u16* bgPalette = (u16*)RGNDS::Files::loadNitroFS(_DSC_BG_PAL_SIZE, _DSC_BG_PAL_FILE);
    
     loadSprite(bgPalette, _DSC_LEFT_SIZE, _DSC_LEFT_FILE, &(bgTopScreen[0]));
     loadSprite(bgPalette, _DSC_RIGHT_SIZE, _DSC_RIGHT_FILE, &(bgTopScreen[1]));
