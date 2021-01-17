@@ -17,11 +17,6 @@ The upgrades are partially randomized, allowing for each run to turn out slightl
 - Endless gamemode
 
 ## TODO
-- Implement saves
-  - For the highscore 
-  - For the controller config
-  - (Maybe a qucksave mode, to pause the current run.)
-  
 - Add music and sound
 - Implement the ship upgrades
 - Add more game mechanics to balance the game
@@ -31,11 +26,18 @@ The upgrades are partially randomized, allowing for each run to turn out slightl
   - Cooldown for shots 
     (the cooldown can be reduced via upgrade purchases)
 
-- Implement NDS sleep mode
-  (probably a feature, that will be added to RGNDS::Engine)
 
 - ~~Add a pause menu
   (to allow for quiting the game without having to force a gameover)~~
+
+- ~~Implement NDS sleep mode
+
+- ~~Implement saves   
+  (Scrapped, because there is no consistend save method accross different emulators for homebrew)
+  - ~~For the highscore 
+  - ~~For the controller config
+  - ~~(Maybe a qucksave mode, to pause the current run.)
+  
 
 ## Changes
 **alpha 0.0.2:**
