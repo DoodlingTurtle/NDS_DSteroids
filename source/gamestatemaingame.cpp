@@ -1,11 +1,13 @@
-#include <nds.h>
-#include "gamestatemaingame.h"
-#include "gamestatepause.h"
-#include "nds/input.h"
-#include "scorepopup.h"
-
 #include <climits>
 #include <cstdio>
+
+#include <nds.h>
+
+#include "gamestatemaingame.h"
+#include "gamestatepause.h"
+#include "scorepopup.h"
+
+#include "res/sb1.h"
 
 static std::vector<SpaceObj*>   gameObjList[3];
 static std::vector<SpaceObj*>*  gameObjects         = &gameObjList[0];
@@ -28,7 +30,7 @@ int GameStateMainGame::onStart() {
     
     ship.controlls = keys;
 
-    Asteroid::ship = &ship;
+    Asteroid::init(&ship);
 
     Engine_Log("Start MainGame");
 
@@ -53,6 +55,9 @@ int GameStateMainGame::onStart() {
 
         newGameObjects->push_back(ast);
     }
+
+    
+
     return 0;
 }
 
@@ -71,7 +76,7 @@ void GameStateMainGame::onEnd() {
     prevGameObjects->clear();
     newGameObjects->clear();
 
-    Asteroid::ship = nullptr;
+    Asteroid::deinit();
 }
 
 void GameStateMainGame::onUpdate(float deltaTime) {

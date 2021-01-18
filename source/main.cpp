@@ -2,8 +2,8 @@
 #include <stdlib.h>
 
 #include <nds.h>
-#include <filesystem.h>
 #include <time.h>
+#include <maxmod9.h>
 
 #include "../modules/RGNDS_Engine/engine.h"
 
@@ -13,16 +13,19 @@
 #include "gamestatesetupcontroller.h"
 
 #include "asteroid.h"
+#include "mm_types.h"
 #include "star.h"
 
 #include "config.h"
+
+#include "res/sb1.h"
 
 //-----------------------------------------------------------------------------
 int main(void) {
 //-----------------------------------------------------------------------------
     RGNDS::Engine::init();
     srand(time(nullptr));
-    nitroFSInit(NULL);
+    mmInitDefault("nitro:/audio/sb1.bin");
     
 // Ressources available to all gamestates
     Star stars[CNT_STARS];

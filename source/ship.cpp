@@ -1,3 +1,5 @@
+#include <maxmod9.h>
+#include "mm_types.h"
 #include "ship.h"
 #include <math.h>
 
@@ -7,12 +9,16 @@
 
 #include "shipupgrade_shield.h"
 
+#include "res/sb1.h"
+
 #define SCREEN_HEIGHT2 384
 
 #define SHIP_DEFAULT_RADIUS 16.0f
 
 static const int COLOR_SHIP = Engine_Color16(1, 31, 0, 0);
 
+static mm_sfxhand thrust_sound;
+static float thrustSoundTimer;
 
 ShipExplosionParticle ShipExplosionParticle::proto = ShipExplosionParticle();
 
@@ -114,6 +120,10 @@ Ship::Ship() : SpaceObj(SHIP_DEFAULT_RADIUS)
     
     this->bIsAlive = true;
 
+    mmLoadEffect(SFX_SFX_LASER1);
+    mmLoadEffect(SFX_S_EXP);
+    mmLoadEffect(SFX_S_THRUST);
+
 // Setup Coordinats of the ship and varables needed for Wrap-Arround functionality
     reset();
 }
@@ -124,6 +134,10 @@ Ship::~Ship()
     delete shaThruster;
 
     clearUpgrades();
+
+    mmUnloadEffect(SFX_SFX_LASER1);
+    mmUnloadEffect(SFX_S_EXP);
+    mmUnloadEffect(SFX_S_THRUST);
 }
 
 void Ship::clearUpgrades() 
@@ -146,16 +160,32 @@ void Ship::update(float deltaTime, int keys_held, int keys_up, int keys_justpres
     if(keys_held&GameKeyMap[controlls[GAMEINPUT_TURNLEFT]])
         this->setAngleRel(-angRes);
 
-    if(keys_justpressed&GameKeyMap[controlls[GAMEINPUT_FIRE]])
+    if(keys_justpressed&GameKeyMap[controlls[GAMEINPUT_FIRE]]){
         Shot::Spawn(ang, &pos);
+        mmEffect(SFX_SFX_LASER1);
+    }
     
     if(keys_held&GameKeyMap[controlls[GAMEINPUT_ACCELERATE]]) {
         thrusting = true;
         ph.accelerate(deltaTime * 1.5f);
+        if(thrust_sound == 0) {
+            thrustSoundTimer  = 0.00;
+            thrust_sound = mmEffect(SFX_S_THRUST);
+        }
+        else {
+            thrustSoundTimer += 1000.0f * deltaTime;
+            if(thrustSoundTimer >= 1000) {
+                thrustSoundTimer = 0;
+                mmEffectCancel(thrust_sound);
+                thrust_sound = mmEffect(SFX_S_THRUST);
+            }
+        }
     }
     else {
         thrusting = false;
         ph.decerlerate(1);
+        mmEffectCancel(thrust_sound);
+        thrust_sound = 0;
     }
 
     ShipUpgrade* upgrade;
@@ -231,6 +261,9 @@ bool Ship::gotHit(SpaceObj* culprit) {
     }
     else {
         Engine_Log("Ship " << this << " got killed by " << culprit);
+        mmEffect(SFX_S_EXP); 
+        if(thrust_sound)
+            mmEffectCancel(thrust_sound);
         kill(); 
         return true;
     }

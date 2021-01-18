@@ -38,7 +38,7 @@ SOURCES  := source modules/RGNDS_Engine modules/RGNDS_Engine/addons/TextMenu
 INCLUDES :=
 DATA     :=
 GRAPHICS :=
-AUDIO    :=
+AUDIO    := 
 ICON     :=
 NITRO    := nitrofs
 
@@ -65,7 +65,7 @@ LDFLAGS   = -specs=ds_arm9.specs -g $(ARCH) -Wl,-Map,$(notdir $*.map)
 #---------------------------------------------------------------------------------
 # any extra libraries we wish to link with the project (order is important)
 #---------------------------------------------------------------------------------
-LIBS := -lnds9
+LIBS := -lnds9 -lmm9
 
 # automatigically add libraries for NitroFS 
 ifneq ($(strip $(NITRO)),)

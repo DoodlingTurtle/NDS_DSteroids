@@ -9,7 +9,7 @@
 #include "shot.h"
 #include "./particles.h"
 
-
+#include "res/sb1.h"
 
 class AsteroidParticle : public ParticleSystem::Particle, public RGNDS::Transform {
 public:
@@ -54,6 +54,9 @@ class Asteroid
 {
     public:
         static Ship* ship;
+
+        static void init(Ship* ship);
+        static void deinit();
         
         Asteroid();
         virtual ~Asteroid();
@@ -76,6 +79,8 @@ class Asteroid
     private:
         void generateShape();
         float spinSpeed;
+
+        static int sounds[4];
 };
 
 #endif

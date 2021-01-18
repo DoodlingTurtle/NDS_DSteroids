@@ -1,4 +1,5 @@
 #include "asteroid.h"
+#include <maxmod9.h>
 
 #include "../modules/RGNDS_Engine/engine.h"
 
@@ -15,10 +16,37 @@
 
 static const int COLOR_ASTEROIDS = Engine_Color16(1, 14, 11, 10);
 
+int Asteroid::sounds[4] = {
+    SFX_A_EXP_1,
+    SFX_A_EXP_2,
+    SFX_A_EXP_3,
+    SFX_A_EXP_4
+};
+
 
 std::vector<Shot*> Asteroid::shots;
 
 Ship* Asteroid::ship = nullptr;
+
+void Asteroid::init(Ship* s) {
+    ship = s;
+    for(int a = 0; a < 4; a++)
+        mmLoadEffect(sounds[a]);
+
+    mmLoadEffect(SFX_A_BOUNCE);
+}
+
+void Asteroid::deinit() {
+    ship = nullptr;
+    for(int a = 0; a < 4; a++)
+        mmUnloadEffect(sounds[a]);
+
+    mmUnloadEffect(SFX_A_BOUNCE);
+}
+
+
+
+
 
 float AsteroidParticle::scale = 1.0f;
 
@@ -75,7 +103,7 @@ AsteroidExplosion::AsteroidExplosion(float x, float y)
 void AsteroidExplosion::onUpdate(SpaceObj::MainGameUpdateData* data) 
 { 
     update(data->deltaTime);
- }
+}
 
 void AsteroidExplosion::onDraw(SpaceObj::MainGameDrawData* data) 
 {
@@ -84,8 +112,6 @@ void AsteroidExplosion::onDraw(SpaceObj::MainGameDrawData* data)
 
 void AsteroidExplosion::revive(float x, float y, float scale) 
 {
-   
-   
     Engine_Log("revive particles" << scale);
     AsteroidParticle::scale = scale;
     spawnNewParticles(5*scale);
@@ -200,6 +226,7 @@ void Asteroid::onUpdate(SpaceObj::MainGameUpdateData* data)
             )) {
                 s->kill();
                 this->kill();
+                mmEffect(sounds[(int)(Engine_RandF() * 4)]);
             }
         }
       
@@ -211,6 +238,7 @@ void Asteroid::onUpdate(SpaceObj::MainGameUpdateData* data)
                 &col
             )) {
                 if(!ship->gotHit(this)) {
+                    mmEffect(SFX_A_BOUNCE);
                     this->velocity.x = col.overlapDir.x + ship->velocity.x;
                     this->velocity.y = col.overlapDir.y + ship->velocity.y;
                 }

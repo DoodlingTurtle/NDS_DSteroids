@@ -1,0 +1,11 @@
+#define SFX_A_BOUNCE	0
+#define SFX_A_EXP_1	1
+#define SFX_A_EXP_2	2
+#define SFX_A_EXP_3	3
+#define SFX_A_EXP_4	4
+#define SFX_S_EXP	5
+#define SFX_SFX_LASER1	6
+#define SFX_S_THRUST	7
+#define MSL_NSONGS	0
+#define MSL_NSAMPS	8
+#define MSL_BANKSIZE	8
