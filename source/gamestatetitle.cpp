@@ -15,6 +15,7 @@ GameStateTitle::GameStateTitle() : RGNDS::Engine() {
 
     this->menu.addOption((char*)"new game");
     this->menu.addOption((char*)"options");
+    this->menu.addOption((char*)"credits");
 }
 GameStateTitle::~GameStateTitle() {}
 

@@ -11,6 +11,7 @@
 #include "gamestatemaingame.h"
 #include "gamestategameover.h"
 #include "gamestatesetupcontroller.h"
+#include "gamestatecredits.h"
 
 #include "asteroid.h"
 #include "mm_types.h"
@@ -61,7 +62,10 @@ int main(void) {
 
     GameStateSetupController controller;
         controller.keys = gamecontrolls;
-       
+      
+    GameStateCredits credits;
+
+
 // Main loop
     while(1) {
         title.run();
@@ -82,6 +86,9 @@ int main(void) {
             case 1: //Options - Menu
                 controller.run();
                 break;
+
+            case 2:
+                credits.run();
         }
     }
 
