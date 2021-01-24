@@ -152,6 +152,11 @@ void Ship::clearUpgrades()
 
 void Ship::update(float deltaTime, int keys_held, int keys_up, int keys_justpressed, touchPosition& touch) 
 {
+// Genrator Recovery
+    generator += deltaTime * generatorrecovery;
+    if(generator > 24.0f)
+        generator = 24.0f;
+
 
 // Process user Input
     if(keys_held&GameKeyMap[controlls[GAMEINPUT_TURNRIGHT]])
@@ -161,8 +166,12 @@ void Ship::update(float deltaTime, int keys_held, int keys_up, int keys_justpres
         this->setAngleRel(-angRes);
 
     if(keys_justpressed&GameKeyMap[controlls[GAMEINPUT_FIRE]]){
-        Shot::Spawn(ang, &pos);
-        mmEffect(SFX_SFX_LASER1);
+        if(generator >= shotenergyconsumption) {
+            Shot::Spawn(ang, &pos);
+            mmEffect(SFX_SFX_LASER1);
+
+            generator -= shotenergyconsumption;
+        }
     }
     
     if(keys_held&GameKeyMap[controlls[GAMEINPUT_ACCELERATE]]) {
@@ -227,6 +236,10 @@ void Ship::reset()
 
     objRadius = 24;
 
+    generator = 24;
+    shotenergyconsumption = 12;
+    generatorrecovery = 16;
+
 }
 
 void Ship::onUpdate(SpaceObj::MainGameUpdateData* dat) 
@@ -252,6 +265,11 @@ void Ship::onDraw(SpaceObj::MainGameDrawData* data)
             upgrade->draw(*tr);
         }
     });
+   
+    int barheight = (int)((generator / 24.0f) * 164.0f);
+    RGNDS::GL2D::glRectFilled(240, 28 + (164 - barheight), 16, barheight, 0xffff) ;
+
+    RGNDS::GL2D::glRectFilled(240, 192, 16, barheight, 0xffff);
 }
 
 bool Ship::gotHit(SpaceObj* culprit) {

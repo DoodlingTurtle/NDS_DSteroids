@@ -10,7 +10,7 @@ GameStateCredits::~GameStateCredits() {}
 
 int GameStateCredits::onStart() {
 
-    creditsText = (char*)RGNDS::Files::loadNitroFS(160, "nitro:/credits.txt");  
+    creditsText = (char*)RGNDS::Files::loadNitroFS(155, "nitro:/credits.txt");  
     Engine_Log("Credits Text: " << creditsText);
 
     return 0;

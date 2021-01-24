@@ -79,6 +79,10 @@ class Ship : public SpaceObj {
         RGNDS::GL2D::PolyShape* shaThruster;
 
         std::vector<ShipUpgrade*> upgrades;
+
+        float generator;
+        float shotenergyconsumption;
+        float generatorrecovery;
 };
 
 
