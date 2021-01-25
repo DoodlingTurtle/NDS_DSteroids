@@ -5,6 +5,7 @@
 #include "../modules/RGNDS_Engine/broadcast.h"
 
 #include "./ship.h"
+#include "./shipstats.h"
 #include "./asteroid.h"
 #include "./star.h"
 
@@ -15,7 +16,7 @@
 class GameStateMainGame : public RGNDS::Engine
 {
     public:
-		GameStateMainGame();
+		GameStateMainGame(ShipStats *shipstats);
         virtual ~GameStateMainGame();
         
         int *score;

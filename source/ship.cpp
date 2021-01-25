@@ -7,6 +7,7 @@
 #include "gamestatemaingame.h"
 #include "broadcastchannels.h"
 
+#include "shipstats.h"
 #include "shipupgrade_shield.h"
 
 #include "res/sb1.h"
@@ -153,9 +154,9 @@ void Ship::clearUpgrades()
 void Ship::update(float deltaTime, int keys_held, int keys_up, int keys_justpressed, touchPosition& touch) 
 {
 // Genrator Recovery
-    generator += deltaTime * generatorrecovery;
-    if(generator > 24.0f)
-        generator = 24.0f;
+    stats->generator += deltaTime * stats->generatorrecovery;
+    if(stats->generator > stats->generatorcapacity)
+        stats->generator = stats->generatorcapacity;
 
 
 // Process user Input
@@ -166,11 +167,11 @@ void Ship::update(float deltaTime, int keys_held, int keys_up, int keys_justpres
         this->setAngleRel(-angRes);
 
     if(keys_justpressed&GameKeyMap[controlls[GAMEINPUT_FIRE]]){
-        if(generator >= shotenergyconsumption) {
+        if(stats->generator >= stats->shotenergyconsumption) {
             Shot::Spawn(ang, &pos);
             mmEffect(SFX_SFX_LASER1);
 
-            generator -= shotenergyconsumption;
+            stats->generator -= stats->shotenergyconsumption;
         }
     }
     
@@ -236,10 +237,7 @@ void Ship::reset()
 
     objRadius = 24;
 
-    generator = 24;
-    shotenergyconsumption = 12;
-    generatorrecovery = 16;
-
+    Engine_Log("Generator-Cap: " << stats->generatorcapacity);
 }
 
 void Ship::onUpdate(SpaceObj::MainGameUpdateData* dat) 
@@ -266,7 +264,7 @@ void Ship::onDraw(SpaceObj::MainGameDrawData* data)
         }
     });
    
-    int barheight = (int)((generator / 24.0f) * 164.0f);
+    int barheight = (int)((stats->generator / stats->generatorcapacity) * 164.0f);
     RGNDS::GL2D::glRectFilled(240, 28 + (164 - barheight), 16, barheight, 0xffff) ;
 
     RGNDS::GL2D::glRectFilled(240, 192, 16, barheight, 0xffff);

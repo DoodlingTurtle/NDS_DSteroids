@@ -12,10 +12,12 @@
 #include "gamestategameover.h"
 #include "gamestatesetupcontroller.h"
 #include "gamestatecredits.h"
+#include "gamestateupgrade.h"
 
 #include "asteroid.h"
 #include "mm_types.h"
 #include "star.h"
+#include "shipstats.h"
 
 #include "config.h"
 
@@ -39,12 +41,15 @@ int main(void) {
     gamecontrolls[GAMEINPUT_TURNRIGHT] = KEYPAD_RIGHT;
     gamecontrolls[GAMEINPUT_FIRE] = KEYPAD_R;
 
+    ShipStats shipstats;
+
+
 // Initialize Asteroids for the very first start
     for(int a = 0; a < 6; a++)
         asteroids[a].bringBackToLife({Engine_RandF() * 256, Engine_RandF() * SCREEN_HEIGHT*2}, true, (1+round(Engine_RandF() * 3)) * 0.25f);
 
 // Define gamestates
-    GameStateMainGame mainGame;
+    GameStateMainGame mainGame(&shipstats);
         mainGame.asteroids = asteroids;
         mainGame.score = &score;
         mainGame.stars = stars;
@@ -65,6 +70,7 @@ int main(void) {
       
     GameStateCredits credits;
 
+    GameStateUpgrade upgrade(&shipstats);
 
 // Main loop
     while(1) {
@@ -74,21 +80,33 @@ int main(void) {
                 score = 0;
                 mainGame.game_difficulty = 1;
 
+                // reset shipstats back to default
+                shipstats.generator = 6.0f;
+                shipstats.generatorcapacity = 6.0f;
+                shipstats.shotenergyconsumption = 3.0f;
+                shipstats.generatorrecovery = 3.0f;
+                shipstats.shielduses = 0;
+
+
                 while(1) {
                     mainGame.run();
                     if(!mainGame.wasGameWon())
                         break;
+
+                    upgrade.run();
+
                     mainGame.game_difficulty += 1;
                 }
                 gameOver.run();
                 break;
 
-            case 1: //Options - Menu
+            case 1: //Options
                 controller.run();
                 break;
 
-            case 2:
+            case 2:  // Credtis
                 credits.run();
+                break;
         }
     }
 

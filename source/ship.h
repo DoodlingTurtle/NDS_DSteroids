@@ -1,5 +1,5 @@
 #ifndef SHIP_H
-#define SHIP_H 1
+#define SHIP_H #include "shipstats.h"
 
 #include <vector>
 #include <nds.h>
@@ -11,6 +11,7 @@
 #include "./broadcastchannels.h"
 #include "../modules/RGNDS_Engine/broadcast.h"
 
+#include "shipstats.h"
 #include "shipengine.h"
 #include "spaceobj.h"
 #include "shipupgrade.h"
@@ -63,6 +64,7 @@ class Ship : public SpaceObj {
         bool gotHit(SpaceObj* culprit);
 
         int* controlls;
+        ShipStats* stats;
 
     protected:
         ShipUpgrade_Shield* currentShield; 
@@ -80,9 +82,6 @@ class Ship : public SpaceObj {
 
         std::vector<ShipUpgrade*> upgrades;
 
-        float generator;
-        float shotenergyconsumption;
-        float generatorrecovery;
 };
 
 

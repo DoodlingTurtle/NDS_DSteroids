@@ -8,6 +8,7 @@
 #include "scorepopup.h"
 
 #include "res/sb1.h"
+#include "shipstats.h"
 
 static std::vector<SpaceObj*>   gameObjList[3];
 static std::vector<SpaceObj*>*  gameObjects         = &gameObjList[0];
@@ -21,8 +22,9 @@ GameStateMainGame::~GameStateMainGame() {
     Shot::shotGameObjects = nullptr;
 }
 
-GameStateMainGame::GameStateMainGame() {
+GameStateMainGame::GameStateMainGame(ShipStats *shipstats) {
     Shot::shotGameObjects = newGameObjects;
+    ship.stats = shipstats;
 }
 
 int GameStateMainGame::onStart() {
