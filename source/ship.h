@@ -56,6 +56,8 @@ class Ship : public SpaceObj {
         void update(float deltaTime, int keys_held, int keys_up, int keys_justpressed, touchPosition& touch);
         void reset();
 
+        void addUpgrade(ShipUpgrade* upgrade);
+
         std::function<void(int, void*)> heartbeat;
 
         void onUpdate(SpaceObj::MainGameUpdateData*);
@@ -81,7 +83,7 @@ class Ship : public SpaceObj {
         RGNDS::GL2D::PolyShape* shaThruster;
 
         std::vector<ShipUpgrade*> upgrades;
-
+        std::vector<ShipUpgrade*> newUpgrades; 
 };
 
 

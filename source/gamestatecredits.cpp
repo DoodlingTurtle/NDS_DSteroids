@@ -1,6 +1,5 @@
 #include "gamestatecredits.h"
 
-#include "../modules/RGNDS_Engine/transform.h";
 #include "../modules/RGNDS_Engine/gl2d.h"
 #include "../modules/RGNDS_Engine/nitrofs.h"
 

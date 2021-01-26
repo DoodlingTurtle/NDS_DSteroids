@@ -1,11 +1,10 @@
-#include <maxmod9.h>
-#include "mm_types.h"
 #include "ship.h"
+
 #include <math.h>
+#include <maxmod9.h>
 
 #include "config.h"
 #include "gamestatemaingame.h"
-#include "broadcastchannels.h"
 
 #include "shipstats.h"
 #include "shipupgrade_shield.h"
@@ -148,16 +147,29 @@ void Ship::clearUpgrades()
     for (auto upgrade : upgrades)
         delete upgrade;
 
+    for (auto upgrade : newUpgrades)
+        delete upgrade;
+
     upgrades.clear();
+    newUpgrades.clear();
 }
 
-void Ship::update(float deltaTime, int keys_held, int keys_up, int keys_justpressed, touchPosition& touch) 
-{
+void Ship::addUpgrade(ShipUpgrade *upgrade) {
+    if(upgrade->init(stats))
+        upgrades.push_back(upgrade);
+}
+
+void Ship::update(float deltaTime, int keys_held, int keys_up, int keys_justpressed, touchPosition& touch) {
+// Activate new upgrades
+    for(int a = 0; a < newUpgrades.size(); a++)
+        upgrades.push_back(newUpgrades.at(a));
+
+    newUpgrades.clear();
+
 // Genrator Recovery
     stats->generator += deltaTime * stats->generatorrecovery;
     if(stats->generator > stats->generatorcapacity)
         stats->generator = stats->generatorcapacity;
-
 
 // Process user Input
     if(keys_held&GameKeyMap[controlls[GAMEINPUT_TURNRIGHT]])
@@ -201,7 +213,7 @@ void Ship::update(float deltaTime, int keys_held, int keys_up, int keys_justpres
     ShipUpgrade* upgrade;
     for(int a = upgrades.size()-1; a >= 0; a--) {
         upgrade = upgrades.at(a);
-        if(!upgrade->update(deltaTime)) {
+        if(!upgrade->update(stats, this, deltaTime, keys_held, keys_up, keys_justpressed)) {
             Engine_Log("remove upgrade " << upgrade);
             if(upgrade == currentShield) {
                 currentShield = nullptr;
@@ -234,6 +246,8 @@ void Ship::reset()
 
     currentShield = new ShipUpgrade_Shield();
     upgrades.push_back(currentShield);  
+
+
 
     objRadius = 24;
 

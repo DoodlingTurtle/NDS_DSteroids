@@ -1,5 +1,6 @@
 #include "shipupgrade_shield.h"
 #include "../modules/RGNDS_Engine/engine.h"
+#include "shipstats.h"
 
 ShipUpgrade_Shield::ShipUpgrade_Shield() 
 {
@@ -12,6 +13,8 @@ ShipUpgrade_Shield::~ShipUpgrade_Shield()
 {
     delete circle;
 }
+
+bool ShipUpgrade_Shield::init(ShipStats* shipstats) { return true; }
 
 void ShipUpgrade_Shield::draw(RGNDS::Transform& ship) 
 {
@@ -31,7 +34,7 @@ void ShipUpgrade_Shield::gotHit() {
     this->lastHitTime = 1000.0f;
 }
 
-bool ShipUpgrade_Shield::update(float dt) 
+bool ShipUpgrade_Shield::update(ShipStats* shipstats, Ship* ship, float dt, int keys_held, int keys_up, int keys_justpressed) 
 {
     lifetime -= dt * 1000.0f;
     if(lastHitTime > 0.0f) {
@@ -41,6 +44,7 @@ bool ShipUpgrade_Shield::update(float dt)
     }
     return (lifetime > 0.0f);
 }
+
 float ShipUpgrade_Shield::getRadius() {
     return 28.0f;
 }
