@@ -2,19 +2,21 @@
 #include "../modules/RGNDS_Engine/engine.h"
 #include "shipstats.h"
 
-ShipUpgrade_Shield::ShipUpgrade_Shield() 
-{
+ShipUpgrade_Shield::ShipUpgrade_Shield() {
     circle = RGNDS::GL2D::PolyShape::createCircle( 28, 16 );
-    lifetime = 5000.0f;
-    lastHitTime = 0;
 }
 
-ShipUpgrade_Shield::~ShipUpgrade_Shield() 
-{
+ShipUpgrade_Shield::~ShipUpgrade_Shield() {
     delete circle;
 }
 
-bool ShipUpgrade_Shield::init(ShipStats* shipstats) { return true; }
+bool ShipUpgrade_Shield::init(ShipStats* shipstats) { 
+    
+    lifetime = 5000.0f;
+    lastHitTime = 0;
+
+    return true; 
+}
 
 void ShipUpgrade_Shield::draw(RGNDS::Transform& ship) 
 {

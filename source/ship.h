@@ -13,9 +13,10 @@
 
 #include "shipstats.h"
 #include "shipengine.h"
+#include "shipupgrade_shield.h"
+#include "shipupgrade_shieldgenerator.h"
 #include "spaceobj.h"
 #include "shipupgrade.h"
-#include "shipupgrade_shield.h"
 
 #include "shot.h"
 
@@ -64,12 +65,14 @@ class Ship : public SpaceObj {
         void onDraw(SpaceObj::MainGameDrawData*);
 
         bool gotHit(SpaceObj* culprit);
+        bool shieldIsActive();
 
         int* controlls;
         ShipStats* stats;
 
     protected:
-        ShipUpgrade_Shield* currentShield; 
+        ShipUpgrade_Shield* currentShield;
+        ShipUpgrade_ShieldGenerator shieldgenerator;
 
     private:
 

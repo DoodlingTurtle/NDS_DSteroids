@@ -32,12 +32,17 @@ void GameStateUpgrade::onUpdate(float deltaTime) {
 
     if(keys&KEY_A) {
         switch(selection->selected()) {
+            case 0: // +1 Shielduse
+                shipstats->shielduses += 1;
+                break;
+
             case 1: // Generator cap +3
                 shipstats->generatorcapacity += 3;
                 break;
-            case 2: 
-                shipstats->generatorrecovery *= 2;
 
+            case 2: // Genrator recovery + 50% 
+                shipstats->generatorrecovery *= 1.5f;
+                break;
 
         }
         exit();

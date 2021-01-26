@@ -144,19 +144,20 @@ void Ship::clearUpgrades()
 {
     currentShield = nullptr;
 
-    for (auto upgrade : upgrades)
-        delete upgrade;
-
-    for (auto upgrade : newUpgrades)
-        delete upgrade;
-
     upgrades.clear();
     newUpgrades.clear();
 }
 
 void Ship::addUpgrade(ShipUpgrade *upgrade) {
+
+    Engine_Log("Add ship upgrade " << upgrade);
+
     if(upgrade->init(stats))
         upgrades.push_back(upgrade);
+
+
+    if(upgrade == &shieldgenerator.shield)
+        currentShield = (ShipUpgrade_Shield*)upgrade;
 }
 
 void Ship::update(float deltaTime, int keys_held, int keys_up, int keys_justpressed, touchPosition& touch) {
@@ -220,7 +221,6 @@ void Ship::update(float deltaTime, int keys_held, int keys_up, int keys_justpres
                 objRadius = SHIP_DEFAULT_RADIUS;
             }
 
-            delete upgrade;
             upgrades.erase(upgrades.begin()+a);
         }
     }
@@ -244,10 +244,7 @@ void Ship::reset()
 
     clearUpgrades();
 
-    currentShield = new ShipUpgrade_Shield();
-    upgrades.push_back(currentShield);  
-
-
+    addUpgrade(&shieldgenerator);
 
     objRadius = 24;
 
@@ -282,6 +279,10 @@ void Ship::onDraw(SpaceObj::MainGameDrawData* data)
     RGNDS::GL2D::glRectFilled(240, 28 + (164 - barheight), 16, barheight, 0xffff) ;
 
     RGNDS::GL2D::glRectFilled(240, 192, 16, barheight, 0xffff);
+}
+
+bool Ship::shieldIsActive() {
+    return currentShield > 0;
 }
 
 bool Ship::gotHit(SpaceObj* culprit) {

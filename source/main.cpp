@@ -85,7 +85,7 @@ int main(void) {
                 shipstats.generatorcapacity = 6.0f;
                 shipstats.shotenergyconsumption = 3.0f;
                 shipstats.generatorrecovery = 3.0f;
-                shipstats.shielduses = 0;
+                shipstats.shielduses = 1; // <-- One Shield use is needed to automatically deplay the shield at the beginning of each level
 
 
                 while(1) {
