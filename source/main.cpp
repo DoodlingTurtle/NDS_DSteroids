@@ -34,12 +34,13 @@ int main(void) {
     Star stars[CNT_STARS];
     Asteroid asteroids[MAX_ASTEROIDS];
     int score = 0;
-    int gamecontrolls[4];
+    int gamecontrolls[5];
 
     gamecontrolls[GAMEINPUT_ACCELERATE] = KEYPAD_UP;
     gamecontrolls[GAMEINPUT_TURNLEFT] = KEYPAD_LEFT;
     gamecontrolls[GAMEINPUT_TURNRIGHT] = KEYPAD_RIGHT;
     gamecontrolls[GAMEINPUT_FIRE] = KEYPAD_R;
+    gamecontrolls[GAMEINPUT_SHIELD] = KEYPAD_A;
 
     ShipStats shipstats;
 
@@ -85,7 +86,7 @@ int main(void) {
                 shipstats.generatorcapacity = 6.0f;
                 shipstats.shotenergyconsumption = 3.0f;
                 shipstats.generatorrecovery = 3.0f;
-                shipstats.shielduses = 1; // <-- One Shield use is needed to automatically deplay the shield at the beginning of each level
+                shipstats.shielduses = 3; // <-- One Shield use is needed to automatically deplay the shield at the beginning of each level
 
 
                 while(1) {

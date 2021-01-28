@@ -9,7 +9,7 @@
 
 #include "config.h"
 
-#define NUM_INPUT_BUTTONS 4
+#define NUM_INPUT_BUTTONS 5
 
 class GameStateSetupController : public RGNDS::Engine {
 public:

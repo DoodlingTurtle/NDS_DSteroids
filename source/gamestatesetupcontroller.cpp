@@ -34,7 +34,8 @@ char* GameStateSetupController::keyLabels[NUM_INPUT_BUTTONS] = {
     (char*)"Accelerate",
     (char*)"Turn left",
     (char*)"Turn right",
-    (char*)"Fire"
+    (char*)"Fire",
+    (char*)"use Shield"
 };
 
 
@@ -124,6 +125,7 @@ void GameStateSetupController::onEnd() {
     Engine_Log("Turn Right key: " << keys[1]);
     Engine_Log("Turn Left key: " << keys[2]);
     Engine_Log("Fire key: " << keys[3]);
+    Engine_Log("use Shield:" << keys[4]);
 
     controls.clear();
 }
