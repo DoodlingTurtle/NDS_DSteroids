@@ -12,7 +12,7 @@ public:
     ShipUpgrade_ShieldGenerator();
     virtual~ShipUpgrade_ShieldGenerator();
 
-    bool init(ShipStats* stats); 
+    bool init(ShipStats* stats, int* controls, glImage* gfx); 
     bool update(ShipStats* shipstats, Ship* ship, float deltaTime, int keys_held, int keys_up, int keys_justpressed);
     void draw(RGNDS::Transform& ship); 
 
@@ -22,6 +22,7 @@ protected:
 
 private:
     int uses;
+    int* controls;
     bool deployShield;
 
 };

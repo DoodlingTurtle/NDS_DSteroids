@@ -3,6 +3,8 @@
 #include <math.h>
 #include <maxmod9.h>
 
+#include "../modules/RGNDS_Engine/nitrofs.h"
+
 #include "config.h"
 #include "gamestatemaingame.h"
 
@@ -75,6 +77,9 @@ ShipExplosion::ShipExplosion(Ship* ship) : ParticleSystem::Emitter(ship->pos.x, 
     pos.y = transform.pos.y;
 
     bIsAlive = true;
+
+
+
 }
 ShipExplosion::~ShipExplosion(){};
 
@@ -124,6 +129,27 @@ Ship::Ship() : SpaceObj(SHIP_DEFAULT_RADIUS)
     mmLoadEffect(SFX_S_EXP);
     mmLoadEffect(SFX_S_THRUST);
 
+    u16* pal = (u16*)RGNDS::Files::loadNitroFS(
+        _SHIP_PAL_SIZE,
+        _SHIP_PAL_FILE
+    );
+    u8* tex = (u8*)RGNDS::Files::loadNitroFS(
+        _SHIP_SIZE,
+        _SHIP_FILE
+    );
+    RGNDS::GL2D::glLoadTileSet(
+        gfx, 
+        32, 32, 32, 96, 
+        GL_RGB256, 
+        TEXTURE_SIZE_32, TEXTURE_SIZE_128, 
+        GL_TEXTURE_COLOR0_TRANSPARENT, 4, 
+        pal, 
+        tex
+    );
+
+    free(pal);
+    free(tex);
+
 // Setup Coordinats of the ship and varables needed for Wrap-Arround functionality
     reset();
 }
@@ -152,7 +178,7 @@ void Ship::addUpgrade(ShipUpgrade *upgrade) {
 
     Engine_Log("Add ship upgrade " << upgrade);
 
-    if(upgrade->init(stats))
+    if(upgrade->init(stats, controlls, gfx))
         upgrades.push_back(upgrade);
 
 

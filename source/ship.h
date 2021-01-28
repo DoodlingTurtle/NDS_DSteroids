@@ -4,6 +4,8 @@
 #include <vector>
 #include <nds.h>
 #include "../modules/RGNDS_Engine/engine.h"
+#include "../modules/RGNDS_Engine/gl2d.h"
+
 #include "../modules/RGNDS_Engine/gl2d_polyshape.h"
 #include "../modules/RGNDS_Engine/transform.h"
 
@@ -22,6 +24,7 @@
 
 #include "./particles.h"
 
+#include "./res/Ship.h"
 
 class ShipExplosionParticle 
   : public ParticleSystem::Particle
@@ -84,6 +87,8 @@ class Ship : public SpaceObj {
 
         RGNDS::GL2D::PolyShape* shaBody;
         RGNDS::GL2D::PolyShape* shaThruster;
+
+        glImage gfx[3];
 
         std::vector<ShipUpgrade*> upgrades;
         std::vector<ShipUpgrade*> newUpgrades; 

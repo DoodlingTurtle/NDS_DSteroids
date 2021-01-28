@@ -15,7 +15,7 @@ public:
     ShipUpgrade_Shield();
     ~ShipUpgrade_Shield();
 
-    bool init(ShipStats *shipstats);
+    bool init(ShipStats *shipstats, int* controls, glImage* gfx);
     void draw(RGNDS::Transform& ship);
     bool update(ShipStats* shipstats, Ship* ship, float deltaTime, int keys_held, int keys_up, int keys_justpressed);
 
@@ -24,6 +24,8 @@ public:
     void gotHit();
 
     RGNDS::GL2D::PolyShape* circle;
+
+    glImage* gfx;
 
 private:
     float lifetime;
