@@ -21,7 +21,7 @@ public:
 protected:
 
 private:
-    int uses;
+    byte* uses;
     int* controls;
     bool deployShield;
 

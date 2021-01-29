@@ -17,7 +17,7 @@ void ShipUpgrade_ShieldGenerator::draw(RGNDS::Transform& ship) {
     tra.pos.x = 229;
     tra.pos.y = 32; 
 
-    for(int a = 0; a < uses; a++) {
+    for(byte a = 0; a < *uses; a++) {
         RGNDS::GL2D::glSprite(0, shield.gfx, &tra, 3);
         tra.pos.y += 12;
     }
@@ -29,7 +29,7 @@ bool ShipUpgrade_ShieldGenerator::init(ShipStats *stats, int* controls, glImage*
     this->controls = controls;
 
     if(stats->shielduses > 0) {
-        uses = stats->shielduses;
+        uses = &stats->shielduses;
         deployShield = true;
         return true;
     }
@@ -44,10 +44,10 @@ bool ShipUpgrade_ShieldGenerator::update(ShipStats *shipstats, Ship *ship, float
     
 
     if(deployShield) {
-        uses--;
+        (*uses)--;
         ship->addUpgrade(&shield);
         deployShield = false;
     }
 
-    return (uses > 0);
+    return (*uses > 0);
 }
