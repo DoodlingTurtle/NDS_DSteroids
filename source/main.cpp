@@ -72,6 +72,7 @@ int main(void) {
     GameStateCredits credits;
 
     GameStateUpgrade upgrade(&shipstats);
+        upgrade.score = &score;
 
 // Main loop
     while(1) {
@@ -86,10 +87,11 @@ int main(void) {
                 shipstats.generatorcapacity = 6.0f;
                 shipstats.shotenergyconsumption = 3.0f;
                 shipstats.generatorrecovery = 3.0f;
-                shipstats.shielduses = 3; // <-- One Shield use is needed to automatically deplay the shield at the beginning of each level
+                shipstats.shielduses = 0; 
 
 
                 while(1) {
+                    shipstats.shielduses++; // <-- add 1 extra shield use at the begin of each level because the first deployment is automatic
                     mainGame.run();
                     if(!mainGame.wasGameWon())
                         break;

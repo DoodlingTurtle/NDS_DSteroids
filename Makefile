@@ -31,6 +31,7 @@ include $(DEVKITARM)/ds_rules
 # LIBPATH  defines the Path to your own library
 #---------------------------------------------------------------------------------
 BUILDASDEBUG := true
+#BUILDASDEBUG := 
 
 TARGET   := $(shell basename $(CURDIR))
 BUILD    := build

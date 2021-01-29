@@ -130,13 +130,15 @@ Ship::Ship() : SpaceObj(SHIP_DEFAULT_RADIUS)
     mmLoadEffect(SFX_S_THRUST);
 
     u16* pal = (u16*)RGNDS::Files::loadNitroFS(
-        _SHIP_PAL_SIZE,
-        _SHIP_PAL_FILE
+        _SHIP_PAL_FILE,
+        _SHIP_PAL_SIZE
     );
+
     u8* tex = (u8*)RGNDS::Files::loadNitroFS(
-        _SHIP_SIZE,
-        _SHIP_FILE
+        _SHIP_FILE,
+        _SHIP_SIZE
     );
+
     RGNDS::GL2D::glLoadTileSet(
         gfx, 
         32, 32, 32, 96, 

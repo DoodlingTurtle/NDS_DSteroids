@@ -2,22 +2,53 @@
 #include "config.h"
 #include "nds/arm9/input.h"
 
+#include "../modules/RGNDS_Engine/gl2d.h"
+#include "../modules/RGNDS_Engine/nitrofs.h"
+
+#define ERROR_PRICE_TO_HIGH "You don't have enough points"
+
+static int costs[4] = {
+    1000, 2000, 3500, 0
+};
+
 GameStateUpgrade::GameStateUpgrade(ShipStats *stats) {
     shipstats = stats;
+    selection.transform.pos.y += 200;
+    selection.transform.pos.x += 8;
+
+    descriptionlocation.pos.x += 8;
+    descriptionlocation.pos.y += 34;
+
+    scorelocation.pos += 8;
+    scorelocation.scale = 2.0f;
 }
 
 
 int GameStateUpgrade::onStart() {
-    
-    selection = new RGNDS::TextMenu();
 
-    selection->addOption("+ 1 Shield use");
-    selection->addOption("Generator Capacity + 3");
-    selection->addOption("Generator Regen. -50%");
+    description[0] = (char*)RGNDS::Files::loadNitroFS("nitro:/upgrades/shield.txt");
+    description[1] = (char*)RGNDS::Files::loadNitroFS("nitro:/upgrades/gencap.txt");
+    description[2] = (char*)RGNDS::Files::loadNitroFS("nitro:/upgrades/genreg.txt");
+    description[3] = (char*)RGNDS::Files::loadNitroFS("nitro:/upgrades/none.txt");
+
+    selection.addOption("+ 1 Shield use:         1000");
+    selection.addOption("Generator Capacity + 3  1800");
+    selection.addOption("Generator Regen. -50%   3500");
+
+    selection.addOption("none");
+    showError = false;
 
     return 0;
 }
 
+void GameStateUpgrade::onEnd() {
+    selection.clearOptions();
+
+    free(description[0]);
+    free(description[1]);
+    free(description[2]);
+    free(description[3]);
+}
 
 void GameStateUpgrade::onUpdate(float deltaTime) {
     scanKeys();
@@ -25,34 +56,75 @@ void GameStateUpgrade::onUpdate(float deltaTime) {
     int keys = keysDown();
 
     if(keys&KEY_DOWN)
-        selection->selectNext();
+        selection.selectNext();
 
     if(keys&KEY_UP)
-        selection->selectPrev();
+        selection.selectPrev();
 
     if(keys&KEY_A) {
-        switch(selection->selected()) {
-            case 0: // +1 Shielduse
-                shipstats->shielduses += 1;
-                break;
+        int selected = selection.selected();
 
-            case 1: // Generator cap +3
-                shipstats->generatorcapacity += 3;
-                break;
 
-            case 2: // Genrator recovery + 50% 
-                shipstats->generatorrecovery *= 1.5f;
-                break;
+        if(*score >= costs[selected]) {
+            *score -= costs[selected];
+            switch(selected) {
+                case 0: // +1 Shielduse
+                    shipstats->shielduses += 1;
+                    break;
 
+                case 1: // Generator cap +3
+                    shipstats->generatorcapacity += 3;
+                    break;
+
+                case 2: // Genrator recovery + 50% 
+                    shipstats->generatorrecovery *= 1.5f;
+                    break;
+
+            }
+            exit();
         }
-        exit();
+        else {
+            showError = true;    
+        }
     }
-    
 
 }
 
 void GameStateUpgrade::onDraw(RGNDS::Engine::Screen scr) {
+   
+    if(scr == ENGINE_SCREEN_BOTTOM) {
+        selection.draw();
 
-    selection->draw();
+        RGNDS::GL2D::glRectFilled(
+                22, 199 + (10 * selection.selected()), 
+                228 , 10,
+                Engine_Color16(1, 3, 3, 31),
+                12
+        );
 
+
+        if(showError) {
+            RGNDS::Transform tra;
+            tra.pos.y = 308;
+            tra.pos.x = 24;
+
+            RGNDS::GL2D::glText(
+                    ERROR_PRICE_TO_HIGH, 
+                    Engine_Color16(1, 31, 0, 0),
+                    &tra
+            );
+        }
+    }
+    else {
+
+        char buffer[16];
+        sprintf(buffer, "Score: % 8d", *score);
+        RGNDS::GL2D::glText(buffer, Engine_Color16(1, 0, 10, 31), &scorelocation);
+
+        RGNDS::GL2D::glText(
+                description[selection.selected()], 
+                0xffff,
+                &descriptionlocation
+                );
+    }
 }

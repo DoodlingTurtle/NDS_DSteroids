@@ -1,0 +1,6 @@
+Allows you to manually 
+activate the shield 
+via the "use shield" button.
+
+Once you use it however, 
+it will be gone.

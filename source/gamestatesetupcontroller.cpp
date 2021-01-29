@@ -55,7 +55,7 @@ GameStateSetupController::~GameStateSetupController() {}
 
 static void loadSprite(u16* bgPalette, int texSize, const char* texFile, glImage* target) {
 
-    u8* bgTexture = (u8*)RGNDS::Files::loadNitroFS(texSize+1, texFile);
+    u8* bgTexture = (u8*)RGNDS::Files::loadNitroFS(texFile, texSize+1);
 
     RGNDS::GL2D::glLoadTileSet(
             target, 
@@ -98,7 +98,7 @@ int GameStateSetupController::onStart() {
 
     }
 
-    u16* bgPalette = (u16*)RGNDS::Files::loadNitroFS(_DSC_BG_PAL_SIZE, _DSC_BG_PAL_FILE);
+    u16* bgPalette = (u16*)RGNDS::Files::loadNitroFS(_DSC_BG_PAL_FILE, _DSC_BG_PAL_SIZE);
    
     loadSprite(bgPalette, _DSC_LEFT_SIZE, _DSC_LEFT_FILE, &(bgTopScreen[0]));
     loadSprite(bgPalette, _DSC_RIGHT_SIZE, _DSC_RIGHT_FILE, &(bgTopScreen[1]));
