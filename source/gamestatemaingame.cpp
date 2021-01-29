@@ -111,6 +111,15 @@ void GameStateMainGame::onUpdate(float deltaTime) {
         return;
     }
 
+// Debug-Only input
+#ifdef TARGET_DEBUG
+    if(data.keys_held&(KEY_SELECT)) {
+        *score += game_difficulty * 2100;
+        exit();
+        return;
+    }
+#endif
+
 // switch gameobject lists
     tick++;
     tick = (tick&1);
