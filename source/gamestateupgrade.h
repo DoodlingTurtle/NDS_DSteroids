@@ -13,6 +13,7 @@ public:
 
     void onDraw(RGNDS::Engine::Screen screen);
     int* score;
+    float* game_difficulty; 
 
 protected:
     int onStart();
@@ -26,6 +27,7 @@ private:
     char* description[4];
     RGNDS::Transform descriptionlocation;
     RGNDS::Transform scorelocation;
+    RGNDS::Transform costlocation;
 
     bool showError;
 };

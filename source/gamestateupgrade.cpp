@@ -1,4 +1,7 @@
 #include "gamestateupgrade.h"
+
+#include <stdio.h>
+
 #include "config.h"
 #include "nds/arm9/input.h"
 
@@ -21,6 +24,9 @@ GameStateUpgrade::GameStateUpgrade(ShipStats *stats) {
 
     scorelocation.pos += 8;
     scorelocation.scale = 2.0f;
+
+    costlocation.pos.x += 8;
+    costlocation.pos.y = 180;
 }
 
 
@@ -31,11 +37,11 @@ int GameStateUpgrade::onStart() {
     description[2] = (char*)RGNDS::Files::loadNitroFS("nitro:/upgrades/genreg.txt");
     description[3] = (char*)RGNDS::Files::loadNitroFS("nitro:/upgrades/none.txt");
 
-    selection.addOption("+ 1 Shield use:         1000");
-    selection.addOption("Generator Capacity + 3  1800");
-    selection.addOption("Generator Regen. -50%   3500");
-
+    selection.addOption("+1 Shield use");
+    selection.addOption("Generator Capacity");
+    selection.addOption("Generator Regen. -50%");
     selection.addOption("none");
+
     showError = false;
 
     return 0;
@@ -65,8 +71,8 @@ void GameStateUpgrade::onUpdate(float deltaTime) {
         int selected = selection.selected();
 
 
-        if(*score >= costs[selected]) {
-            *score -= costs[selected];
+        if(*score >= (costs[selected] * *game_difficulty)) {
+            *score -= (costs[selected] * *game_difficulty);
             switch(selected) {
                 case 0: // +1 Shielduse
                     shipstats->shielduses += 1;
@@ -102,7 +108,6 @@ void GameStateUpgrade::onDraw(RGNDS::Engine::Screen scr) {
                 12
         );
 
-
         if(showError) {
             RGNDS::Transform tra;
             tra.pos.y = 308;
@@ -126,5 +131,14 @@ void GameStateUpgrade::onDraw(RGNDS::Engine::Screen scr) {
                 0xffff,
                 &descriptionlocation
                 );
+        
+        char str[30];
+        sprintf(
+                str,
+                "cost: % 24d", 
+                (int)(costs[selection.selected()] * (*game_difficulty))
+        );
+
+        RGNDS::GL2D::glText(str, 0xffff, &costlocation);
     }
 }

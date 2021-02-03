@@ -73,6 +73,7 @@ int main(void) {
 
     GameStateUpgrade upgrade(&shipstats);
         upgrade.score = &score;
+        upgrade.game_difficulty = &(mainGame.game_difficulty);
 
 // Main loop
     while(1) {
