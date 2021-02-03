@@ -8,18 +8,45 @@ It is also the Base/Test for a Framework/Engine that I am currently developing.
 The Engine is free to use for everyone. Simply add the repository as a Submodule to your GIT Project.
 
 ## The Plan
-The Idea is, to make a Asteroids Game, that will allow the Player to purchase "Upgrades" for there Ship in between Levels.
-The Upgrades are partially randomized, allowing for each Run to turn out slightly different.
+The idea is, a Asteroids game, that will allow the player to purchase upgrades for there ship in between Levels.
+These upgrades are payed for with the point the player earns during the main game.
+The Upgrades are partially randomized, allowing for each run to turn out slightly different.
 
 ## Current features
-- Remapable Controls
-- Endless Gamemode
+- Remapable controls
+- Endless gamemode
+- Ship upgrades (changes how the ship controls in between levels)
+
+## Changes
+**beta 0.1.0**
+* [+] Score countdown (score ticks down by 1 every second you play)
+* [\*]changes to the upgrade screen 
+  * moved cost to upper screen
+  * tweaks to the costs of the upgrades
+
+**alpha 0.0.4:**
+* [+]Added ship upgrades (purchaseable in between levels)
+* [\*]Improved the display of the shield (now a sprite, instead of a circle made of polygons)
+
+**alpha 0.0.3:**
++ [+] Added Sound Effects
++ [+] Added a "Credits" Screen (since the Sound Effects aren't by me)
++ [\*] Added a Cooldown to the Shots fired in the Maingame
+
+**alpha 0.0.2:**
++ [+] Added a "Pause" gamestate
+  * Pressing start during gameplay will pause the game
+  * Closing the DS during gameplay will also open the pause menu
+  * A running game can now be exited from the pause menu
+- [*] Selected menu entrys are now marked with a blue background 
+
+**alpha 0.0.1:**
+- Initial version
 
 ## TODO
-
 - Add more Game Mechanics to balance the game
-  - Timer to count down the Score
-    (the longer the Player takes to complete the Level, the less Points they will get)
+  - ~~Timer to count down the Score~~
+    ~~(the longer the Player takes to complete the Level, the less Points they will get)~~
 
 - ~~Cooldown for shots~~
     ~~(the cooldown can be reduced via upgrade purchases)~~
@@ -39,23 +66,3 @@ The Upgrades are partially randomized, allowing for each Run to turn out slightl
   - ~~For the Controller Config~~
   - ~~(Maybe a Qucksave Mode, to Pause the current Run.)~~
   
-
-## Changes
-**alpha 0.0.4:**
-* Added ship upgrades (purchaseable in between levels)
-* Improved the display of the shield (now a sprite, instead of a circle made of polygons)
-
-**alpha 0.0.3:**
-+ [+] Added Sound Effects
-+ [+] Added a "Credits" Screen (since the Sound Effects aren't by me)
-+ [\*] Added a Cooldown to the Shots fired in the Maingame
-
-**alpha 0.0.2:**
-+ [+] Added a "Pause" gamestate
-  * Pressing start during gameplay will pause the game
-  * Closing the DS during gameplay will also open the pause menu
-  * A running game can now be exited from the pause menu
-- [*] Selected menu entrys are now marked with a blue background 
-
-**alpha 0.0.1:**
-- Initial version

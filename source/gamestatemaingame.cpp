@@ -58,7 +58,6 @@ int GameStateMainGame::onStart() {
         newGameObjects->push_back(ast);
     }
 
-    
 
     return 0;
 }
@@ -119,6 +118,16 @@ void GameStateMainGame::onUpdate(float deltaTime) {
         return;
     }
 #endif
+
+// score countdown
+    if(*score > 0) {
+        scoreTimer += 1000.0f * deltaTime;
+        if(scoreTimer > 1000) {
+            (*score)--;
+            
+            scoreTimer = 0;
+        }
+    }
 
 // switch gameobject lists
     tick++;
@@ -205,7 +214,6 @@ void GameStateMainGame::onUpdate(float deltaTime) {
     }
 
 // If Ship is dead, exit game
-// TODO: (DoTu) add "multiple lifes game mechanic"
     if(!ship.isAlive() and shipexp == nullptr) {
         Asteroid::ship = nullptr;
 

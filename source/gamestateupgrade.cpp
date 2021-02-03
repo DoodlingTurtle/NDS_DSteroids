@@ -11,7 +11,7 @@
 #define ERROR_PRICE_TO_HIGH "You don't have enough points"
 
 static int costs[4] = {
-    1000, 2000, 3500, 0
+    1000, 2050, 3500, 0
 };
 
 GameStateUpgrade::GameStateUpgrade(ShipStats *stats) {
@@ -132,7 +132,7 @@ void GameStateUpgrade::onDraw(RGNDS::Engine::Screen scr) {
                 &descriptionlocation
                 );
         
-        char str[30];
+        char str[31];
         sprintf(
                 str,
                 "cost: % 24d", 
