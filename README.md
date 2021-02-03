@@ -16,16 +16,17 @@ The Upgrades are partially randomized, allowing for each Run to turn out slightl
 - Endless Gamemode
 
 ## TODO
-- Implement the Ship Upgrades
 
 - Add more Game Mechanics to balance the game
-  - ~~Cooldown for shots~~
-    (the cooldown can be reduced via upgrade purchases)
-
   - Timer to count down the Score
     (the longer the Player takes to complete the Level, the less Points they will get)
 
+- ~~Cooldown for shots~~
+    ~~(the cooldown can be reduced via upgrade purchases)~~
+
 - Add Music ~~and sound~~
+
+- ~~Implement the Ship Upgrades~~
 
 - ~~Add a pause Menu
   (to allow for quiting the Game without having to force a Gameover)~~
@@ -40,6 +41,10 @@ The Upgrades are partially randomized, allowing for each Run to turn out slightl
   
 
 ## Changes
+**alpha 0.0.4:**
+* Added ship upgrades (purchaseable in between levels)
+* Improved the display of the shield (now a sprite, instead of a circle made of polygons)
+
 **alpha 0.0.3:**
 + [+] Added Sound Effects
 + [+] Added a "Credits" Screen (since the Sound Effects aren't by me)
