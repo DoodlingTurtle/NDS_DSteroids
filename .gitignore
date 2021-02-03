@@ -8,3 +8,4 @@ commit.txt
 *.swp
 tags
 INFO.txt
+.vscode

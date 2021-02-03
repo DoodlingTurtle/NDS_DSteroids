@@ -1,6 +1,9 @@
 #ifndef __GameStateUpgrade_H__
 #define __GameStateUpgrade_H__
 
+#include <functional>
+#include <vector>
+
 #include "../modules/RGNDS_Engine/engine.h"
 #include "../modules/RGNDS_Engine/addons/TextMenu/textmenu.h"
 #include "../modules/RGNDS_Engine/transform.h"
@@ -24,12 +27,15 @@ private:
     ShipStats *shipstats;
     RGNDS::TextMenu selection;
 
-    char* description[4];
+    std::vector<char*> description;
     RGNDS::Transform descriptionlocation;
     RGNDS::Transform scorelocation;
     RGNDS::Transform costlocation;
 
     bool showError;
+
+    std::vector<int> upgrade_data;
+    std::function<void()> handlers[4];
 };
 
 #endif
