@@ -19,10 +19,11 @@ The Upgrades are partially randomized, allowing for each run to turn out slightl
 
 ## Changes
 **beta 0.1.0**
-* [+] Score countdown (score ticks down by 1 every second you play)
-* [\*]changes to the upgrade screen 
-  * moved cost to upper screen
-  * tweaks to the costs of the upgrades
+- [\*] cost of upgrades is now dependent on the current game level
+- [\*] ship upgrades are now partially randomized
+- [\*] countdown for the score in maingame
+- [\*] tweaks to the prices of upgrades
+- [\*] BUGFIX: char limit for cost display in upgrade screen was to low
 
 **alpha 0.0.4:**
 * [+]Added ship upgrades (purchaseable in between levels)
@@ -44,7 +45,13 @@ The Upgrades are partially randomized, allowing for each run to turn out slightl
 - Initial version
 
 ## TODO
-- Add more Game Mechanics to balance the game
+
+- find better sound effects for the shots
+- improve performance on higher levels. (The screen starts to "Glitch out" if to many drawing calls are made in one frame)
+- replace some polygon graphics with sprites to reduce polygon count
+  - alternatively reduce the number of segments on smaler asteroids
+
+- ~~Add more Game Mechanics to balance the game~~
   - ~~Timer to count down the Score~~
     ~~(the longer the Player takes to complete the Level, the less Points they will get)~~
 
